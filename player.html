@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>Tu Rol — Blood on the Clocktower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0608;
+    --surface: #140d10;
+    --border: #3d1f28;
+    --gold: #c9a84c;
+    --gold-dim: #7a5e28;
+    --red: #8b1a2a;
+    --blue: #1a3a6b;
+    --cyan: #1a5a6b;
+    --orange: #6b2a1a;
+    --text: #e8d5b7;
+    --text-dim: #7a6550;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, #2a0a1240 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, #0a1a2a30 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .stars {
+    position: fixed; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, #ffffff44, transparent),
+      radial-gradient(1px 1px at 30% 5%, #ffffff33, transparent),
+      radial-gradient(1px 1px at 50% 25%, #ffffff55, transparent),
+      radial-gradient(1px 1px at 70% 10%, #ffffff33, transparent),
+      radial-gradient(1px 1px at 90% 20%, #ffffff44, transparent),
+      radial-gradient(1px 1px at 15% 80%, #ffffff22, transparent),
+      radial-gradient(1px 1px at 45% 90%, #ffffff33, transparent),
+      radial-gradient(1px 1px at 80% 85%, #ffffff22, transparent);
+  }
+
+  /* ── Loading / error ── */
+  .centered-msg {
+    text-align: center;
+    opacity: .6;
+    font-size: 1.1rem;
+  }
+
+  /* ── Reveal overlay ── */
+  #reveal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1.5rem;
+    transition: opacity .6s ease;
+  }
+  #reveal-overlay.hidden { opacity: 0; pointer-events: none; }
+
+  .reveal-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .75rem;
+    letter-spacing: .2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  .player-greeting {
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--text);
+    text-align: center;
+  }
+
+  .reveal-btn {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .85rem;
+    letter-spacing: .15em;
+    padding: .9rem 2.5rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .reveal-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
+    z-index: -1;
+  }
+  .reveal-btn:active::before { transform: scaleX(1); }
+  .reveal-btn:active { color: var(--bg); }
+
+  .warning-text {
+    font-size: .85rem;
+    color: var(--text-dim);
+    font-style: italic;
+    max-width: 260px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* ── Role card ── */
+  #role-card {
+    width: 100%;
+    max-width: 380px;
+    position: relative;
+    animation: fadeUp .6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-frame {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-frame::before,
+  .card-frame::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    border-color: var(--gold-dim);
+    border-style: solid;
+    z-index: 2;
+  }
+  .card-frame::before { top: 6px; left: 6px; border-width: 1px 0 0 1px; }
+  .card-frame::after  { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+  .card-header {
+    padding: 1.5rem 1.5rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .team-badge {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .6rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    padding: .25rem .75rem;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: .75rem;
+  }
+
+  .team-TOWNSFOLK { background: #1a3a6b33; color: #5a9fd4; border: 1px solid #1a3a6b66; }
+  .team-OUTSIDER  { background: #1a5a6b33; color: #5ac4d4; border: 1px solid #1a5a6b66; }
+  .team-MINION    { background: #6b2a1a33; color: #d47055; border: 1px solid #6b2a1a66; }
+  .team-DEMON     { background: #8b1a2a44; color: #d45570; border: 1px solid #8b1a2a; }
+
+  .role-icon { font-size: 3.5rem; line-height: 1; margin: .5rem 0; }
+
+  .role-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    line-height: 1.2;
+    margin-bottom: .25rem;
+  }
+
+  .player-name-small {
+    font-size: .9rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .card-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    background: #0f080a;
+  }
+
+  .ability-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .6rem;
+    letter-spacing: .2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+    display: block;
+  }
+
+  .ability-text {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  /* ── Status indicators ── */
+  .status-bar {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .status-pill {
+    font-size: .72rem;
+    padding: .2rem .65rem;
+    border-radius: 20px;
+    font-family: 'Cinzel Decorative', serif;
+    letter-spacing: .1em;
+  }
+
+  .status-drunk    { background: #5a3a0a44; color: #c9842c; border: 1px solid #5a3a0a88; }
+  .status-poisoned { background: #2a4a0a44; color: #7ac92c; border: 1px solid #2a4a0a88; }
+  .status-dead     { background: #2a0a0a44; color: #c92c2c; border: 1px solid #2a0a0a88; }
+  .status-alive    { background: #0a2a1a44; color: #2cc97a; border: 1px solid #0a2a1a88; }
+
+  /* ── Allies / enemies (known info) ── */
+  .info-section {
+    margin-top: 1rem;
+    padding: 1rem 1.5rem;
+    background: #0f080a;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .info-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .65rem;
+    letter-spacing: .2em;
+    color: var(--gold-dim);
+    margin-bottom: .6rem;
+    display: block;
+  }
+
+  .ally-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+  }
+
+  .ally-item {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: .95rem;
+  }
+
+  .ally-icon { font-size: 1.1rem; }
+  .ally-name { color: var(--text); }
+  .ally-role { color: var(--text-dim); font-style: italic; font-size: .85rem; }
+
+  /* ── Game info bar ── */
+  .game-info-bar {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .78rem;
+    color: var(--text-dim);
+    padding: .5rem 0;
+    border-top: 1px solid #1a1015;
+  }
+
+  .game-id { font-family: monospace; letter-spacing: .1em; }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+
+<!-- Reveal overlay -->
+<div id="reveal-overlay">
+  <div class="reveal-label">Blood on the Clocktower</div>
+  <div class="player-greeting" id="greeting-name">Bienvenido/a</div>
+  <button class="reveal-btn" onclick="revealRole()">Revelar mi rol</button>
+  <p class="warning-text">Asegúrate de que nadie más pueda ver tu pantalla antes de continuar.</p>
+</div>
+
+<!-- Role display -->
+<div id="role-card" style="display:none; width:100%; max-width:380px;">
+  <div class="card-frame">
+    <div class="card-header">
+      <div class="team-badge" id="team-badge">Aldeano</div>
+      <div class="role-icon" id="role-icon">❓</div>
+      <div class="role-name" id="role-name">Rol</div>
+      <div class="player-name-small" id="player-name-display">Jugador</div>
+      <div class="status-bar" id="status-bar">
+        <span class="status-pill status-alive">⚔️ Vivo</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="ability-label">Habilidad</span>
+      <p class="ability-text" id="ability-text">—</p>
+    </div>
+  </div>
+
+  <div id="allies-section" class="info-section" style="display:none;">
+    <span class="info-title">Conoces a estos jugadores</span>
+    <ul class="ally-list" id="allies-list"></ul>
+  </div>
+
+  <div class="game-info-bar">
+    <span>Partida <span class="game-id" id="game-id-display">—</span></span>
+    <span id="phase-display">—</span>
+  </div>
+</div>
+
+<div id="error-msg" class="centered-msg" style="display:none;">
+  <p style="font-size:2rem;">🕰️</p>
+  <p style="margin-top:.5rem;">Enlace inválido o expirado.</p>
+  <p style="font-size:.85rem; margin-top:.5rem; color:var(--text-dim);">Pide al Narrador un nuevo QR.</p>
+</div>
+
+<script>
+const EDITIONS = {
+  TB: { id: 'TB', name: 'Trouble Brewing', color: '#c0392b', emoji: '🍺' },
+  BMR: { id: 'BMR', name: 'Bad Moon Rising', color: '#8e44ad', emoji: '🌙' },
+  SV: { id: 'SV', name: 'Sects & Violets', color: '#2980b9', emoji: '💜' },
+  CUSTOM: { id: 'CUSTOM', name: 'Script Personalizado', color: '#27ae60', emoji: '⚙️' }
+};
+
+const TEAM = {
+  TOWNSFOLK: { id: 'TOWNSFOLK', name: 'Aldeano', color: '#2196F3' },
+  OUTSIDER: { id: 'OUTSIDER', name: 'Forastero', color: '#00BCD4' },
+  MINION: { id: 'MINION', name: 'Secuaz', color: '#FF5722' },
+  DEMON: { id: 'DEMON', name: 'Demonio', color: '#B71C1C' },
+  TRAVELLER: { id: 'TRAVELLER', name: 'Viajero', color: '#9C27B0' }
+};
+
+const ROLES = [
+  // ===== TROUBLE BREWING =====
+  // Townsfolk
+  { id: 'washerwoman', edition: 'TB', team: 'TOWNSFOLK', name: 'Lavandera', icon: '🧺',
+    ability: 'Sabes que uno de los dos jugadores es un Aldeano específico, pero no cuál.',
+    night: null, night_other: null, firstNight: 1, otherNight: 0 },
+  { id: 'librarian', edition: 'TB', team: 'TOWNSFOLK', name: 'Bibliotecario', icon: '📚',
+    ability: 'Sabes que uno de los dos jugadores es un Forastero específico, pero no cuál.',
+    firstNight: 2, otherNight: 0 },
+  { id: 'investigator', edition: 'TB', team: 'TOWNSFOLK', name: 'Investigador', icon: '🔍',
+    ability: 'Sabes que uno de los dos jugadores es un Secuaz específico, pero no cuál.',
+    firstNight: 3, otherNight: 0 },
+  { id: 'chef', edition: 'TB', team: 'TOWNSFOLK', name: 'Cocinero', icon: '👨‍🍳',
+    ability: 'Sabes cuántos pares de jugadores malignos son vecinos entre sí.',
+    firstNight: 4, otherNight: 0 },
+  { id: 'empath', edition: 'TB', team: 'TOWNSFOLK', name: 'Empático', icon: '💙',
+    ability: 'Cada noche sabes cuántos de tus dos vecinos vivos son malignos.',
+    firstNight: 5, otherNight: 1 },
+  { id: 'fortuneteller', edition: 'TB', team: 'TOWNSFOLK', name: 'Adivina', icon: '🔮',
+    ability: 'Cada noche elige 2 jugadores: sabes si alguno es el Demonio. Hay un jugador bueno que siempre te da positivo.',
+    firstNight: 6, otherNight: 2 },
+  { id: 'undertaker', edition: 'TB', team: 'TOWNSFOLK', name: 'Enterrador', icon: '⚰️',
+    ability: 'Cada noche (excepto la primera), sabes qué rol tenía el jugador ejecutado hoy.',
+    firstNight: 0, otherNight: 3 },
+  { id: 'monk', edition: 'TB', team: 'TOWNSFOLK', name: 'Monje', icon: '🧘',
+    ability: 'Cada noche (excepto la primera), elige a un jugador que no seas tú: está protegido del Demonio esta noche.',
+    firstNight: 0, otherNight: 4 },
+  { id: 'ravenkeeper', edition: 'TB', team: 'TOWNSFOLK', name: 'Guardacuervos', icon: '🐦‍⬛',
+    ability: 'Si mueres por la noche, elige a un jugador: sabes su rol.',
+    firstNight: 0, otherNight: 5 },
+  { id: 'virgin', edition: 'TB', team: 'TOWNSFOLK', name: 'Virgen', icon: '👼',
+    ability: 'La primera vez que seas nominado, si el que te nominó es Aldeano, muere inmediatamente.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'slayer', edition: 'TB', team: 'TOWNSFOLK', name: 'Cazador', icon: '🏹',
+    ability: 'Una vez por partida, durante el día, elige a un jugador: si es el Demonio, muere.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'soldier', edition: 'TB', team: 'TOWNSFOLK', name: 'Soldado', icon: '⚔️',
+    ability: 'Eres inmune a los ataques del Demonio.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'mayor', edition: 'TB', team: 'TOWNSFOLK', name: 'Alcalde', icon: '🏛️',
+    ability: 'Si solo quedan 3 jugadores vivos y no se ejecuta a nadie, el Bien gana. Si mueres por el Demonio, otro jugador podría morir en tu lugar.',
+    firstNight: 0, otherNight: 0 },
+  // Outsiders TB
+  { id: 'butler', edition: 'TB', team: 'OUTSIDER', name: 'Mayordomo', icon: '🤵',
+    ability: 'Cada noche, elige a un jugador (no a ti): mañana solo puedes votar si ese jugador vota también.',
+    firstNight: 7, otherNight: 6 },
+  { id: 'drunk', edition: 'TB', team: 'OUTSIDER', name: 'Borracho', icon: '🍺',
+    ability: 'No sabes que eres el Borracho. El Narrador te da información como si fueras otro rol de Aldeano, pero puede ser incorrecta.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'recluse', edition: 'TB', team: 'OUTSIDER', name: 'Recluso', icon: '🏚️',
+    ability: 'Puedes ser considerado maligno para las habilidades que comprueban la alineación. Puedes ser considerado un Secuaz o Demonio.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'saint', edition: 'TB', team: 'OUTSIDER', name: 'Santo', icon: '✝️',
+    ability: 'Si el equipo bueno te ejecuta, el equipo malo gana.',
+    firstNight: 0, otherNight: 0 },
+  // Minions TB
+  { id: 'poisoner', edition: 'TB', team: 'MINION', name: 'Envenenador', icon: '☠️',
+    ability: 'Cada noche, elige a un jugador: está envenenado esta noche y durante el día de mañana.',
+    firstNight: 8, otherNight: 7 },
+  { id: 'spy', edition: 'TB', team: 'MINION', name: 'Espía', icon: '🕵️',
+    ability: 'Cada noche ve el Grimorio. Puedes ser considerado bueno para las habilidades que comprueban la alineación.',
+    firstNight: 9, otherNight: 8 },
+  { id: 'scarletwoman', edition: 'TB', team: 'MINION', name: 'Mujer Escarlata', icon: '💋',
+    ability: 'Si hay 5+ jugadores vivos y el Demonio muere, te conviertes en el Demonio.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'baron', edition: 'TB', team: 'MINION', name: 'Barón', icon: '🎩',
+    ability: 'Hay 2 Forasteros extra en esta partida.',
+    firstNight: 0, otherNight: 0 },
+  // Demon TB
+  { id: 'imp', edition: 'TB', team: 'DEMON', name: 'Duende', icon: '😈',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. Si te matas a ti mismo, un Secuaz se convierte en el Duende.',
+    firstNight: 0, otherNight: 9 },
+
+  // ===== BAD MOON RISING =====
+  // Townsfolk
+  { id: 'grandmother', edition: 'BMR', team: 'TOWNSFOLK', name: 'Abuela', icon: '👵',
+    ability: 'Sabes de qué rol y equipo es un jugador específico. Si el Demonio mata a ese jugador, también mueres.',
+    firstNight: 10, otherNight: 0 },
+  { id: 'sailor', edition: 'BMR', team: 'TOWNSFOLK', name: 'Marinero', icon: '⚓',
+    ability: 'Cada noche, elige a un jugador vivo: uno de los dos no puede morir esta noche. Mientras estés vivo, no puedes morir.',
+    firstNight: 11, otherNight: 10 },
+  { id: 'chambermaid', edition: 'BMR', team: 'TOWNSFOLK', name: 'Doncella', icon: '🧹',
+    ability: 'Cada noche, elige 2 jugadores vivos que no sean tú: sabes cuántos se despertaron esta noche por su habilidad.',
+    firstNight: 0, otherNight: 11 },
+  { id: 'exorcist', edition: 'BMR', team: 'TOWNSFOLK', name: 'Exorcista', icon: '✝️',
+    ability: 'Cada noche (excepto la primera), elige a un jugador (diferente al de anoche): si es el Demonio, no usa su habilidad y sabe quién eres.',
+    firstNight: 0, otherNight: 12 },
+  { id: 'innkeeper', edition: 'BMR', team: 'TOWNSFOLK', name: 'Posadero', icon: '🏨',
+    ability: 'Cada noche (excepto la primera), elige 2 jugadores: están protegidos del Demonio esta noche, pero uno de ellos se emborracha hasta el anochecer.',
+    firstNight: 0, otherNight: 13 },
+  { id: 'gambler', edition: 'BMR', team: 'TOWNSFOLK', name: 'Jugador', icon: '🎲',
+    ability: 'Cada noche (excepto la primera), elige a un jugador y adivina su rol: si te equivocas, mueres.',
+    firstNight: 0, otherNight: 14 },
+  { id: 'gossip', edition: 'BMR', team: 'TOWNSFOLK', name: 'Cotilla', icon: '💬',
+    ability: 'Cada día puedes hacer una declaración pública. Esta noche, si era cierta, un jugador muere.',
+    firstNight: 0, otherNight: 15 },
+  { id: 'courtier', edition: 'BMR', team: 'TOWNSFOLK', name: 'Cortesano', icon: '👑',
+    ability: 'Una vez por partida, en la primera noche, elige un rol: ese jugador está borracho durante 3 noches y días.',
+    firstNight: 12, otherNight: 0 },
+  { id: 'professor', edition: 'BMR', team: 'TOWNSFOLK', name: 'Profesor', icon: '🎓',
+    ability: 'Una vez por partida, en la noche, elige a un jugador muerto: si es Aldeano, revive.',
+    firstNight: 0, otherNight: 16 },
+  { id: 'minstrel', edition: 'BMR', team: 'TOWNSFOLK', name: 'Juglar', icon: '🎵',
+    ability: 'Cuando un Secuaz muere ejecutado, todos los demás jugadores (excepto tú) se emborrachan hasta el anochecer.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'teamaker', edition: 'BMR', team: 'TOWNSFOLK', name: 'Hacedor de Té', icon: '☕',
+    ability: 'Si el Narrador es imparcial esta partida, no usarás tu habilidad.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'pacifist', edition: 'BMR', team: 'TOWNSFOLK', name: 'Pacifista', icon: '☮️',
+    ability: 'Los jugadores buenos ejecutados ocasionalmente pueden no morir.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'fool', edition: 'BMR', team: 'TOWNSFOLK', name: 'Bufón', icon: '🃏',
+    ability: 'La primera vez que deberías morir, no mueres.',
+    firstNight: 0, otherNight: 0 },
+  // Outsiders BMR
+  { id: 'tinker', edition: 'BMR', team: 'OUTSIDER', name: 'Hojalatero', icon: '🔧',
+    ability: 'Podrías morir en cualquier momento.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'moonchild', edition: 'BMR', team: 'OUTSIDER', name: 'Hijo de la Luna', icon: '🌙',
+    ability: 'Cuando aprendes que has muerto, puedes matar a un jugador vivo que hayas elegido esta noche.',
+    firstNight: 0, otherNight: 17 },
+  { id: 'goon', edition: 'BMR', team: 'OUTSIDER', name: 'Matón', icon: '💪',
+    ability: 'Cada vez que un jugador maligno te elige con su habilidad durante la noche, cambias de equipo y te emborrachas.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'lunatic', edition: 'BMR', team: 'OUTSIDER', name: 'Lunático', icon: '🌀',
+    ability: 'Crees que eres un Demonio específico, pero no lo eres. El Narrador actúa como si lo fueras.',
+    firstNight: 0, otherNight: 18 },
+  // Minions BMR
+  { id: 'godfather', edition: 'BMR', team: 'MINION', name: 'Padrino', icon: '🌹',
+    ability: 'Sabes qué Forasteros hay en juego. Si uno muere de día, elige esta noche a un jugador que muera. Eres inmune al Demonio.',
+    firstNight: 13, otherNight: 19 },
+  { id: 'devilsadvocate', edition: 'BMR', team: 'MINION', name: 'Abogado del Diablo', icon: '⚖️',
+    ability: 'Cada noche (excepto la primera), elige a un jugador vivo: si es ejecutado mañana, no muere.',
+    firstNight: 0, otherNight: 20 },
+  { id: 'assassin', edition: 'BMR', team: 'MINION', name: 'Asesino', icon: '🗡️',
+    ability: 'Una vez por partida, en la noche, elige a un jugador: muere, aunque de otro modo estuviera protegido.',
+    firstNight: 0, otherNight: 21 },
+  { id: 'mastermind', edition: 'BMR', team: 'MINION', name: 'Cerebro', icon: '🧠',
+    ability: 'Si el Demonio muere ejecutado (y conocías su identidad), el juego continúa durante un día y noche más.',
+    firstNight: 0, otherNight: 0 },
+  // Demons BMR
+  { id: 'zombuul', edition: 'BMR', team: 'DEMON', name: 'Zombuul', icon: '🧟',
+    ability: 'Cada noche (excepto la primera), si no hay jugadores muertos hoy, elige a un jugador que muera. La primera vez que "mueras", no lo haces de verdad.',
+    firstNight: 0, otherNight: 22 },
+  { id: 'pukka', edition: 'BMR', team: 'DEMON', name: 'Pukka', icon: '🐍',
+    ability: 'Cada noche, elige a un jugador: está envenenado. El jugador envenenado la noche anterior muere, y ya no está envenenado.',
+    firstNight: 0, otherNight: 23 },
+  { id: 'shabaloth', edition: 'BMR', team: 'DEMON', name: 'Shabaloth', icon: '👹',
+    ability: 'Cada noche (excepto la primera), elige a 2 jugadores: mueren. Uno de los que mataste ayer podría revivir.',
+    firstNight: 0, otherNight: 24 },
+  { id: 'po', edition: 'BMR', team: 'DEMON', name: 'Po', icon: '💀',
+    ability: 'Cada noche (excepto la primera), puedes elegir a ningún jugador: la noche siguiente puedes matar a 3 jugadores.',
+    firstNight: 0, otherNight: 25 },
+
+  // ===== SECTS & VIOLETS =====
+  // Townsfolk
+  { id: 'clockmaker', edition: 'SV', team: 'TOWNSFOLK', name: 'Relojero', icon: '⏰',
+    ability: 'Sabes cuántos pasos (en el círculo) hay entre el Demonio y su Secuaz más cercano.',
+    firstNight: 14, otherNight: 0 },
+  { id: 'dreamer', edition: 'SV', team: 'TOWNSFOLK', name: 'Soñador', icon: '💭',
+    ability: 'Cada noche, elige a un jugador (no a ti ni al Viajero): sabes uno de los dos roles que podría tener (el suyo real o uno aleatorio que no sea el suyo).',
+    firstNight: 15, otherNight: 26 },
+  { id: 'snakecharmer', edition: 'SV', team: 'TOWNSFOLK', name: 'Encantador de Serpientes', icon: '🐍',
+    ability: 'Cada noche, elige a un jugador vivo: si es el Demonio, intercambiáis roles y equipo. El nuevo Demonio está envenenado.',
+    firstNight: 16, otherNight: 27 },
+  { id: 'mathematician', edition: 'SV', team: 'TOWNSFOLK', name: 'Matemático', icon: '➗',
+    ability: 'Cada noche sabes cuántos jugadores (incluidos tú) tienen una habilidad que no ha funcionado correctamente esta noche.',
+    firstNight: 0, otherNight: 28 },
+  { id: 'flowergirl', edition: 'SV', team: 'TOWNSFOLK', name: 'Florista', icon: '💐',
+    ability: 'Cada noche (excepto la primera), sabes si el Demonio votó hoy.',
+    firstNight: 0, otherNight: 29 },
+  { id: 'towncrier', edition: 'SV', team: 'TOWNSFOLK', name: 'Pregonero', icon: '📢',
+    ability: 'Cada noche (excepto la primera), sabes si un Secuaz nominó hoy.',
+    firstNight: 0, otherNight: 30 },
+  { id: 'oracle', edition: 'SV', team: 'TOWNSFOLK', name: 'Oráculo', icon: '🌟',
+    ability: 'Cada noche (excepto la primera), sabes cuántos jugadores muertos son malignos.',
+    firstNight: 0, otherNight: 31 },
+  { id: 'savant', edition: 'SV', team: 'TOWNSFOLK', name: 'Erudito', icon: '📖',
+    ability: 'Cada día puedes visitar al Narrador para aprender 2 cosas: una es verdad, otra es mentira.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'seamstress', edition: 'SV', team: 'TOWNSFOLK', name: 'Costurera', icon: '🧵',
+    ability: 'Una vez por partida, en la noche, elige 2 jugadores que no sean tú: sabes si son del mismo equipo.',
+    firstNight: 17, otherNight: 32 },
+  { id: 'philosopher', edition: 'SV', team: 'TOWNSFOLK', name: 'Filósofo', icon: '🤔',
+    ability: 'Una vez por partida, en la noche, elige un rol de Aldeano: obtienes esa habilidad. Si ese rol está vivo, ese jugador se emborracha.',
+    firstNight: 18, otherNight: 33 },
+  { id: 'artist', edition: 'SV', team: 'TOWNSFOLK', name: 'Artista', icon: '🎨',
+    ability: 'Una vez por partida, durante el día, puedes hacerle una pregunta de sí/no al Narrador (en privado).',
+    firstNight: 0, otherNight: 0 },
+  { id: 'juggler', edition: 'SV', team: 'TOWNSFOLK', name: 'Malabarista', icon: '🤹',
+    ability: 'El primer día, declara públicamente cualquier número de parejas jugador+rol. Esta noche, sabes cuántas adivinaste correctamente.',
+    firstNight: 0, otherNight: 34 },
+  { id: 'sage', edition: 'SV', team: 'TOWNSFOLK', name: 'Sabio', icon: '🧙',
+    ability: 'Si el Demonio te mata, sabes que es uno de los 2 jugadores.',
+    firstNight: 0, otherNight: 35 },
+  // Outsiders SV
+  { id: 'mutant', edition: 'SV', team: 'OUTSIDER', name: 'Mutante', icon: '🧬',
+    ability: 'Si estás "loco" por creer que eres un Forastero, podrías ser ejecutado.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'sweetheart', edition: 'SV', team: 'OUTSIDER', name: 'Amor', icon: '💝',
+    ability: 'Cuando mueres, un jugador se emborracha para siempre.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'barber', edition: 'SV', team: 'OUTSIDER', name: 'Barbero', icon: '✂️',
+    ability: 'Si mueres hoy o esta noche, el Demonio puede esta noche intercambiar los roles de dos jugadores (no al Demonio).',
+    firstNight: 0, otherNight: 0 },
+  { id: 'klutz', edition: 'SV', team: 'OUTSIDER', name: 'Torpe', icon: '🤦',
+    ability: 'Cuando aprendes que has muerto, debes inmediatamente señalar a un jugador vivo. Si ese jugador es maligno, el equipo bueno pierde.',
+    firstNight: 0, otherNight: 0 },
+  // Minions SV
+  { id: 'eviltwin', edition: 'SV', team: 'MINION', name: 'Gemelo Malvado', icon: '👿',
+    ability: 'Sabes quién es tu gemelo bueno. Los jugadores buenos saben que existe el Gemelo Malvado. Si tu gemelo bueno es ejecutado, los malignos ganan.',
+    firstNight: 19, otherNight: 0 },
+  { id: 'witch', edition: 'SV', team: 'MINION', name: 'Bruja', icon: '🧙‍♀️',
+    ability: 'Cada noche, elige a un jugador: si nomina mañana, muere. Si quedan solo 3 jugadores, no tienes habilidad.',
+    firstNight: 20, otherNight: 36 },
+  { id: 'cerenovus', edition: 'SV', team: 'MINION', name: 'Cerenovus', icon: '🎭',
+    ability: 'Cada noche, elige a un jugador y un rol de Aldeano: están "locos" por ser ese rol mañana o el Narrador podría ejecutarlos.',
+    firstNight: 21, otherNight: 37 },
+  { id: 'pithag', edition: 'SV', team: 'MINION', name: 'Pit-Hag', icon: '🌪️',
+    ability: 'Cada noche, elige a un jugador y un rol (no en juego actualmente): ese jugador se convierte en ese rol. Si hay 2+ Demonios, uno al azar se convierte en Lunático.',
+    firstNight: 22, otherNight: 38 },
+  // Demons SV
+  { id: 'fanggu', edition: 'SV', team: 'DEMON', name: 'Fang Gu', icon: '🧛',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. La primera vez que elijas a un Forastero, ese jugador se convierte en Fang Gu y tú mueres.',
+    firstNight: 0, otherNight: 39 },
+  { id: 'vigormortis', edition: 'SV', team: 'DEMON', name: 'Vigormortis', icon: '🦴',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. Los Secuaces malignos muertos conservan su habilidad y envenenan a un vecino vivo.',
+    firstNight: 0, otherNight: 40 },
+  { id: 'nodashii', edition: 'SV', team: 'DEMON', name: 'No Dashii', icon: '🌊',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. Tus dos vecinos aldeanos más cercanos están envenenados.',
+    firstNight: 0, otherNight: 41 },
+  { id: 'vortox', edition: 'SV', team: 'DEMON', name: 'Vortox', icon: '🌀',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. Los aldeanos siempre reciben información falsa. Cada día debe morir alguien por votación o el equipo bueno pierde.',
+    firstNight: 0, otherNight: 42 },
+];
+
+function getRolesByEdition(editionId) {
+  return ROLES.filter(r => r.edition === editionId);
+}
+
+function getRoleById(id) {
+  return ROLES.find(r => r.id === id);
+}
+
+function getTeamRoles(roles, team) {
+  return roles.filter(r => r.team === team);
+}
+
+
+
+
+
+  const TEAM_NAMES = {
+    TOWNSFOLK: 'Aldeano', OUTSIDER: 'Forastero',
+    MINION: 'Secuaz', DEMON: 'Demonio', TRAVELLER: 'Viajero'
+  };
+
+  let playerData = null;
+  let gameState = null;
+
+  function init() {
+    // Parse token from URL ?t=BASE64TOKEN
+    const params = new URLSearchParams(location.search);
+    const token = params.get('t');
+    if (!token) { showError(); return; }
+
+    try {
+      playerData = JSON.parse(atob(token));
+    } catch {
+      showError(); return;
+    }
+
+    // Load game state from localStorage (shared device scenario)
+    // or just show role from token
+    try {
+      const raw = localStorage.getItem('botc_state');
+      if (raw) gameState = JSON.parse(raw);
+    } catch {}
+
+    document.getElementById('greeting-name').textContent =
+      `Hola, ${playerData.name}`;
+  }
+
+  window.revealRole = function() {
+    const overlay = document.getElementById('reveal-overlay');
+    overlay.classList.add('hidden');
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      renderCard();
+      document.getElementById('role-card').style.display = 'block';
+    }, 600);
+  };
+
+  function renderCard() {
+    const role = ROLES.find(r => r.id === playerData.roleId);
+    if (!role) { showError(); return; }
+
+    // Find player in state if available
+    const statePlayer = gameState?.players?.find(p => p.id === playerData.pid);
+    const alive = statePlayer ? statePlayer.alive : true;
+    const drunk = statePlayer ? statePlayer.drunk : false;
+    const poisoned = statePlayer ? statePlayer.poisoned : false;
+
+    // Team badge
+    const badge = document.getElementById('team-badge');
+    badge.textContent = TEAM_NAMES[role.team] || role.team;
+    badge.className = `team-badge team-${role.team}`;
+
+    document.getElementById('role-icon').textContent = role.icon;
+    document.getElementById('role-name').textContent = role.name;
+    document.getElementById('player-name-display').textContent = playerData.name;
+    document.getElementById('ability-text').textContent = role.ability;
+
+    // Status bar
+    const statusBar = document.getElementById('status-bar');
+    statusBar.innerHTML = '';
+    const addStatus = (cls, text) => {
+      const s = document.createElement('span');
+      s.className = `status-pill ${cls}`;
+      s.textContent = text;
+      statusBar.appendChild(s);
+    };
+    addStatus(alive ? 'status-alive' : 'status-dead', alive ? '⚔️ Vivo' : '💀 Muerto');
+    if (drunk) addStatus('status-drunk', '🍺 Borracho');
+    if (poisoned) addStatus('status-poisoned', '☠️ Envenenado');
+
+    // Allies for evil team
+    if (role.team === 'MINION' || role.team === 'DEMON') {
+      const evilPlayers = gameState?.players?.filter(p => {
+        if (p.id === playerData.pid) return false;
+        const r = ROLES.find(r => r.id === p.roleId);
+        return r && (r.team === 'MINION' || r.team === 'DEMON');
+      }) || [];
+
+      if (evilPlayers.length > 0) {
+        const section = document.getElementById('allies-section');
+        section.style.display = 'block';
+        const list = document.getElementById('allies-list');
+        list.innerHTML = '';
+        evilPlayers.forEach(ep => {
+          const er = ROLES.find(r => r.id === ep.roleId);
+          const li = document.createElement('li');
+          li.className = 'ally-item';
+          li.innerHTML = `
+            <span class="ally-icon">${er?.icon || '👤'}</span>
+            <span class="ally-name">${ep.name}</span>
+            <span class="ally-role">— ${er?.name || '?'}</span>
+          `;
+          list.appendChild(li);
+        });
+      }
+    }
+
+    // Game info
+    document.getElementById('game-id-display').textContent = playerData.gid || '—';
+    const phase = gameState?.phase;
+    const phaseMap = {
+      setup: 'Preparación', firstNight: 'Primera Noche',
+      day: `Día ${gameState?.day || 1}`, night: `Noche ${(gameState?.day || 0) + 1}`,
+      ended: 'Partida terminada'
+    };
+    document.getElementById('phase-display').textContent = phaseMap[phase] || '—';
+  }
+
+  function showError() {
+    document.getElementById('reveal-overlay').style.display = 'none';
+    document.getElementById('error-msg').style.display = 'block';
+  }
+
+  init();
+
+</script>
+</body>
+</html>
