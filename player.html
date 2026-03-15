@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>Tu Rol — Blood on the Clocktower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0608;
+    --surface: #140d10;
+    --border: #3d1f28;
+    --gold: #c9a84c;
+    --gold-dim: #7a5e28;
+    --red: #8b1a2a;
+    --blue: #1a3a6b;
+    --cyan: #1a5a6b;
+    --orange: #6b2a1a;
+    --text: #e8d5b7;
+    --text-dim: #7a6550;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, #2a0a1240 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, #0a1a2a30 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .stars {
+    position: fixed; inset: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, #ffffff44, transparent),
+      radial-gradient(1px 1px at 30% 5%, #ffffff33, transparent),
+      radial-gradient(1px 1px at 50% 25%, #ffffff55, transparent),
+      radial-gradient(1px 1px at 70% 10%, #ffffff33, transparent),
+      radial-gradient(1px 1px at 90% 20%, #ffffff44, transparent),
+      radial-gradient(1px 1px at 15% 80%, #ffffff22, transparent),
+      radial-gradient(1px 1px at 45% 90%, #ffffff33, transparent),
+      radial-gradient(1px 1px at 80% 85%, #ffffff22, transparent);
+  }
+
+  /* ── Loading / error ── */
+  .centered-msg {
+    text-align: center;
+    opacity: .6;
+    font-size: 1.1rem;
+  }
+
+  /* ── Reveal overlay ── */
+  #reveal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1.5rem;
+    transition: opacity .6s ease;
+  }
+  #reveal-overlay.hidden { opacity: 0; pointer-events: none; }
+
+  .reveal-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .75rem;
+    letter-spacing: .2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  .player-greeting {
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--text);
+    text-align: center;
+  }
+
+  .reveal-btn {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .85rem;
+    letter-spacing: .15em;
+    padding: .9rem 2.5rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .reveal-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
+    z-index: -1;
+  }
+  .reveal-btn:active::before { transform: scaleX(1); }
+  .reveal-btn:active { color: var(--bg); }
+
+  .warning-text {
+    font-size: .85rem;
+    color: var(--text-dim);
+    font-style: italic;
+    max-width: 260px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* ── Role card ── */
+  #role-card {
+    width: 100%;
+    max-width: 380px;
+    position: relative;
+    animation: fadeUp .6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-frame {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-frame::before,
+  .card-frame::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    border-color: var(--gold-dim);
+    border-style: solid;
+    z-index: 2;
+  }
+  .card-frame::before { top: 6px; left: 6px; border-width: 1px 0 0 1px; }
+  .card-frame::after  { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+
+  .card-header {
+    padding: 1.5rem 1.5rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .team-badge {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .6rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    padding: .25rem .75rem;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: .75rem;
+  }
+
+  .team-TOWNSFOLK { background: #1a3a6b33; color: #5a9fd4; border: 1px solid #1a3a6b66; }
+  .team-OUTSIDER  { background: #1a5a6b33; color: #5ac4d4; border: 1px solid #1a5a6b66; }
+  .team-MINION    { background: #6b2a1a33; color: #d47055; border: 1px solid #6b2a1a66; }
+  .team-DEMON     { background: #8b1a2a44; color: #d45570; border: 1px solid #8b1a2a; }
+
+  .role-icon { font-size: 3.5rem; line-height: 1; margin: .5rem 0; }
+
+  .role-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    line-height: 1.2;
+    margin-bottom: .25rem;
+  }
+
+  .player-name-small {
+    font-size: .9rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .card-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    background: #0f080a;
+  }
+
+  .ability-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .6rem;
+    letter-spacing: .2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+    display: block;
+  }
+
+  .ability-text {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  /* ── Status indicators ── */
+  .status-bar {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .status-pill {
+    font-size: .72rem;
+    padding: .2rem .65rem;
+    border-radius: 20px;
+    font-family: 'Cinzel Decorative', serif;
+    letter-spacing: .1em;
+  }
+
+  .status-drunk    { background: #5a3a0a44; color: #c9842c; border: 1px solid #5a3a0a88; }
+  .status-poisoned { background: #2a4a0a44; color: #7ac92c; border: 1px solid #2a4a0a88; }
+  .status-dead     { background: #2a0a0a44; color: #c92c2c; border: 1px solid #2a0a0a88; }
+  .status-alive    { background: #0a2a1a44; color: #2cc97a; border: 1px solid #0a2a1a88; }
+
+  /* ── Allies / enemies (known info) ── */
+  .info-section {
+    margin-top: 1rem;
+    padding: 1rem 1.5rem;
+    background: #0f080a;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .info-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: .65rem;
+    letter-spacing: .2em;
+    color: var(--gold-dim);
+    margin-bottom: .6rem;
+    display: block;
+  }
+
+  .ally-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+  }
+
+  .ally-item {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: .95rem;
+  }
+
+  .ally-icon { font-size: 1.1rem; }
+  .ally-name { color: var(--text); }
+  .ally-role { color: var(--text-dim); font-style: italic; font-size: .85rem; }
+
+  /* ── Game info bar ── */
+  .game-info-bar {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .78rem;
+    color: var(--text-dim);
+    padding: .5rem 0;
+    border-top: 1px solid #1a1015;
+  }
+
+  .game-id { font-family: monospace; letter-spacing: .1em; }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+
+<!-- Reveal overlay -->
+<div id="reveal-overlay">
+  <div class="reveal-label">Blood on the Clocktower</div>
+  <div class="player-greeting" id="greeting-name">Bienvenido/a</div>
+  <button class="reveal-btn" onclick="revealRole()">Revelar mi rol</button>
+  <p class="warning-text">Asegúrate de que nadie más pueda ver tu pantalla antes de continuar.</p>
+</div>
+
+<!-- Role display -->
+<div id="role-card" style="display:none; width:100%; max-width:380px;">
+  <div class="card-frame">
+    <div class="card-header">
+      <div class="team-badge" id="team-badge">Aldeano</div>
+      <div class="role-icon" id="role-icon">❓</div>
+      <div class="role-name" id="role-name">Rol</div>
+      <div class="player-name-small" id="player-name-display">Jugador</div>
+      <div class="status-bar" id="status-bar">
+        <span class="status-pill status-alive">⚔️ Vivo</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <span class="ability-label">Habilidad</span>
+      <p class="ability-text" id="ability-text">—</p>
+    </div>
+  </div>
+
+  <div id="allies-section" class="info-section" style="display:none;">
+    <span class="info-title">Conoces a estos jugadores</span>
+    <ul class="ally-list" id="allies-list"></ul>
+  </div>
+
+  <div class="game-info-bar">
+    <span>Partida <span class="game-id" id="game-id-display">—</span></span>
+    <span id="phase-display">—</span>
+  </div>
+</div>
+
+<div id="error-msg" class="centered-msg" style="display:none;">
+  <p style="font-size:2rem;">🕰️</p>
+  <p style="margin-top:.5rem;">Enlace inválido o expirado.</p>
+  <p style="font-size:.85rem; margin-top:.5rem; color:var(--text-dim);">Pide al Narrador un nuevo QR.</p>
+</div>
+
+<script type="module">
+  import { ROLES, TEAM } from './src/data/roles.js';
+
+  const TEAM_NAMES = {
+    TOWNSFOLK: 'Aldeano', OUTSIDER: 'Forastero',
+    MINION: 'Secuaz', DEMON: 'Demonio', TRAVELLER: 'Viajero'
+  };
+
+  let playerData = null;
+  let gameState = null;
+
+  function init() {
+    // Parse token from URL ?t=BASE64TOKEN
+    const params = new URLSearchParams(location.search);
+    const token = params.get('t');
+    if (!token) { showError(); return; }
+
+    try {
+      playerData = JSON.parse(atob(token));
+    } catch {
+      showError(); return;
+    }
+
+    // Load game state from localStorage (shared device scenario)
+    // or just show role from token
+    try {
+      const raw = localStorage.getItem('botc_state');
+      if (raw) gameState = JSON.parse(raw);
+    } catch {}
+
+    document.getElementById('greeting-name').textContent =
+      `Hola, ${playerData.name}`;
+  }
+
+  window.revealRole = function() {
+    const overlay = document.getElementById('reveal-overlay');
+    overlay.classList.add('hidden');
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      renderCard();
+      document.getElementById('role-card').style.display = 'block';
+    }, 600);
+  };
+
+  function renderCard() {
+    const role = ROLES.find(r => r.id === playerData.roleId);
+    if (!role) { showError(); return; }
+
+    // Find player in state if available
+    const statePlayer = gameState?.players?.find(p => p.id === playerData.pid);
+    const alive = statePlayer ? statePlayer.alive : true;
+    const drunk = statePlayer ? statePlayer.drunk : false;
+    const poisoned = statePlayer ? statePlayer.poisoned : false;
+
+    // Team badge
+    const badge = document.getElementById('team-badge');
+    badge.textContent = TEAM_NAMES[role.team] || role.team;
+    badge.className = `team-badge team-${role.team}`;
+
+    document.getElementById('role-icon').textContent = role.icon;
+    document.getElementById('role-name').textContent = role.name;
+    document.getElementById('player-name-display').textContent = playerData.name;
+    document.getElementById('ability-text').textContent = role.ability;
+
+    // Status bar
+    const statusBar = document.getElementById('status-bar');
+    statusBar.innerHTML = '';
+    const addStatus = (cls, text) => {
+      const s = document.createElement('span');
+      s.className = `status-pill ${cls}`;
+      s.textContent = text;
+      statusBar.appendChild(s);
+    };
+    addStatus(alive ? 'status-alive' : 'status-dead', alive ? '⚔️ Vivo' : '💀 Muerto');
+    if (drunk) addStatus('status-drunk', '🍺 Borracho');
+    if (poisoned) addStatus('status-poisoned', '☠️ Envenenado');
+
+    // Allies for evil team
+    if (role.team === 'MINION' || role.team === 'DEMON') {
+      const evilPlayers = gameState?.players?.filter(p => {
+        if (p.id === playerData.pid) return false;
+        const r = ROLES.find(r => r.id === p.roleId);
+        return r && (r.team === 'MINION' || r.team === 'DEMON');
+      }) || [];
+
+      if (evilPlayers.length > 0) {
+        const section = document.getElementById('allies-section');
+        section.style.display = 'block';
+        const list = document.getElementById('allies-list');
+        list.innerHTML = '';
+        evilPlayers.forEach(ep => {
+          const er = ROLES.find(r => r.id === ep.roleId);
+          const li = document.createElement('li');
+          li.className = 'ally-item';
+          li.innerHTML = `
+            <span class="ally-icon">${er?.icon || '👤'}</span>
+            <span class="ally-name">${ep.name}</span>
+            <span class="ally-role">— ${er?.name || '?'}</span>
+          `;
+          list.appendChild(li);
+        });
+      }
+    }
+
+    // Game info
+    document.getElementById('game-id-display').textContent = playerData.gid || '—';
+    const phase = gameState?.phase;
+    const phaseMap = {
+      setup: 'Preparación', firstNight: 'Primera Noche',
+      day: `Día ${gameState?.day || 1}`, night: `Noche ${(gameState?.day || 0) + 1}`,
+      ended: 'Partida terminada'
+    };
+    document.getElementById('phase-display').textContent = phaseMap[phase] || '—';
+  }
+
+  function showError() {
+    document.getElementById('reveal-overlay').style.display = 'none';
+    document.getElementById('error-msg').style.display = 'block';
+  }
+
+  init();
+</script>
+</body>
+</html>
