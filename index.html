@@ -11,26 +11,27 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0608;--surface:#110b0e;--surface2:#180e12;
-  --border:#2d1720;--border2:#3d2030;
-  --gold:#c9a84c;--gold-dim:#6a5228;
-  --red:#8b1a2a;--red-dim:#3d0a12;
-  --text:#e8d5b7;--text-dim:#7a6550;--text-muted:#4a3d30;
-  --guide:#152015;--guide-border:#2a5a2a;--guide-text:#8ad48a;
-  --vote:#1a1a3a;--vote-border:#3a3a8a;--vote-text:#8a9aff;
-  --radius:4px;--nav-h:62px;
+  /* New palette: deep navy-slate base, amber gold, warmer text */
+  --bg:#080c14;--surface:#0f1520;--surface2:#151d2e;
+  --border:#1e2d45;--border2:#2a3f5f;
+  --gold:#e8b84b;--gold-dim:#7a5e20;
+  --red:#9b2335;--red-dim:#3d0a12;
+  --text:#f0e6d0;--text-dim:#8a7e68;--text-muted:#4a4535;
+  --guide:#0d1f10;--guide-border:#1e5a28;--guide-text:#7dd48a;
+  --vote:#0f1a30;--vote-border:#1e3a6a;--vote-text:#7aaaf8;
+  --radius:6px;--nav-h:64px;
 }
 html,body{height:100%;overflow:hidden}
-body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:17px;display:flex;flex-direction:column}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:18px;display:flex;flex-direction:column}
 
 /* ── Header ── */
 #hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:.55rem .85rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;min-height:52px}
-.app-title{font-family:'Cinzel Decorative',serif;font-size:.78rem;color:var(--gold);letter-spacing:.08em;line-height:1.25}
+.app-title{font-family:'Cinzel Decorative',serif;font-size:.85rem;color:var(--gold);letter-spacing:.08em;line-height:1.25}
 .app-title small{display:block;font-size:.55rem;color:var(--gold-dim);letter-spacing:.15em}
 .hdr-right{display:flex;gap:.4rem;align-items:center}
-.hdr-btn{background:none;border:none;cursor:pointer;font-size:1.15rem;padding:.15rem .25rem;opacity:.5;transition:opacity .2s;line-height:1}
+.hdr-btn{background:none;border:none;cursor:pointer;font-size:1.25rem;padding:.15rem .25rem;opacity:.5;transition:opacity .2s;line-height:1}
 .hdr-btn.on{opacity:1}
-.phase-pill{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.12em;padding:.22rem .6rem;border-radius:20px;border:1px solid var(--border2);color:var(--gold-dim)}
+.phase-pill{font-family:'Cinzel Decorative',serif;font-size:.6rem;letter-spacing:.12em;padding:.25rem .65rem;border-radius:20px;border:1px solid var(--border2);color:var(--gold-dim)}
 .phase-pill.day{border-color:#5a4a00;color:#c9a84c}
 .phase-pill.night{border-color:#1a1a5a;color:#7a9aff}
 
@@ -41,18 +42,18 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,se
 
 /* ── Nav ── */
 #nav{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;height:var(--nav-h)}
-.nb{flex:1;background:none;border:none;color:var(--text-muted);font-family:'Cinzel Decorative',serif;font-size:.48rem;letter-spacing:.06em;padding:.55rem .2rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.18rem;transition:color .2s}
-.nb .ni{font-size:1.35rem;line-height:1}
+.nb{flex:1;background:none;border:none;color:var(--text-muted);font-family:'Cinzel Decorative',serif;font-size:.52rem;letter-spacing:.06em;padding:.55rem .2rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.18rem;transition:color .2s}
+.nb .ni{font-size:1.45rem;line-height:1}
 .nb.active{color:var(--gold);background:#c9a84c07}
 
 /* ── Cards & buttons ── */
 .card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;margin-bottom:.7rem}
-.stitle{font-family:'Cinzel Decorative',serif;font-size:.65rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.7rem;padding-bottom:.38rem;border-bottom:1px solid var(--border)}
-.btn{font-family:'Cinzel Decorative',serif;font-size:.64rem;letter-spacing:.08em;padding:.58rem 1.15rem;border-radius:var(--radius);border:1px solid var(--border2);cursor:pointer;background:none;color:var(--text);transition:opacity .2s;-webkit-tap-highlight-color:transparent}
+.stitle{font-family:'Cinzel Decorative',serif;font-size:.7rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.7rem;padding-bottom:.38rem;border-bottom:1px solid var(--border)}
+.btn{font-family:'Cinzel Decorative',serif;font-size:.68rem;letter-spacing:.08em;padding:.62rem 1.2rem;border-radius:var(--radius);border:1px solid var(--border2);cursor:pointer;background:none;color:var(--text);transition:opacity .2s;-webkit-tap-highlight-color:transparent}
 .btn:active{opacity:.55}
 .btn-red{background:var(--red-dim);border-color:var(--red);color:#e8d5b7}
 .btn-gold{background:#1f1500;border-color:var(--gold-dim);color:var(--gold)}
-.btn-sm{font-size:.58rem;padding:.4rem .85rem}
+.btn-sm{font-size:.62rem;padding:.44rem .9rem}
 .btn-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem}
 input[type=text],textarea,select{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-family:'Crimson Pro',serif;font-size:1rem;padding:.48rem .7rem;width:100%;outline:none;resize:none}
 input:focus,textarea:focus,select:focus{border-color:var(--gold-dim)}
@@ -79,16 +80,16 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim)}
 .phase-bar{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:.8rem;align-items:center}
 
 /* ── Grimoire tokens — LARGER for table view ── */
-.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem}
+.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.6rem}
 .ptok{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.8rem .7rem;cursor:pointer;position:relative;user-select:none;transition:border-color .2s;-webkit-tap-highlight-color:transparent}
 .ptok:active{border-color:var(--gold-dim)}
 .ptok.dead{opacity:.4}
 .ptok.nominated{border-color:#c9a84c;box-shadow:0 0 0 1px #c9a84c44}
 .ptok.voted-yes{border-color:#5a9fd4}
 .dead-cross{position:absolute;top:.3rem;right:.5rem;color:#c92c2c;font-size:1rem;font-weight:bold}
-.p-icon{font-size:2rem;line-height:1}
-.p-rname{font-size:.78rem;color:var(--gold-dim);margin:.2rem 0 .1rem}
-.p-name{font-size:1rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.p-icon{font-size:2.1rem;line-height:1}
+.p-rname{font-size:.82rem;color:var(--gold-dim);margin:.2rem 0 .1rem}
+.p-name{font-size:1.05rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 .p-dots{display:flex;gap:.32rem;margin-top:.38rem;flex-wrap:wrap;align-items:center}
 .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .dot-a{background:#2cc97a}.dot-d{background:#c92c2c}.dot-drunk{background:#c9842c}.dot-pois{background:#7ac92c}.dot-prot{background:#5a7aff}
@@ -104,7 +105,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim)}
 .vote-bar-fill{height:100%;border-radius:20px;background:var(--vote-text);transition:width .3s ease}
 .vote-bar-fill.reached{background:#5ad4a0}
 .vote-players{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.55rem}
-.vp{font-size:.8rem;padding:.22rem .65rem;border-radius:20px;border:1px solid var(--border2);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;user-select:none}
+.vp{font-size:.88rem;padding:.28rem .75rem;border-radius:20px;border:1px solid var(--border2);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;user-select:none}
 .vp.yes{background:#1a3a6b44;border-color:#5a9fd4;color:#5a9fd4}
 .vp.dead-voter{opacity:.4;cursor:default;text-decoration:line-through}
 .vote-result{font-family:'Cinzel Decorative',serif;font-size:.7rem;margin-top:.6rem;padding:.4rem .7rem;border-radius:var(--radius);text-align:center}
@@ -117,7 +118,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim)}
 .guide-label::before{content:'📜';font-size:.95rem}
 .guide-step{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.48rem;padding:.48rem .58rem;background:#ffffff07;border-radius:2px}
 .gn{font-family:'Cinzel Decorative',serif;font-size:.58rem;color:var(--guide-text);opacity:.55;flex-shrink:0;margin-top:.18rem;min-width:1.1rem}
-.gt{font-size:.9rem;line-height:1.58;color:var(--guide-text)}
+.gt{font-size:.95rem;line-height:1.62;color:var(--guide-text)}
 .gt strong{color:#b0eeb0}
 .guide-quote{display:block;font-style:italic;color:#c8eec8;background:#ffffff0a;border-left:2px solid var(--guide-border);padding:.32rem .58rem;margin:.28rem 0;border-radius:0 2px 2px 0;font-size:.88rem;line-height:1.5}
 
@@ -127,8 +128,8 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim)}
 .ndot.cur{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-dim)}
 .ndot.done{opacity:.32}
 .nstep{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:1.2rem;margin-bottom:.7rem}
-.nstep-icon{font-size:2.6rem}.nstep-role{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);margin:.3rem 0}
-.nstep-ability{font-size:.95rem;line-height:1.68;color:var(--text);font-weight:300;margin-bottom:.9rem}
+.nstep-icon{font-size:2.6rem}.nstep-role{font-family:'Cinzel Decorative',serif;font-size:1.2rem;color:var(--gold);margin:.3rem 0}
+.nstep-ability{font-size:1rem;line-height:1.68;color:var(--text);font-weight:300;margin-bottom:.9rem}
 .nstep-players{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
 .npc{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:.2rem .75rem;font-size:.88rem;color:var(--text-dim)}
 .nnav{display:flex;gap:.7rem}
@@ -141,8 +142,8 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim)}
 #sheet.open{transform:translateY(0)}
 .sh-title{font-family:'Cinzel Decorative',serif;font-size:.88rem;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
 .act-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem}
-.act-btn{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.65rem .4rem;text-align:center;cursor:pointer;font-family:'Crimson Pro',serif;font-size:.85rem;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.2rem;transition:background .15s;line-height:1.25;-webkit-tap-highlight-color:transparent}
-.act-btn .ai{font-size:1.35rem}
+.act-btn{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.75rem .4rem;text-align:center;cursor:pointer;font-family:'Crimson Pro',serif;font-size:.92rem;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.2rem;transition:background .15s;line-height:1.25;-webkit-tap-highlight-color:transparent}
+.act-btn .ai{font-size:1.45rem}
 .act-btn:active{background:var(--border)}
 .act-btn.danger{border-color:#5a1a2a;color:#d45570}
 .act-btn.warn{border-color:#5a3a1a;color:#d4955a}
@@ -186,8 +187,8 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim)}
 .sum-player{display:flex;align-items:center;gap:.65rem;padding:.48rem 0;border-bottom:1px solid #1a1015}
 .sum-player:last-child{border-bottom:none}
 .sum-p-icon{font-size:1.5rem;flex-shrink:0}
-.sum-p-name{font-size:.95rem;font-weight:600;flex:1}
-.sum-p-role{font-size:.82rem;color:var(--text-dim)}
+.sum-p-name{font-size:1rem;font-weight:600;flex:1}
+.sum-p-role{font-size:.88rem;color:var(--text-dim)}
 .sum-tag{font-size:.62rem;padding:.12rem .45rem;border-radius:20px;font-family:'Cinzel Decorative',serif;letter-spacing:.06em;flex-shrink:0}
 .sum-tag.alive{background:#1a5a3a33;color:#5ad4a0;border:1px solid #2a5a3a}
 .sum-tag.dead{background:#3a1a1a33;color:#c97a7a;border:1px solid #4a2a2a}
@@ -357,7 +358,7 @@ const ROLES=[
   {id:'fortuneteller',edition:'TB',team:'TOWNSFOLK',name:'Adivina',icon:'🔮',ability:'Cada noche elige 2 jugadores: sabes si alguno es el Demonio.',firstNight:6,otherNight:2},
   {id:'undertaker',edition:'TB',team:'TOWNSFOLK',name:'Enterrador',icon:'⚰️',ability:'Cada noche (excl. primera) sabes el rol del jugador ejecutado hoy.',firstNight:0,otherNight:3},
   {id:'monk',edition:'TB',team:'TOWNSFOLK',name:'Monje',icon:'🧘',ability:'Cada noche (excl. primera) elige un jugador: protegido del Demonio esta noche.',firstNight:0,otherNight:4},
-  {id:'ravenkeeper',edition:'TB',team:'TOWNSFOLK',name:'Guardacuervos',icon:'🐦‍⬛',ability:'Si mueres de noche, elige a un jugador: sabes su rol.',firstNight:0,otherNight:5},
+  {id:'ravenkeeper',edition:'TB',team:'TOWNSFOLK',name:'Augur',icon:'🐦‍⬛',ability:'Si mueres de noche, elige a un jugador: sabes su rol.',firstNight:0,otherNight:5},
   {id:'virgin',edition:'TB',team:'TOWNSFOLK',name:'Virgen',icon:'👼',ability:'La primera vez que seas nominado, si el nominador es Aldeano, muere.',firstNight:0,otherNight:0},
   {id:'slayer',edition:'TB',team:'TOWNSFOLK',name:'Cazador',icon:'🏹',ability:'Una vez por partida, elige a un jugador de día: si es el Demonio, muere.',firstNight:0,otherNight:0},
   {id:'soldier',edition:'TB',team:'TOWNSFOLK',name:'Soldado',icon:'⚔️',ability:'Eres inmune a los ataques del Demonio.',firstNight:0,otherNight:0},
@@ -370,7 +371,7 @@ const ROLES=[
   {id:'spy',edition:'TB',team:'MINION',name:'Espía',icon:'🕵️',ability:'Cada noche ve el Grimorio. Puede ser considerado bueno.',firstNight:9,otherNight:8},
   {id:'scarletwoman',edition:'TB',team:'MINION',name:'Mujer Escarlata',icon:'💋',ability:'Si hay 5+ vivos y el Demonio muere, te conviertes en el Demonio.',firstNight:0,otherNight:0},
   {id:'baron',edition:'TB',team:'MINION',name:'Barón',icon:'🎩',ability:'Hay 2 Forasteros extra en esta partida.',firstNight:0,otherNight:0},
-  {id:'imp',edition:'TB',team:'DEMON',name:'Duende',icon:'😈',ability:'Cada noche (excl. primera) elige un jugador: muere. Si te matas, un Secuaz se convierte en Duende.',firstNight:0,otherNight:9},
+  {id:'imp',edition:'TB',team:'DEMON',name:'Diablo',icon:'😈',ability:'Cada noche (excl. primera) elige un jugador: muere. Si te matas a ti mismo, un Secuaz se convierte en el nuevo Diablo.',firstNight:0,otherNight:9},
   {id:'grandmother',edition:'BMR',team:'TOWNSFOLK',name:'Abuela',icon:'👵',ability:'Sabes el rol de un jugador. Si el Demonio mata a ese jugador, también mueres.',firstNight:10,otherNight:0},
   {id:'sailor',edition:'BMR',team:'TOWNSFOLK',name:'Marinero',icon:'⚓',ability:'Cada noche elige un vivo: uno de los dos no puede morir esta noche.',firstNight:11,otherNight:10},
   {id:'chambermaid',edition:'BMR',team:'TOWNSFOLK',name:'Doncella',icon:'🧹',ability:'Cada noche elige 2 vivos: sabes cuántos se despertaron por su habilidad.',firstNight:0,otherNight:11},
@@ -379,17 +380,17 @@ const ROLES=[
   {id:'gambler',edition:'BMR',team:'TOWNSFOLK',name:'Jugador',icon:'🎲',ability:'Cada noche adivina el rol de un jugador: si fallas, mueres.',firstNight:0,otherNight:14},
   {id:'gossip',edition:'BMR',team:'TOWNSFOLK',name:'Cotilla',icon:'💬',ability:'Cada día declara algo público. Esta noche, si era cierto, un jugador muere.',firstNight:0,otherNight:15},
   {id:'fool',edition:'BMR',team:'TOWNSFOLK',name:'Bufón',icon:'🃏',ability:'La primera vez que deberías morir, no mueres.',firstNight:0,otherNight:0},
-  {id:'tinker',edition:'BMR',team:'OUTSIDER',name:'Hojalatero',icon:'🔧',ability:'Podrías morir en cualquier momento.',firstNight:0,otherNight:0},
-  {id:'lunatic',edition:'BMR',team:'OUTSIDER',name:'Lunático',icon:'🌀',ability:'Crees que eres un Demonio pero no lo eres.',firstNight:0,otherNight:18},
+  {id:'tinker',edition:'BMR',team:'OUTSIDER',name:'Mártir',icon:'🔧',ability:'Podrías morir en cualquier momento.',firstNight:0,otherNight:0},
+  {id:'lunatic',edition:'BMR',team:'OUTSIDER',name:'Impostor',icon:'🌀',ability:'Crees que eres un Demonio pero no lo eres.',firstNight:0,otherNight:18},
   {id:'goon',edition:'BMR',team:'OUTSIDER',name:'Matón',icon:'💪',ability:'Cada vez que un maligno te elige de noche, cambias de equipo.',firstNight:0,otherNight:0},
   {id:'godfather',edition:'BMR',team:'MINION',name:'Padrino',icon:'🌹',ability:'Sabes qué Forasteros hay. Si uno muere de día, esta noche matas a un jugador.',firstNight:13,otherNight:19},
   {id:'devilsadvocate',edition:'BMR',team:'MINION',name:'Abogado del Diablo',icon:'⚖️',ability:'Cada noche elige un vivo: si es ejecutado mañana, no muere.',firstNight:0,otherNight:20},
   {id:'assassin',edition:'BMR',team:'MINION',name:'Asesino',icon:'🗡️',ability:'Una vez, elige un jugador de noche: muere aunque esté protegido.',firstNight:0,otherNight:21},
   {id:'mastermind',edition:'BMR',team:'MINION',name:'Cerebro',icon:'🧠',ability:'Si el Demonio muere ejecutado, el juego continúa un día y noche más.',firstNight:0,otherNight:0},
-  {id:'zombuul',edition:'BMR',team:'DEMON',name:'Zombuul',icon:'🧟',ability:'Cada noche sin muertes hoy, elige un jugador que muere. La primera vez que "mueras", no es real.',firstNight:0,otherNight:22},
-  {id:'pukka',edition:'BMR',team:'DEMON',name:'Pukka',icon:'🐍',ability:'Cada noche envenena a alguien. El envenenado de anoche muere.',firstNight:0,otherNight:23},
-  {id:'shabaloth',edition:'BMR',team:'DEMON',name:'Shabaloth',icon:'👹',ability:'Cada noche elige 2 jugadores: mueren.',firstNight:0,otherNight:24},
-  {id:'po',edition:'BMR',team:'DEMON',name:'Po',icon:'💀',ability:'Cada noche puedes no atacar: la siguiente noche matas a 3.',firstNight:0,otherNight:25},
+  {id:'zombuul',edition:'BMR',team:'DEMON',name:'Espectro',icon:'🧟',ability:'Cada noche sin muertes hoy, elige un jugador que muere. La primera vez que "mueras", no es real.',firstNight:0,otherNight:22},
+  {id:'pukka',edition:'BMR',team:'DEMON',name:'Ángel Caído',icon:'🐍',ability:'Cada noche envenena a alguien. El envenenado de anoche muere.',firstNight:0,otherNight:23},
+  {id:'shabaloth',edition:'BMR',team:'DEMON',name:'Bestia',icon:'👹',ability:'Cada noche elige 2 jugadores: mueren.',firstNight:0,otherNight:24},
+  {id:'po',edition:'BMR',team:'DEMON',name:'Silencioso',icon:'💀',ability:'Cada noche puedes no atacar: la siguiente noche matas a 3.',firstNight:0,otherNight:25},
   {id:'clockmaker',edition:'SV',team:'TOWNSFOLK',name:'Relojero',icon:'⏰',ability:'Sabes los pasos entre el Demonio y su Secuaz más cercano.',firstNight:14,otherNight:0},
   {id:'dreamer',edition:'SV',team:'TOWNSFOLK',name:'Soñador',icon:'💭',ability:'Cada noche elige un jugador: sabes uno de sus dos posibles roles.',firstNight:15,otherNight:26},
   {id:'mathematician',edition:'SV',team:'TOWNSFOLK',name:'Matemático',icon:'➗',ability:'Cada noche sabes cuántas habilidades no funcionaron correctamente.',firstNight:0,otherNight:28},
@@ -405,11 +406,11 @@ const ROLES=[
   {id:'klutz',edition:'SV',team:'OUTSIDER',name:'Torpe',icon:'🤦',ability:'Al morir, señala un vivo: si es maligno, el Bien pierde.',firstNight:0,otherNight:0},
   {id:'eviltwin',edition:'SV',team:'MINION',name:'Gemelo Malvado',icon:'👿',ability:'Conoces a tu gemelo bueno. Si tu gemelo es ejecutado, los malignos ganan.',firstNight:19,otherNight:0},
   {id:'witch',edition:'SV',team:'MINION',name:'Bruja',icon:'🧙‍♀️',ability:'Cada noche elige un jugador: si nomina mañana, muere.',firstNight:20,otherNight:36},
-  {id:'pithag',edition:'SV',team:'MINION',name:'Pit-Hag',icon:'🌪️',ability:'Cada noche elige jugador + rol: ese jugador se convierte en ese rol.',firstNight:22,otherNight:38},
-  {id:'fanggu',edition:'SV',team:'DEMON',name:'Fang Gu',icon:'🧛',ability:'Cada noche elige un jugador: muere. La primera vez con un Forastero, te conviertes en él.',firstNight:0,otherNight:39},
-  {id:'vigormortis',edition:'SV',team:'DEMON',name:'Vigormortis',icon:'🦴',ability:'Cada noche elige un jugador: muere. Secuaces muertos conservan su habilidad.',firstNight:0,otherNight:40},
-  {id:'nodashii',edition:'SV',team:'DEMON',name:'No Dashii',icon:'🌊',ability:'Cada noche elige un jugador: muere. Sus dos vecinos aldeanos están envenenados.',firstNight:0,otherNight:41},
-  {id:'vortox',edition:'SV',team:'DEMON',name:'Vortox',icon:'🌀',ability:'Cada noche elige un jugador: muere. Toda info de Aldeanos es incorrecta.',firstNight:0,otherNight:42},
+  {id:'pithag',edition:'SV',team:'MINION',name:'Hechicera',icon:'🌪️',ability:'Cada noche elige jugador + rol: ese jugador se convierte en ese rol.',firstNight:22,otherNight:38},
+  {id:'fanggu',edition:'SV',team:'DEMON',name:'Vampiro',icon:'🧛',ability:'Cada noche elige un jugador: muere. La primera vez con un Forastero, te conviertes en él.',firstNight:0,otherNight:39},
+  {id:'vigormortis',edition:'SV',team:'DEMON',name:'Señor de los Muertos',icon:'🦴',ability:'Cada noche elige un jugador: muere. Secuaces muertos conservan su habilidad.',firstNight:0,otherNight:40},
+  {id:'nodashii',edition:'SV',team:'DEMON',name:'Marea Oscura',icon:'🌊',ability:'Cada noche elige un jugador: muere. Sus dos vecinos aldeanos están envenenados.',firstNight:0,otherNight:41},
+  {id:'vortox',edition:'SV',team:'DEMON',name:'Caos',icon:'🌀',ability:'Cada noche elige un jugador: muere. Toda info de Aldeanos es incorrecta.',firstNight:0,otherNight:42},
 ];
 function roleById(id){return ROLES.find(r=>r.id===id);}
 
@@ -576,7 +577,7 @@ function nightStepGuide(step){
     butler:['El jugador señala a su "amo". Mañana solo puede votar si el amo vota primero.'],
     poisoner:['El jugador señala a alguien. Ese jugador queda envenenado (márcalo). Su habilidad dará info incorrecta.'],
     spy:['Muéstrale el Grimorio completo en silencio. Puede ver todos los roles.'],
-    imp:['El jugador señala a quien quiere matar. Márcalo para morir al amanecer.','Si se señala a sí mismo, un Secuaz aleatorio se convierte en el nuevo Duende.'],
+    imp:['El jugador señala a quien quiere matar. Márcalo para morir al amanecer.','Si se señala a sí mismo, un Secuaz aleatorio se convierte en el nuevo Diablo.'],
     godfather:['Muéstrale la lista de Forasteros en juego.','Si un Forastero murió hoy de día, señala a quien quiere matar esta noche.'],
     devilsadvocate:['El jugador señala a alguien. Si ese jugador es ejecutado mañana, no morirá.'],
     assassin:['Solo puede usarlo una vez. Si quiere, señala a alguien: muere aunque esté protegido.'],
@@ -593,7 +594,7 @@ function nightStepGuide(step){
     snakecharmer:['El jugador señala a alguien. Si es el Demonio, intercambian roles (el nuevo Demonio queda envenenado).'],
     juggler:['Muéstrale cuántas de sus apuestas del día acertaron.'],
     sage:['Solo si murió esta noche. Señala 2 jugadores al jugador: uno de ellos es el Demonio.'],
-    fanggu:['Señala a alguien: muere. Si es Forastero (primera vez), ese jugador se convierte en Fang Gu y este muere.'],
+    fanggu:['Señala a alguien: muere. Si es Forastero (primera vez), ese jugador se convierte en Vampiro y este muere.'],
     vigormortis:['Señala a alguien: muere. Los Secuaces ya muertos conservan su habilidad.'],
     nodashii:['Señala a alguien: muere. Sus dos vecinos aldeanos están envenenados permanentemente.'],
     vortox:['Señala a alguien: muere. Toda la información de Aldeanos esta noche es incorrecta — dala al revés.'],
