@@ -624,7 +624,7 @@ function getTeamRoles(roles, team) {
     if (!token) { showError(); return; }
 
     try {
-      playerData = JSON.parse(atob(token));
+      playerData = JSON.parse(atob(decodeURIComponent(token)));
     } catch {
       showError(); return;
     }
@@ -632,7 +632,7 @@ function getTeamRoles(roles, team) {
     // Load game state from localStorage (shared device scenario)
     // or just show role from token
     try {
-      const raw = localStorage.getItem('botc_state');
+      const raw = localStorage.getItem('botc');
       if (raw) gameState = JSON.parse(raw);
     } catch {}
 
