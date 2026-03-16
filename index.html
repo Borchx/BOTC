@@ -477,7 +477,31 @@ let _L=[];
 function subscribe(fn){_L.push(fn);}
 function emit(){_L.forEach(fn=>fn(STATE));persist();}
 function persist(){try{localStorage.setItem('botc',JSON.stringify(STATE));}catch(e){}}
-function hydrate(){try{const r=localStorage.getItem('botc');if(r)STATE={...STATE,...JSON.parse(r)};}catch(e){}}
+function hydrate(){
+  try{
+    const r=localStorage.getItem('botc');
+    if(!r) return;
+    const saved=JSON.parse(r);
+    // Only restore if there's an active game in progress
+    if(saved.phase&&saved.phase!=='setup'&&saved.phase!=='ended'&&saved.players?.length){
+      STATE={...STATE,...saved};
+      // After hydrate, switch to grimoire if game is active
+      setTimeout(()=>{
+        if(STATE.phase!=='setup'&&STATE.phase!=='ended'){
+          nav('grimoire',document.querySelector('[data-v="grimoire"]'));
+          showResumeToast();
+        }
+      },100);
+    }
+  }catch(e){}
+}
+function showResumeToast(){
+  const t=document.getElementById('ntoa');
+  t.textContent='🔄 Partida anterior restaurada. Puedes continuar.';
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),4000);
+}
 function addLog(text,type='info'){STATE.log=[{id:Date.now()+Math.random(),time:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),text,type},...STATE.log].slice(0,300);}
 function livePlayers(){return STATE.players.filter(p=>p.alive);}
 function demonPlayer(){return STATE.players.find(p=>{const r=roleById(p.roleId);return r&&r.team==='DEMON'&&p.alive;});}
@@ -493,16 +517,33 @@ window.addPInput=addPInput;window.genPlayers=genPlayers;
 
 function renderEditions(){const el=document.getElementById('ed-grid');el.innerHTML='';Object.values(EDITIONS).filter(e=>e.id!=='CUSTOM').forEach(ed=>{const d=document.createElement('div');d.className='ed-pill'+(selEditions.includes(ed.id)?' sel':'');d.innerHTML=`<span class="ed-icon">${ed.emoji}</span><span class="ed-name">${ed.name}</span>`;d.onclick=()=>{if(selEditions.includes(ed.id))selEditions=selEditions.filter(e=>e!==ed.id);else selEditions.push(ed.id);if(!selEditions.length)selEditions=[ed.id];selRoles=selRoles.filter(id=>ROLES.find(r=>r.id===id&&selEditions.includes(r.edition)));renderEditions();renderRoleSel();};el.appendChild(d);});}
 function renderRoleSel(){const el=document.getElementById('role-sel');el.innerHTML='';const TO=['TOWNSFOLK','OUTSIDER','MINION','DEMON'];const TN={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};TO.forEach(team=>{const roles=ROLES.filter(r=>selEditions.includes(r.edition)&&r.team===team);if(!roles.length)return;const sep=document.createElement('div');sep.className=`tsep ${team}`;sep.textContent=TN[team];el.appendChild(sep);const grid=document.createElement('div');grid.className='role-grid';roles.forEach(r=>{const sel=selRoles.includes(r.id);const c=document.createElement('div');c.className=`rc ${r.team}${sel?' sel':''}`;c.innerHTML=`<span>${r.icon}</span><span>${r.name}</span>`;c.onclick=()=>{selRoles.includes(r.id)?selRoles=selRoles.filter(x=>x!==r.id):selRoles.push(r.id);renderRoleSel();renderScriptStats();};grid.appendChild(c);});el.appendChild(grid);});renderScriptStats();}
-function renderScriptStats(){const el=document.getElementById('script-stats');const TN={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};const counts={};['TOWNSFOLK','OUTSIDER','MINION','DEMON'].forEach(t=>counts[t]=selRoles.filter(id=>{const r=roleById(id);return r&&r.team===t;}).length);el.innerHTML=Object.entries(counts).map(([t,c])=>`<div class="sstat"><span>${TN[t]}</span><span>${c}</span></div>`).join('')+`<div class="sstat" style="border-top:1px solid var(--border);padding-top:.2rem;margin-top:.2rem"><span>Total</span><span>${selRoles.length}</span></div>`;}
+function renderScriptStats(){
+  const el=document.getElementById('script-stats');
+  const TN={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};
+  const counts={};
+  ['TOWNSFOLK','OUTSIDER','MINION','DEMON'].forEach(t=>counts[t]=selRoles.filter(id=>{const r=roleById(id);return r&&r.team===t;}).length);
+  const playerCount=document.querySelectorAll('#p-inputs input').length;
+  const total=selRoles.length;
+  const overLimit=total>playerCount&&playerCount>0;
+  const hasDemon=selRoles.some(id=>{const r=roleById(id);return r&&r.team==='DEMON';});
+  el.innerHTML=Object.entries(counts).map(([t,c])=>`<div class="sstat"><span>${TN[t]}</span><span>${c}</span></div>`).join('')
+    +`<div class="sstat" style="border-top:1px solid var(--border);padding-top:.2rem;margin-top:.2rem"><span>Total</span><span style="color:${overLimit?'#e84b4b':'var(--text)'}">${total}${playerCount>0?` / ${playerCount}`:''}</span></div>`
+    +(overLimit?`<div style="font-size:.78rem;color:#e84b4b;margin-top:.3rem">⚠️ Más roles que jugadores (${total-playerCount} de más)</div>`:'')
+    +(!hasDemon&&total>0?`<div style="font-size:.78rem;color:#c9842c;margin-top:.3rem">⚠️ No hay ningún Demonio en el script</div>`:'');
+}
 
 function startGame(){
   const inputs=document.querySelectorAll('#p-inputs input');
   const names=[...inputs].map(i=>i.value.trim()).filter(Boolean);
   if(names.length<3){alert('Necesitas al menos 3 jugadores.');return;}
   if(!selRoles.length){alert('Selecciona al menos un rol.');return;}
+  if(selRoles.length>names.length){alert(`Tienes más roles (${selRoles.length}) que jugadores (${names.length}). Elimina ${selRoles.length-names.length} rol${selRoles.length-names.length>1?'es':''} o añade más jugadores.`);return;}
+  const hasDemon=selRoles.some(id=>{const r=roleById(id);return r&&r.team==='DEMON';});
+  if(!hasDemon){alert('El script necesita al menos un Demonio.');return;}
+  _undoStack=[];document.getElementById('undo-btn').classList.remove('visible');
   STATE.gameId=Math.random().toString(36).substr(2,8).toUpperCase();
   STATE.phase='setup';STATE.day=0;STATE.winner=null;STATE.log=[];STATE.votes={};
-  STATE.players=names.map((name,i)=>({id:`p${i}`,name,roleId:null,alive:true,drunk:false,poisoned:false,protected:false,nominated:false,note:''}));
+  STATE.players=names.map((name,i)=>({id:`p${i}`,name,roleId:null,alive:true,drunk:false,poisoned:false,protected:false,nominated:false,note:'',ghost_votes:1}));
   STATE.script=[...selRoles];
   const avail=[...selRoles];
   for(let i=avail.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[avail[i],avail[j]]=[avail[j],avail[i]];}
@@ -522,6 +563,8 @@ function doStartDay(){
   STATE.phase='day';STATE.day++;
   STATE.players=STATE.players.map(p=>({...p,nominated:false,protected:false}));
   STATE.votes={};
+  // Reset timer for new day
+  clearInterval(_timerInterval);_timerRunning=false;_timerSeconds=0;
   addLog(`☀️ Día ${STATE.day}.`,'phase');
   emit();narratePhase('day');updateMusicPhase('day');checkWin();
 }
@@ -532,7 +575,7 @@ function doEndGame(winner){
   emit();narratePhase('ended',winner);
   showSummary(winner);
 }
-function checkWin(){if(!demonPlayer()){doEndGame('good');return;}if(livePlayers().length<=2&&STATE.phase==='day'){doEndGame('evil');}}
+function checkWin(){if(!demonPlayer()){doEndGame('good');return;}if(livePlayers().length<=2&&STATE.phase==='day'&&STATE.day>0){doEndGame('evil');}}
 function advNight(){if(STATE.nightStep<STATE.nightOrder.length-1){STATE.nightStep++;emit();}}
 function prevNight(){if(STATE.nightStep>0){STATE.nightStep--;emit();}}
 window.advNight=advNight;window.prevNight=prevNight;
@@ -764,7 +807,6 @@ window.addManualLog=addManualLog;
 let _sheetPid=null;
 function openSheet(player,state){
   _sheetPid=player.id;
-  saveSnapshot();
   const r=roleById(player.roleId);
   document.getElementById('sh-icon').textContent=r?.icon||'❓';
   document.getElementById('sh-name').textContent=`${player.name}${r?' — '+r.name:''}`;
@@ -827,9 +869,21 @@ function showSummary(winner){
 }
 function resetGame(){
   document.getElementById('summary-bg').classList.remove('show');
+  // Clear timer
+  clearInterval(_timerInterval);_timerRunning=false;_timerSeconds=0;
+  // Clear undo stack
+  _undoStack=[];
+  document.getElementById('undo-btn').classList.remove('visible');
+  // Stop music
+  stopAllMusic();_curMP=null;
+  // Clear persisted state completely
+  try{localStorage.removeItem('botc');}catch(e){}
   selRoles=[];selEditions=['TB'];
   STATE={gameId:null,phase:'setup',day:0,players:[],script:[],log:[],nightOrder:[],nightStep:0,winner:null,votes:{}};
   renderEditions();renderRoleSel();
+  // Clear player inputs and add fresh ones
+  document.getElementById('p-inputs').innerHTML='';
+  for(let i=0;i<5;i++) addPInput();
   nav('setup',document.querySelector('[data-v="setup"]'));emit();
 }
 window.resetGame=resetGame;
