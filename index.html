@@ -217,6 +217,32 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim);box-shadow:
 .empty{text-align:center;color:var(--text-muted);padding:2.5rem;font-style:italic;font-size:.92rem}
 @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .fu{animation:fu .28s ease both}
+
+/* ── Player circle ── */
+.circle-wrap{position:relative;width:100%;padding-bottom:100%;margin:.5rem 0}
+.circle-svg{position:absolute;inset:0;width:100%;height:100%}
+
+/* ── Day timer ── */
+.timer-wrap{display:flex;align-items:center;gap:.65rem;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.6rem .85rem;margin-bottom:.5rem}
+.timer-display{font-family:'Cinzel Decorative',serif;font-size:1.5rem;color:var(--gold);letter-spacing:.08em;min-width:3.5rem;text-align:center}
+.timer-display.urgent{color:#e84b4b;animation:pulse .6s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:1}to{opacity:.5}}
+.timer-label{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.15em;color:var(--text-muted);text-transform:uppercase}
+.timer-btns{display:flex;gap:.35rem;margin-left:auto}
+.timer-btn{background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text-dim);font-size:.95rem;padding:.2rem .5rem;cursor:pointer;transition:all .18s;-webkit-tap-highlight-color:transparent}
+.timer-btn:active{opacity:.6;transform:scale(.93)}
+.timer-btn.running{border-color:var(--gold-dim);color:var(--gold)}
+
+/* ── Death history in grimoire ── */
+.death-strip{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.75rem;padding:.6rem .7rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.death-chip{display:flex;align-items:center;gap:.3rem;font-size:.82rem;padding:.18rem .55rem;background:#3a1010;border:1px solid #6a2020;border-radius:20px;color:#e08080}
+.death-chip .dc-icon{font-size:1rem}
+.death-chip .dc-when{font-size:.65rem;color:#c06060;margin-left:.1rem}
+
+/* ── Undo button ── */
+.undo-btn{position:fixed;bottom:calc(var(--nav-h) + .7rem);left:.75rem;z-index:80;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 10px #00000050;opacity:0;pointer-events:none;transition:opacity .25s,transform .2s;-webkit-tap-highlight-color:transparent}
+.undo-btn.visible{opacity:.85;pointer-events:all}
+.undo-btn:active{transform:scale(.88);opacity:1}
 </style>
 </head>
 <body>
@@ -260,11 +286,21 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim);box-shadow:
     <button class="btn btn-red" style="width:100%;text-align:center;font-size:.82rem;padding:.82rem" onclick="startGame()">⚔️ Comenzar partida</button>
   </div>
 
+  <!-- CIRCLE -->
+  <div class="view" id="view-circle">
+    <div class="stitle">Círculo de Jugadores</div>
+    <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:.75rem;line-height:1.5">Los jugadores se sientan en orden circular. Sus vecinos son clave para roles como Empático, Relojero o Marea Oscura.</p>
+    <div class="circle-wrap"><svg class="circle-svg" id="circle-svg" viewBox="0 0 400 400"></svg></div>
+    <div style="font-size:.8rem;color:var(--text-muted);text-align:center;margin-top:.5rem;font-style:italic">Toca un jugador para gestionar su estado</div>
+  </div>
+
   <!-- GRIMOIRE -->
   <div class="view" id="view-grimoire">
     <div class="phase-bar" id="phase-bar"></div>
     <div id="grimoire-guide"></div>
+    <div id="timer-container"></div>
     <div id="vote-panel-container"></div>
+    <div id="death-strip-container"></div>
     <div class="stitle">Grimorio</div>
     <div class="g-grid fu" id="g-grid"></div>
   </div>
@@ -293,6 +329,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim);box-shadow:
   <button class="nb active" data-v="setup" onclick="nav('setup',this)"><span class="ni">⚙️</span>SETUP</button>
   <button class="nb" data-v="grimoire" onclick="nav('grimoire',this)"><span class="ni">📖</span>GRIMORIO</button>
   <button class="nb" data-v="night" onclick="nav('night',this)"><span class="ni">🌙</span>NOCHE</button>
+  <button class="nb" data-v="circle" onclick="nav('circle',this)"><span class="ni">⭕</span>CÍRCULO</button>
   <button class="nb" data-v="log" onclick="nav('log',this)"><span class="ni">📜</span>LOG</button>
 </div>
 
@@ -356,6 +393,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--gold-dim);box-shadow:
 
 <!-- NARRATOR TOAST -->
 <div id="ntoa"></div>
+<button class="undo-btn" id="undo-btn" onclick="undoAction()" title="Deshacer">↩️</button>
 
 <script>
 // ═══════════════════════════════════════
@@ -628,7 +666,7 @@ function guideCard(title,steps){
 // RENDER
 // ═══════════════════════════════════════
 subscribe(function(s){
-  renderPhasePill(s);renderPhaseBar(s);renderGrimoire(s);renderVotePanel(s);renderNightView(s);renderLog(s);
+  renderPhasePill(s);renderPhaseBar(s);renderGrimoire(s);renderVotePanel(s);renderNightView(s);renderLog(s);renderTimer();renderDeathStrip(s);renderCircle(s);
 });
 
 function renderPhasePill(s){
@@ -726,6 +764,7 @@ window.addManualLog=addManualLog;
 let _sheetPid=null;
 function openSheet(player,state){
   _sheetPid=player.id;
+  saveSnapshot();
   const r=roleById(player.roleId);
   document.getElementById('sh-icon').textContent=r?.icon||'❓';
   document.getElementById('sh-name').textContent=`${player.name}${r?' — '+r.name:''}`;
@@ -808,6 +847,225 @@ window.openHelp=openHelp;window.closeHelp=closeHelp;window.closeHelpBg=closeHelp
 // ═══════════════════════════════════════
 function nav(viewId,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));document.getElementById('view-'+viewId).classList.add('active');if(btn)btn.classList.add('active');}
 window.nav=nav;
+
+
+// ═══════════════════════════════════════
+// UNDO SYSTEM
+// ═══════════════════════════════════════
+let _undoStack = [];
+
+function saveSnapshot(){
+  _undoStack.push(JSON.stringify({players:STATE.players,phase:STATE.phase,day:STATE.day,votes:STATE.votes,log:STATE.log.slice(0,5)}));
+  if(_undoStack.length>20) _undoStack.shift();
+  document.getElementById('undo-btn').classList.add('visible');
+}
+
+function undoAction(){
+  if(!_undoStack.length) return;
+  const snap=JSON.parse(_undoStack.pop());
+  STATE.players=snap.players;
+  STATE.phase=snap.phase;
+  STATE.day=snap.day;
+  STATE.votes=snap.votes||{};
+  // Restore top log entries
+  STATE.log=[{id:Date.now(),time:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),text:'↩️ Acción deshecha.',type:'system'},...STATE.log];
+  if(!_undoStack.length) document.getElementById('undo-btn').classList.remove('visible');
+  emit();
+}
+window.undoAction=undoAction;
+
+// Patch key actions to save snapshot first
+const _origKillPlayer=(fn)=>function(pid,reason){saveSnapshot();return fn(pid,reason);};
+const _origRevive=(fn)=>function(pid){saveSnapshot();return fn(pid);};
+// We'll call saveSnapshot manually in openSheet actions
+
+// ═══════════════════════════════════════
+// DAY TIMER
+// ═══════════════════════════════════════
+let _timerInterval=null;
+let _timerSeconds=0;
+let _timerRunning=false;
+const TIMER_PRESETS=[3,5,7,10]; // minutes
+
+function renderTimer(){
+  const el=document.getElementById('timer-container');
+  if(!el) return;
+  if(STATE.phase!=='day'){el.innerHTML='';return;}
+  const mins=Math.floor(_timerSeconds/60);
+  const secs=_timerSeconds%60;
+  const display=`${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  const urgent=_timerSeconds>0&&_timerSeconds<=30;
+  el.innerHTML=`<div class="timer-wrap">
+    <div>
+      <div class="timer-label">Tiempo debate</div>
+      <div class="timer-display${urgent?' urgent':''}">${display}</div>
+    </div>
+    <div class="timer-btns">
+      ${TIMER_PRESETS.map(m=>`<button class="timer-btn" onclick="setTimer(${m})">${m}'</button>`).join('')}
+      <button class="timer-btn${_timerRunning?' running':''}" onclick="toggleTimer()">${_timerRunning?'⏸':'▶'}</button>
+      <button class="timer-btn" onclick="resetTimer()">↺</button>
+    </div>
+  </div>`;
+}
+
+function setTimer(minutes){
+  clearInterval(_timerInterval);_timerRunning=false;
+  _timerSeconds=minutes*60;
+  renderTimer();
+}
+
+function toggleTimer(){
+  if(_timerRunning){
+    clearInterval(_timerInterval);_timerRunning=false;
+  } else {
+    if(_timerSeconds===0) _timerSeconds=5*60;
+    _timerRunning=true;
+    _timerInterval=setInterval(()=>{
+      if(_timerSeconds<=0){
+        clearInterval(_timerInterval);_timerRunning=false;
+        speak('El tiempo de debate ha terminado.');
+        renderTimer();return;
+      }
+      _timerSeconds--;
+      if(_timerSeconds===30) speak('Quedan treinta segundos.');
+      renderTimer();
+    },1000);
+  }
+  renderTimer();
+}
+
+function resetTimer(){
+  clearInterval(_timerInterval);_timerRunning=false;_timerSeconds=0;renderTimer();
+}
+window.setTimer=setTimer;window.toggleTimer=toggleTimer;window.resetTimer=resetTimer;
+
+// ═══════════════════════════════════════
+// DEATH HISTORY STRIP
+// ═══════════════════════════════════════
+function renderDeathStrip(s){
+  const el=document.getElementById('death-strip-container');
+  if(!el) return;
+  const deaths=s.log.filter(e=>e.type==='death'||e.type==='execution');
+  if(!deaths.length){el.innerHTML='';return;}
+  el.innerHTML=`<div class="death-strip">
+    ${deaths.slice(0,10).map(e=>{
+      // Extract player name from log text
+      const nameMatch=e.text.match(/💀 (.+?) ha|⚖️ (.+?) ejecutado/);
+      const name=nameMatch?(nameMatch[1]||nameMatch[2]):'?';
+      const icon=e.type==='execution'?'⚖️':'💀';
+      return `<div class="death-chip"><span class="dc-icon">${icon}</span><span>${name}</span><span class="dc-when">${e.time}</span></div>`;
+    }).join('')}
+  </div>`;
+}
+
+// ═══════════════════════════════════════
+// PLAYER CIRCLE (SVG)
+// ═══════════════════════════════════════
+function renderCircle(s){
+  const svg=document.getElementById('circle-svg');
+  if(!svg||!s.players?.length) return;
+  const players=s.players;
+  const n=players.length;
+  const cx=200,cy=200,r=155,tokenR=30;
+  svg.innerHTML='';
+
+  // Background circle
+  const bgCircle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  bgCircle.setAttribute('cx',cx);bgCircle.setAttribute('cy',cy);bgCircle.setAttribute('r',r+tokenR+5);
+  bgCircle.setAttribute('fill','none');bgCircle.setAttribute('stroke','#1e2d45');bgCircle.setAttribute('stroke-width','1');
+  svg.appendChild(bgCircle);
+
+  // Connecting lines between neighbours
+  players.forEach((_,i)=>{
+    const next=(i+1)%n;
+    const a1=(i/n)*Math.PI*2-Math.PI/2;
+    const a2=(next/n)*Math.PI*2-Math.PI/2;
+    const x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);
+    const x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x1);line.setAttribute('y1',y1);
+    line.setAttribute('x2',x2);line.setAttribute('y2',y2);
+    line.setAttribute('stroke','#1e2d45');line.setAttribute('stroke-width','1.5');
+    svg.appendChild(line);
+  });
+
+  // Player tokens
+  players.forEach((p,i)=>{
+    const angle=(i/n)*Math.PI*2-Math.PI/2;
+    const x=cx+r*Math.cos(angle);
+    const y=cy+r*Math.sin(angle);
+    const role=roleById(p.roleId);
+
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('cursor','pointer');
+    g.addEventListener('click',()=>openSheet(p,s));
+
+    // Circle bg
+    const teamColors={TOWNSFOLK:'#1a3a6b',OUTSIDER:'#1a5a6b',MINION:'#6b2a1a',DEMON:'#5a0a18'};
+    const teamBorders={TOWNSFOLK:'#3a6aab',OUTSIDER:'#3a9aab',MINION:'#ab5a3a',DEMON:'#ab2a3a'};
+    const team=role?.team||'TOWNSFOLK';
+    const bgColor=p.alive?teamColors[team]:'#1a1a1a';
+    const borderColor=p.alive?teamBorders[team]:'#3a3a3a';
+
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r',tokenR);
+    circle.setAttribute('fill',bgColor);circle.setAttribute('stroke',borderColor);circle.setAttribute('stroke-width',p.nominated?3:1.5);
+    if(p.nominated) circle.setAttribute('stroke','#e8b84b');
+    g.appendChild(circle);
+
+    // Dead overlay
+    if(!p.alive){
+      const deadLine1=document.createElementNS('http://www.w3.org/2000/svg','line');
+      deadLine1.setAttribute('x1',x-12);deadLine1.setAttribute('y1',y-12);deadLine1.setAttribute('x2',x+12);deadLine1.setAttribute('y2',y+12);
+      deadLine1.setAttribute('stroke','#c92c2c');deadLine1.setAttribute('stroke-width','2');
+      const deadLine2=document.createElementNS('http://www.w3.org/2000/svg','line');
+      deadLine2.setAttribute('x1',x+12);deadLine2.setAttribute('y1',y-12);deadLine2.setAttribute('x2',x-12);deadLine2.setAttribute('y2',y+12);
+      deadLine2.setAttribute('stroke','#c92c2c');deadLine2.setAttribute('stroke-width','2');
+      g.appendChild(deadLine1);g.appendChild(deadLine2);
+    }
+
+    // Role emoji
+    const roleText=document.createElementNS('http://www.w3.org/2000/svg','text');
+    roleText.setAttribute('x',x);roleText.setAttribute('y',y+2);
+    roleText.setAttribute('text-anchor','middle');roleText.setAttribute('dominant-baseline','middle');
+    roleText.setAttribute('font-size','18');roleText.setAttribute('opacity',p.alive?'1':'.4');
+    roleText.textContent=role?.icon||'❓';
+    g.appendChild(roleText);
+
+    // Status dots (drunk/poisoned/protected)
+    let dotX=x+tokenR-6;const dotY=y-tokenR+6;
+    if(p.drunk){const d=document.createElementNS('http://www.w3.org/2000/svg','circle');d.setAttribute('cx',dotX);d.setAttribute('cy',dotY);d.setAttribute('r',5);d.setAttribute('fill','#c9842c');g.appendChild(d);dotX-=11;}
+    if(p.poisoned){const d=document.createElementNS('http://www.w3.org/2000/svg','circle');d.setAttribute('cx',dotX);d.setAttribute('cy',dotY);d.setAttribute('r',5);d.setAttribute('fill','#7ac92c');g.appendChild(d);dotX-=11;}
+    if(p.protected){const d=document.createElementNS('http://www.w3.org/2000/svg','circle');d.setAttribute('cx',dotX);d.setAttribute('cy',dotY);d.setAttribute('r',5);d.setAttribute('fill','#5a7aff');g.appendChild(d);}
+
+    // Player name (below circle)
+    const nameText=document.createElementNS('http://www.w3.org/2000/svg','text');
+    const nameY=y+tokenR+14;
+    nameText.setAttribute('x',x);nameText.setAttribute('y',nameY);
+    nameText.setAttribute('text-anchor','middle');nameText.setAttribute('dominant-baseline','middle');
+    nameText.setAttribute('font-size','11');nameText.setAttribute('fill',p.alive?'#f0e6d0':'#5a5a5a');
+    nameText.setAttribute('font-family','Crimson Pro, serif');nameText.setAttribute('font-weight','600');
+    // Truncate long names
+    const maxChars=8;
+    nameText.textContent=p.name.length>maxChars?p.name.substr(0,maxChars)+'…':p.name;
+    g.appendChild(nameText);
+
+    svg.appendChild(g);
+  });
+
+  // Center info
+  const centerText=document.createElementNS('http://www.w3.org/2000/svg','text');
+  centerText.setAttribute('x',cx);centerText.setAttribute('y',cy-8);
+  centerText.setAttribute('text-anchor','middle');centerText.setAttribute('font-size','13');
+  centerText.setAttribute('fill','#4a4535');centerText.setAttribute('font-family','Cinzel Decorative, serif');
+  centerText.textContent=`${n} jugadores`;
+  const centerText2=document.createElementNS('http://www.w3.org/2000/svg','text');
+  centerText2.setAttribute('x',cx);centerText2.setAttribute('y',cy+12);
+  centerText2.setAttribute('text-anchor','middle');centerText2.setAttribute('font-size','11');
+  centerText2.setAttribute('fill','#3a3530');centerText2.setAttribute('font-family','Crimson Pro, serif');
+  centerText2.textContent=`${livePlayers().length} vivos`;
+  svg.appendChild(centerText);svg.appendChild(centerText2);
+}
 
 // ═══════════════════════════════════════
 // NARRATOR
