@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#0a0608"/>
+<title>Blood on the Clocktower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+/* ─── Reset & tokens ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0608; --surface: #110b0e; --surface2: #180e12;
+  --border: #2d1720; --border2: #3d2030;
+  --gold: #c9a84c; --gold-dim: #6a5228; --gold-bright: #e8c870;
+  --red: #8b1a2a; --red-dim: #3d0a12;
+  --text: #e8d5b7; --text-dim: #7a6550; --text-muted: #4a3d30;
+  --blue: #2563a8; --cyan: #1a7a8b; --orange: #8b4a1a; --green: #1a6b3a;
+  --radius: 3px;
+  --nav-h: 56px;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+#app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: .6rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  min-height: 52px;
+}
+.app-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .75rem;
+  color: var(--gold);
+  letter-spacing: .1em;
+  line-height: 1.2;
+}
+.app-title small { display: block; font-size: .55rem; color: var(--gold-dim); letter-spacing: .15em; }
+.header-right { display: flex; gap: .5rem; align-items: center; }
+.phase-badge {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .55rem; letter-spacing: .15em;
+  padding: .2rem .6rem; border-radius: 20px;
+  border: 1px solid var(--border2);
+  color: var(--gold-dim);
+}
+.phase-badge.day    { border-color: #5a4a00; color: #c9a84c; background: #1a140200; }
+.phase-badge.night  { border-color: #1a1a4a; color: #5a7aff; background: #00001a44; }
+.phase-badge.setup  { border-color: var(--border); }
+
+/* ─── Main content ───────────────────────────────────────────── */
+#main-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.view { display: none; height: 100%; overflow-y: auto; padding: 1rem; padding-bottom: 80px; }
+.view.active { display: block; }
+
+/* ─── Bottom nav ─────────────────────────────────────────────── */
+#bottom-nav {
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.nav-btn {
+  flex: 1;
+  background: none; border: none;
+  color: var(--text-muted);
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .5rem; letter-spacing: .08em;
+  padding: .6rem .25rem;
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  align-items: center; gap: .2rem;
+  transition: color .2s, background .2s;
+}
+.nav-btn .nav-icon { font-size: 1.25rem; line-height: 1; }
+.nav-btn.active { color: var(--gold); background: #c9a84c08; }
+.nav-btn:active { background: #c9a84c12; }
+
+/* ─── Common components ──────────────────────────────────────── */
+.section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .7rem; letter-spacing: .2em;
+  color: var(--gold-dim); text-transform: uppercase;
+  margin-bottom: .75rem; padding-bottom: .4rem;
+  border-bottom: 1px solid var(--border);
+}
+.card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: .75rem;
+}
+.btn {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .65rem; letter-spacing: .1em;
+  padding: .6rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  transition: all .2s;
+  background: none; color: var(--text);
+}
+.btn-primary   { background: var(--red-dim); border-color: var(--red); color: var(--text); }
+.btn-gold      { background: #2a1f0a; border-color: var(--gold-dim); color: var(--gold); }
+.btn-sm        { font-size: .55rem; padding: .35rem .75rem; }
+.btn:active    { opacity: .7; }
+.btn-row       { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .75rem; }
+
+input[type="text"], textarea, select {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: 'Crimson Pro', serif;
+  font-size: 1rem;
+  padding: .5rem .75rem;
+  width: 100%;
+  outline: none;
+}
+input:focus, select:focus { border-color: var(--gold-dim); }
+label { font-size: .85rem; color: var(--text-dim); display: block; margin-bottom: .25rem; }
+
+/* ─── Setup view ─────────────────────────────────────────────── */
+.player-input-row {
+  display: flex; gap: .5rem; margin-bottom: .4rem; align-items: center;
+}
+.player-input-row input { flex: 1; }
+.remove-btn {
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.1rem; cursor: pointer; padding: .1rem .3rem;
+  flex-shrink: 0;
+}
+.remove-btn:hover { color: #c92c2c; }
+
+/* edition pills */
+.edition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.edition-pill {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: .6rem .75rem;
+  cursor: pointer; display: flex; align-items: center; gap: .5rem;
+  font-size: .9rem; color: var(--text-dim);
+  transition: all .2s;
+}
+.edition-pill.selected { border-color: var(--gold-dim); color: var(--gold); background: #1a120500; }
+.edition-pill-icon { font-size: 1.2rem; }
+.edition-pill-name { font-size: .75rem; line-height: 1.2; }
+
+/* role selector */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: .4rem; margin-top: .5rem;
+}
+.role-chip {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: .4rem .6rem;
+  display: flex; align-items: center; gap: .4rem;
+  cursor: pointer; transition: all .2s;
+  font-size: .82rem; color: var(--text-dim);
+}
+.role-chip.selected { border-color: currentColor; }
+.role-chip.team-TOWNSFOLK.selected { color: #5a9fd4; background: #1a3a6b15; }
+.role-chip.team-OUTSIDER.selected  { color: #5ac4d4; background: #1a5a6b15; }
+.role-chip.team-MINION.selected    { color: #d47055; background: #6b2a1a15; }
+.role-chip.team-DEMON.selected     { color: #d45570; background: #8b1a2a20; }
+.role-chip-icon { font-size: 1rem; }
+.role-chip-name { flex: 1; line-height: 1.2; }
+
+/* team separator */
+.team-sep {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .58rem; letter-spacing: .2em;
+  padding: .5rem 0 .25rem;
+  color: var(--text-muted);
+}
+.team-sep.TOWNSFOLK { color: #2a5a8b; }
+.team-sep.OUTSIDER  { color: #1a6a7b; }
+.team-sep.MINION    { color: #7b3a2a; }
+.team-sep.DEMON     { color: #8b1a2a; }
+
+/* ─── Grimoire view ──────────────────────────────────────────── */
+.grimoire-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: .6rem;
+}
+.player-token {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: .75rem;
+  position: relative; cursor: pointer;
+  transition: border-color .2s;
+}
+.player-token.dead { opacity: .45; }
+.player-token.dead::after {
+  content: '✝'; position: absolute; top: .3rem; right: .5rem;
+  color: #c92c2c; font-size: 1rem;
+}
+.player-token.drunk::before {
+  content: '🍺'; position: absolute; bottom: .3rem; right: .5rem; font-size: .9rem;
+}
+.player-token.poisoned::before {
+  content: '☠️'; position: absolute; bottom: .3rem; right: .5rem; font-size: .9rem;
+}
+.player-token .p-role-icon { font-size: 1.8rem; }
+.player-token .p-role-name { font-size: .75rem; color: var(--gold-dim); margin: .2rem 0; }
+.player-token .p-name {
+  font-size: .9rem; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.player-token .p-status-row { display: flex; gap: .3rem; margin-top: .35rem; }
+.p-status-dot {
+  width: 7px; height: 7px; border-radius: 50%; display: inline-block;
+}
+.dot-alive    { background: #2cc97a; }
+.dot-dead     { background: #c92c2c; }
+.dot-drunk    { background: #c9842c; }
+.dot-poisoned { background: #7ac92c; }
+
+/* Player action sheet */
+#action-sheet {
+  position: fixed; inset: 0; z-index: 200;
+  background: #0a060888;
+  backdrop-filter: blur(4px);
+  display: flex; align-items: flex-end;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+#action-sheet.open { opacity: 1; pointer-events: all; }
+.action-sheet-body {
+  background: var(--surface2); border-top: 1px solid var(--border2);
+  width: 100%; padding: 1.25rem 1rem 2rem;
+  transform: translateY(100%); transition: transform .3s ease;
+  border-radius: 8px 8px 0 0;
+}
+#action-sheet.open .action-sheet-body { transform: translateY(0); }
+.action-sheet-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: .85rem; color: var(--gold); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: .5rem;
+}
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.action-btn {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: .65rem .5rem;
+  text-align: center; cursor: pointer; font-family: 'Crimson Pro', serif;
+  font-size: .85rem; color: var(--text); display: flex;
+  flex-direction: column; align-items: center; gap: .2rem;
+  transition: all .2s;
+}
+.action-btn .a-icon { font-size: 1.3rem; }
+.action-btn:active { background: var(--border); }
+.action-btn.danger { border-color: #5a1a2a; color: #d45570; }
+.action-btn.warning { border-color: #5a3a1a; color: #d4955a; }
+.action-btn.success { border-color: #1a5a3a; color: #5ad4a0; }
+
+/* QR modal */
+#qr-modal {
+  position: fixed; inset: 0; z-index: 300;
+  background: #0a0608cc; backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+#qr-modal.open { opacity: 1; pointer-events: all; }
+.qr-box {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 6px; padding: 1.5rem; max-width: 320px; width: 90%;
+  text-align: center;
+  transform: scale(.95); transition: transform .25s;
+}
+#qr-modal.open .qr-box { transform: scale(1); }
+.qr-player-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1rem; color: var(--gold); margin-bottom: .25rem;
+}
+.qr-role-name { font-size: .9rem; color: var(--text-dim); margin-bottom: 1rem; }
+#qr-container { background: white; padding: .75rem; border-radius: 4px; display: inline-block; }
+.qr-url { font-size: .7rem; color: var(--text-muted); margin-top: .75rem; word-break: break-all; }
+
+/* ─── Night view ─────────────────────────────────────────────── */
+.night-progress {
+  display: flex; gap: .3rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.night-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; cursor: pointer; transition: all .2s;
+}
+.night-dot.current { border-color: var(--gold); background: #1a120500; box-shadow: 0 0 0 2px var(--gold-dim); }
+.night-dot.done    { opacity: .4; }
+
+.night-step-card {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 1.25rem;
+}
+.night-step-role-icon { font-size: 2.5rem; }
+.night-step-role { font-family: 'Cinzel Decorative', serif; font-size: 1.1rem; color: var(--gold); margin: .3rem 0; }
+.night-step-ability { font-size: .95rem; color: var(--text); line-height: 1.6; font-weight: 300; margin-bottom: 1rem; }
+.night-step-players { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.night-player-chip {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 20px; padding: .2rem .75rem;
+  font-size: .85rem; color: var(--text-dim);
+}
+.night-nav { display: flex; gap: .75rem; }
+.night-nav .btn { flex: 1; text-align: center; }
+
+/* ─── Log view ───────────────────────────────────────────────── */
+.log-entry {
+  padding: .5rem 0;
+  border-bottom: 1px solid #1a1015;
+  display: flex; gap: .75rem; align-items: flex-start;
+  font-size: .9rem;
+}
+.log-time { color: var(--text-muted); font-size: .78rem; flex-shrink: 0; margin-top: .1rem; }
+.log-text { flex: 1; color: var(--text); line-height: 1.4; }
+.log-entry.death .log-text    { color: #c95a5a; }
+.log-entry.execution .log-text{ color: #c97a5a; }
+.log-entry.phase .log-text    { color: var(--gold); font-style: italic; }
+.log-entry.system .log-text   { color: var(--text-muted); font-style: italic; }
+.log-entry.result .log-text   { color: #5ac97a; font-family: 'Cinzel Decorative', serif; font-size: .85rem; }
+.log-entry.nomination .log-text { color: #c9a04c; }
+
+/* day/night control bar */
+.phase-controls { display: flex; gap: .5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+
+/* ─── Custom script editor ───────────────────────────────────── */
+.script-stat-row {
+  display: flex; justify-content: space-between;
+  font-size: .85rem; margin-bottom: .25rem;
+  color: var(--text-dim);
+}
+.script-stat-val { color: var(--text); }
+
+/* ─── Ended overlay ──────────────────────────────────────────── */
+#win-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  display: none; align-items: center; justify-content: center; flex-direction: column;
+  background: #0a060899; backdrop-filter: blur(8px);
+  text-align: center; padding: 2rem;
+}
+#win-overlay.show { display: flex; }
+.win-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.6rem; color: var(--gold);
+  margin-bottom: .5rem;
+}
+.win-team { font-size: 1.2rem; color: var(--text); margin-bottom: 1.5rem; }
+
+/* ─── Misc ───────────────────────────────────────────────────── */
+.divider { border: none; border-top: 1px solid var(--border); margin: .75rem 0; }
+.empty-state { text-align: center; color: var(--text-muted); padding: 2rem; font-style: italic; font-size: .9rem; }
+.tag {
+  display: inline-block; font-size: .65rem; padding: .15rem .5rem;
+  border-radius: 20px; border: 1px solid var(--border); color: var(--text-muted);
+  margin: .1rem;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.fade-in { animation: fadeIn .3s ease; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ HEADER -->
+<div id="app-header">
+  <div class="app-title">
+    Blood on the Clocktower
+    <small>NARRADOR</small>
+  </div>
+  <div class="header-right">
+    <span class="phase-badge setup" id="phase-badge">Preparación</span>
+    <span id="header-day" style="font-size:.75rem;color:var(--text-muted);font-family:monospace;"></span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ MAIN -->
+<div id="main-content">
+
+  <!-- ── VIEW: SETUP ───────────────────────────────────────── -->
+  <div class="view active" id="view-setup">
+    <div class="card fade-in">
+      <div class="section-title">Jugadores</div>
+      <div id="player-inputs-container"></div>
+      <div class="btn-row">
+        <button class="btn btn-sm" onclick="addPlayerInput()">+ Añadir jugador</button>
+        <button class="btn btn-sm" id="gen-players-btn" onclick="generateDefaultPlayers()">Generar 5–15</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Edición base</div>
+      <div class="edition-grid" id="edition-grid"></div>
+    </div>
+
+    <div class="card" id="role-selector-card">
+      <div class="section-title">Seleccionar roles para el script</div>
+      <div id="script-stats" style="margin-bottom:.75rem;"></div>
+      <div id="role-selector"></div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;text-align:center;font-size:.8rem;" onclick="handleStartGame()">
+      ⚔️ Comenzar partida
+    </button>
+  </div>
+
+  <!-- ── VIEW: GRIMOIRE ────────────────────────────────────── -->
+  <div class="view" id="view-grimoire">
+    <div class="phase-controls" id="grimoire-phase-controls"></div>
+    <div class="section-title">Grimorio</div>
+    <div class="grimoire-grid fade-in" id="grimoire-grid"></div>
+  </div>
+
+  <!-- ── VIEW: NIGHT ───────────────────────────────────────── -->
+  <div class="view" id="view-night">
+    <div class="section-title" id="night-view-title">Orden de Noche</div>
+    <div class="night-progress" id="night-progress-dots"></div>
+    <div id="night-step-container"></div>
+  </div>
+
+  <!-- ── VIEW: LOG ─────────────────────────────────────────── -->
+  <div class="view" id="view-log">
+    <div class="section-title">Registro de Partida</div>
+    <div class="phase-controls">
+      <button class="btn btn-sm" onclick="addCustomLog()">+ Nota manual</button>
+      <button class="btn btn-sm" style="color:var(--text-muted)" onclick="clearLog()">Limpiar</button>
+    </div>
+    <div id="log-list"></div>
+  </div>
+
+  <!-- ── VIEW: SCRIPT ──────────────────────────────────────── -->
+  <div class="view" id="view-script">
+    <div class="card">
+      <div class="section-title">Script Personalizado</div>
+      <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:.75rem;">
+        Selecciona roles de cualquier edición para crear tu propio script.
+      </p>
+      <div id="custom-script-stats" style="margin-bottom:.75rem;"></div>
+      <div id="custom-script-selector"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="exportScript()">⬇ Exportar JSON</button>
+      <button class="btn btn-sm" onclick="importScript()">⬆ Importar</button>
+    </div>
+  </div>
+
+</div><!-- /main-content -->
+
+<!-- ═══════════════════════════════════════════════════════════ BOTTOM NAV -->
+<div id="bottom-nav">
+  <button class="nav-btn active" data-view="setup" onclick="switchView('setup', this)">
+    <span class="nav-icon">⚙️</span>SETUP
+  </button>
+  <button class="nav-btn" data-view="grimoire" onclick="switchView('grimoire', this)">
+    <span class="nav-icon">📖</span>GRIMORIO
+  </button>
+  <button class="nav-btn" data-view="night" onclick="switchView('night', this)">
+    <span class="nav-icon">🌙</span>NOCHE
+  </button>
+  <button class="nav-btn" data-view="log" onclick="switchView('log', this)">
+    <span class="nav-icon">📜</span>LOG
+  </button>
+  <button class="nav-btn" data-view="script" onclick="switchView('script', this)">
+    <span class="nav-icon">📝</span>SCRIPT
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ ACTION SHEET -->
+<div id="action-sheet" onclick="closeActionSheet(event)">
+  <div class="action-sheet-body">
+    <div class="action-sheet-title">
+      <span id="as-role-icon"></span>
+      <span id="as-player-name"></span>
+    </div>
+    <div class="action-grid" id="action-grid"></div>
+    <div class="btn-row" style="margin-top:1rem;">
+      <button class="btn btn-sm" style="width:100%;text-align:center;" onclick="closeActionSheet()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ QR MODAL -->
+<div id="qr-modal" onclick="closeQR(event)">
+  <div class="qr-box">
+    <div class="qr-player-name" id="qr-player-name">—</div>
+    <div class="qr-role-name" id="qr-role-desc">—</div>
+    <div id="qr-container"></div>
+    <p class="qr-url" id="qr-url"></p>
+    <div class="btn-row" style="margin-top:1rem;justify-content:center;">
+      <button class="btn btn-sm" onclick="closeQR()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ WIN OVERLAY -->
+<div id="win-overlay">
+  <div class="win-title" id="win-title">¡Partida terminada!</div>
+  <div class="win-team" id="win-team"></div>
+  <div class="btn-row" style="justify-content:center;">
+    <button class="btn btn-gold" onclick="resetGame()">Nueva partida</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SCRIPT -->
+<script>
+const EDITIONS = {
+  TB: { id: 'TB', name: 'Trouble Brewing', color: '#c0392b', emoji: '🍺' },
+  BMR: { id: 'BMR', name: 'Bad Moon Rising', color: '#8e44ad', emoji: '🌙' },
+  SV: { id: 'SV', name: 'Sects & Violets', color: '#2980b9', emoji: '💜' },
+  CUSTOM: { id: 'CUSTOM', name: 'Script Personalizado', color: '#27ae60', emoji: '⚙️' }
+};
+
+const TEAM = {
+  TOWNSFOLK: { id: 'TOWNSFOLK', name: 'Aldeano', color: '#2196F3' },
+  OUTSIDER: { id: 'OUTSIDER', name: 'Forastero', color: '#00BCD4' },
+  MINION: { id: 'MINION', name: 'Secuaz', color: '#FF5722' },
+  DEMON: { id: 'DEMON', name: 'Demonio', color: '#B71C1C' },
+  TRAVELLER: { id: 'TRAVELLER', name: 'Viajero', color: '#9C27B0' }
+};
+
+const ROLES = [
+  // ===== TROUBLE BREWING =====
+  // Townsfolk
+  { id: 'washerwoman', edition: 'TB', team: 'TOWNSFOLK', name: 'Lavandera', icon: '🧺',
+    ability: 'Sabes que uno de los dos jugadores es un Aldeano específico, pero no cuál.',
+    night: null, night_other: null, firstNight: 1, otherNight: 0 },
+  { id: 'librarian', edition: 'TB', team: 'TOWNSFOLK', name: 'Bibliotecario', icon: '📚',
+    ability: 'Sabes que uno de los dos jugadores es un Forastero específico, pero no cuál.',
+    firstNight: 2, otherNight: 0 },
+  { id: 'investigator', edition: 'TB', team: 'TOWNSFOLK', name: 'Investigador', icon: '🔍',
+    ability: 'Sabes que uno de los dos jugadores es un Secuaz específico, pero no cuál.',
+    firstNight: 3, otherNight: 0 },
+  { id: 'chef', edition: 'TB', team: 'TOWNSFOLK', name: 'Cocinero', icon: '👨‍🍳',
+    ability: 'Sabes cuántos pares de jugadores malignos son vecinos entre sí.',
+    firstNight: 4, otherNight: 0 },
+  { id: 'empath', edition: 'TB', team: 'TOWNSFOLK', name: 'Empático', icon: '💙',
+    ability: 'Cada noche sabes cuántos de tus dos vecinos vivos son malignos.',
+    firstNight: 5, otherNight: 1 },
+  { id: 'fortuneteller', edition: 'TB', team: 'TOWNSFOLK', name: 'Adivina', icon: '🔮',
+    ability: 'Cada noche elige 2 jugadores: sabes si alguno es el Demonio. Hay un jugador bueno que siempre te da positivo.',
+    firstNight: 6, otherNight: 2 },
+  { id: 'undertaker', edition: 'TB', team: 'TOWNSFOLK', name: 'Enterrador', icon: '⚰️',
+    ability: 'Cada noche (excepto la primera), sabes qué rol tenía el jugador ejecutado hoy.',
+    firstNight: 0, otherNight: 3 },
+  { id: 'monk', edition: 'TB', team: 'TOWNSFOLK', name: 'Monje', icon: '🧘',
+    ability: 'Cada noche (excepto la primera), elige a un jugador que no seas tú: está protegido del Demonio esta noche.',
+    firstNight: 0, otherNight: 4 },
+  { id: 'ravenkeeper', edition: 'TB', team: 'TOWNSFOLK', name: 'Guardacuervos', icon: '🐦‍⬛',
+    ability: 'Si mueres por la noche, elige a un jugador: sabes su rol.',
+    firstNight: 0, otherNight: 5 },
+  { id: 'virgin', edition: 'TB', team: 'TOWNSFOLK', name: 'Virgen', icon: '👼',
+    ability: 'La primera vez que seas nominado, si el que te nominó es Aldeano, muere inmediatamente.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'slayer', edition: 'TB', team: 'TOWNSFOLK', name: 'Cazador', icon: '🏹',
+    ability: 'Una vez por partida, durante el día, elige a un jugador: si es el Demonio, muere.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'soldier', edition: 'TB', team: 'TOWNSFOLK', name: 'Soldado', icon: '⚔️',
+    ability: 'Eres inmune a los ataques del Demonio.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'mayor', edition: 'TB', team: 'TOWNSFOLK', name: 'Alcalde', icon: '🏛️',
+    ability: 'Si solo quedan 3 jugadores vivos y no se ejecuta a nadie, el Bien gana. Si mueres por el Demonio, otro jugador podría morir en tu lugar.',
+    firstNight: 0, otherNight: 0 },
+  // Outsiders TB
+  { id: 'butler', edition: 'TB', team: 'OUTSIDER', name: 'Mayordomo', icon: '🤵',
+    ability: 'Cada noche, elige a un jugador (no a ti): mañana solo puedes votar si ese jugador vota también.',
+    firstNight: 7, otherNight: 6 },
+  { id: 'drunk', edition: 'TB', team: 'OUTSIDER', name: 'Borracho', icon: '🍺',
+    ability: 'No sabes que eres el Borracho. El Narrador te da información como si fueras otro rol de Aldeano, pero puede ser incorrecta.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'recluse', edition: 'TB', team: 'OUTSIDER', name: 'Recluso', icon: '🏚️',
+    ability: 'Puedes ser considerado maligno para las habilidades que comprueban la alineación. Puedes ser considerado un Secuaz o Demonio.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'saint', edition: 'TB', team: 'OUTSIDER', name: 'Santo', icon: '✝️',
+    ability: 'Si el equipo bueno te ejecuta, el equipo malo gana.',
+    firstNight: 0, otherNight: 0 },
+  // Minions TB
+  { id: 'poisoner', edition: 'TB', team: 'MINION', name: 'Envenenador', icon: '☠️',
+    ability: 'Cada noche, elige a un jugador: está envenenado esta noche y durante el día de mañana.',
+    firstNight: 8, otherNight: 7 },
+  { id: 'spy', edition: 'TB', team: 'MINION', name: 'Espía', icon: '🕵️',
+    ability: 'Cada noche ve el Grimorio. Puedes ser considerado bueno para las habilidades que comprueban la alineación.',
+    firstNight: 9, otherNight: 8 },
+  { id: 'scarletwoman', edition: 'TB', team: 'MINION', name: 'Mujer Escarlata', icon: '💋',
+    ability: 'Si hay 5+ jugadores vivos y el Demonio muere, te conviertes en el Demonio.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'baron', edition: 'TB', team: 'MINION', name: 'Barón', icon: '🎩',
+    ability: 'Hay 2 Forasteros extra en esta partida.',
+    firstNight: 0, otherNight: 0 },
+  // Demon TB
+  { id: 'imp', edition: 'TB', team: 'DEMON', name: 'Duende', icon: '😈',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. Si te matas a ti mismo, un Secuaz se convierte en el Duende.',
+    firstNight: 0, otherNight: 9 },
+
+  // ===== BAD MOON RISING =====
+  // Townsfolk
+  { id: 'grandmother', edition: 'BMR', team: 'TOWNSFOLK', name: 'Abuela', icon: '👵',
+    ability: 'Sabes de qué rol y equipo es un jugador específico. Si el Demonio mata a ese jugador, también mueres.',
+    firstNight: 10, otherNight: 0 },
+  { id: 'sailor', edition: 'BMR', team: 'TOWNSFOLK', name: 'Marinero', icon: '⚓',
+    ability: 'Cada noche, elige a un jugador vivo: uno de los dos no puede morir esta noche. Mientras estés vivo, no puedes morir.',
+    firstNight: 11, otherNight: 10 },
+  { id: 'chambermaid', edition: 'BMR', team: 'TOWNSFOLK', name: 'Doncella', icon: '🧹',
+    ability: 'Cada noche, elige 2 jugadores vivos que no sean tú: sabes cuántos se despertaron esta noche por su habilidad.',
+    firstNight: 0, otherNight: 11 },
+  { id: 'exorcist', edition: 'BMR', team: 'TOWNSFOLK', name: 'Exorcista', icon: '✝️',
+    ability: 'Cada noche (excepto la primera), elige a un jugador (diferente al de anoche): si es el Demonio, no usa su habilidad y sabe quién eres.',
+    firstNight: 0, otherNight: 12 },
+  { id: 'innkeeper', edition: 'BMR', team: 'TOWNSFOLK', name: 'Posadero', icon: '🏨',
+    ability: 'Cada noche (excepto la primera), elige 2 jugadores: están protegidos del Demonio esta noche, pero uno de ellos se emborracha hasta el anochecer.',
+    firstNight: 0, otherNight: 13 },
+  { id: 'gambler', edition: 'BMR', team: 'TOWNSFOLK', name: 'Jugador', icon: '🎲',
+    ability: 'Cada noche (excepto la primera), elige a un jugador y adivina su rol: si te equivocas, mueres.',
+    firstNight: 0, otherNight: 14 },
+  { id: 'gossip', edition: 'BMR', team: 'TOWNSFOLK', name: 'Cotilla', icon: '💬',
+    ability: 'Cada día puedes hacer una declaración pública. Esta noche, si era cierta, un jugador muere.',
+    firstNight: 0, otherNight: 15 },
+  { id: 'courtier', edition: 'BMR', team: 'TOWNSFOLK', name: 'Cortesano', icon: '👑',
+    ability: 'Una vez por partida, en la primera noche, elige un rol: ese jugador está borracho durante 3 noches y días.',
+    firstNight: 12, otherNight: 0 },
+  { id: 'professor', edition: 'BMR', team: 'TOWNSFOLK', name: 'Profesor', icon: '🎓',
+    ability: 'Una vez por partida, en la noche, elige a un jugador muerto: si es Aldeano, revive.',
+    firstNight: 0, otherNight: 16 },
+  { id: 'minstrel', edition: 'BMR', team: 'TOWNSFOLK', name: 'Juglar', icon: '🎵',
+    ability: 'Cuando un Secuaz muere ejecutado, todos los demás jugadores (excepto tú) se emborrachan hasta el anochecer.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'teamaker', edition: 'BMR', team: 'TOWNSFOLK', name: 'Hacedor de Té', icon: '☕',
+    ability: 'Si el Narrador es imparcial esta partida, no usarás tu habilidad.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'pacifist', edition: 'BMR', team: 'TOWNSFOLK', name: 'Pacifista', icon: '☮️',
+    ability: 'Los jugadores buenos ejecutados ocasionalmente pueden no morir.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'fool', edition: 'BMR', team: 'TOWNSFOLK', name: 'Bufón', icon: '🃏',
+    ability: 'La primera vez que deberías morir, no mueres.',
+    firstNight: 0, otherNight: 0 },
+  // Outsiders BMR
+  { id: 'tinker', edition: 'BMR', team: 'OUTSIDER', name: 'Hojalatero', icon: '🔧',
+    ability: 'Podrías morir en cualquier momento.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'moonchild', edition: 'BMR', team: 'OUTSIDER', name: 'Hijo de la Luna', icon: '🌙',
+    ability: 'Cuando aprendes que has muerto, puedes matar a un jugador vivo que hayas elegido esta noche.',
+    firstNight: 0, otherNight: 17 },
+  { id: 'goon', edition: 'BMR', team: 'OUTSIDER', name: 'Matón', icon: '💪',
+    ability: 'Cada vez que un jugador maligno te elige con su habilidad durante la noche, cambias de equipo y te emborrachas.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'lunatic', edition: 'BMR', team: 'OUTSIDER', name: 'Lunático', icon: '🌀',
+    ability: 'Crees que eres un Demonio específico, pero no lo eres. El Narrador actúa como si lo fueras.',
+    firstNight: 0, otherNight: 18 },
+  // Minions BMR
+  { id: 'godfather', edition: 'BMR', team: 'MINION', name: 'Padrino', icon: '🌹',
+    ability: 'Sabes qué Forasteros hay en juego. Si uno muere de día, elige esta noche a un jugador que muera. Eres inmune al Demonio.',
+    firstNight: 13, otherNight: 19 },
+  { id: 'devilsadvocate', edition: 'BMR', team: 'MINION', name: 'Abogado del Diablo', icon: '⚖️',
+    ability: 'Cada noche (excepto la primera), elige a un jugador vivo: si es ejecutado mañana, no muere.',
+    firstNight: 0, otherNight: 20 },
+  { id: 'assassin', edition: 'BMR', team: 'MINION', name: 'Asesino', icon: '🗡️',
+    ability: 'Una vez por partida, en la noche, elige a un jugador: muere, aunque de otro modo estuviera protegido.',
+    firstNight: 0, otherNight: 21 },
+  { id: 'mastermind', edition: 'BMR', team: 'MINION', name: 'Cerebro', icon: '🧠',
+    ability: 'Si el Demonio muere ejecutado (y conocías su identidad), el juego continúa durante un día y noche más.',
+    firstNight: 0, otherNight: 0 },
+  // Demons BMR
+  { id: 'zombuul', edition: 'BMR', team: 'DEMON', name: 'Zombuul', icon: '🧟',
+    ability: 'Cada noche (excepto la primera), si no hay jugadores muertos hoy, elige a un jugador que muera. La primera vez que "mueras", no lo haces de verdad.',
+    firstNight: 0, otherNight: 22 },
+  { id: 'pukka', edition: 'BMR', team: 'DEMON', name: 'Pukka', icon: '🐍',
+    ability: 'Cada noche, elige a un jugador: está envenenado. El jugador envenenado la noche anterior muere, y ya no está envenenado.',
+    firstNight: 0, otherNight: 23 },
+  { id: 'shabaloth', edition: 'BMR', team: 'DEMON', name: 'Shabaloth', icon: '👹',
+    ability: 'Cada noche (excepto la primera), elige a 2 jugadores: mueren. Uno de los que mataste ayer podría revivir.',
+    firstNight: 0, otherNight: 24 },
+  { id: 'po', edition: 'BMR', team: 'DEMON', name: 'Po', icon: '💀',
+    ability: 'Cada noche (excepto la primera), puedes elegir a ningún jugador: la noche siguiente puedes matar a 3 jugadores.',
+    firstNight: 0, otherNight: 25 },
+
+  // ===== SECTS & VIOLETS =====
+  // Townsfolk
+  { id: 'clockmaker', edition: 'SV', team: 'TOWNSFOLK', name: 'Relojero', icon: '⏰',
+    ability: 'Sabes cuántos pasos (en el círculo) hay entre el Demonio y su Secuaz más cercano.',
+    firstNight: 14, otherNight: 0 },
+  { id: 'dreamer', edition: 'SV', team: 'TOWNSFOLK', name: 'Soñador', icon: '💭',
+    ability: 'Cada noche, elige a un jugador (no a ti ni al Viajero): sabes uno de los dos roles que podría tener (el suyo real o uno aleatorio que no sea el suyo).',
+    firstNight: 15, otherNight: 26 },
+  { id: 'snakecharmer', edition: 'SV', team: 'TOWNSFOLK', name: 'Encantador de Serpientes', icon: '🐍',
+    ability: 'Cada noche, elige a un jugador vivo: si es el Demonio, intercambiáis roles y equipo. El nuevo Demonio está envenenado.',
+    firstNight: 16, otherNight: 27 },
+  { id: 'mathematician', edition: 'SV', team: 'TOWNSFOLK', name: 'Matemático', icon: '➗',
+    ability: 'Cada noche sabes cuántos jugadores (incluidos tú) tienen una habilidad que no ha funcionado correctamente esta noche.',
+    firstNight: 0, otherNight: 28 },
+  { id: 'flowergirl', edition: 'SV', team: 'TOWNSFOLK', name: 'Florista', icon: '💐',
+    ability: 'Cada noche (excepto la primera), sabes si el Demonio votó hoy.',
+    firstNight: 0, otherNight: 29 },
+  { id: 'towncrier', edition: 'SV', team: 'TOWNSFOLK', name: 'Pregonero', icon: '📢',
+    ability: 'Cada noche (excepto la primera), sabes si un Secuaz nominó hoy.',
+    firstNight: 0, otherNight: 30 },
+  { id: 'oracle', edition: 'SV', team: 'TOWNSFOLK', name: 'Oráculo', icon: '🌟',
+    ability: 'Cada noche (excepto la primera), sabes cuántos jugadores muertos son malignos.',
+    firstNight: 0, otherNight: 31 },
+  { id: 'savant', edition: 'SV', team: 'TOWNSFOLK', name: 'Erudito', icon: '📖',
+    ability: 'Cada día puedes visitar al Narrador para aprender 2 cosas: una es verdad, otra es mentira.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'seamstress', edition: 'SV', team: 'TOWNSFOLK', name: 'Costurera', icon: '🧵',
+    ability: 'Una vez por partida, en la noche, elige 2 jugadores que no sean tú: sabes si son del mismo equipo.',
+    firstNight: 17, otherNight: 32 },
+  { id: 'philosopher', edition: 'SV', team: 'TOWNSFOLK', name: 'Filósofo', icon: '🤔',
+    ability: 'Una vez por partida, en la noche, elige un rol de Aldeano: obtienes esa habilidad. Si ese rol está vivo, ese jugador se emborracha.',
+    firstNight: 18, otherNight: 33 },
+  { id: 'artist', edition: 'SV', team: 'TOWNSFOLK', name: 'Artista', icon: '🎨',
+    ability: 'Una vez por partida, durante el día, puedes hacerle una pregunta de sí/no al Narrador (en privado).',
+    firstNight: 0, otherNight: 0 },
+  { id: 'juggler', edition: 'SV', team: 'TOWNSFOLK', name: 'Malabarista', icon: '🤹',
+    ability: 'El primer día, declara públicamente cualquier número de parejas jugador+rol. Esta noche, sabes cuántas adivinaste correctamente.',
+    firstNight: 0, otherNight: 34 },
+  { id: 'sage', edition: 'SV', team: 'TOWNSFOLK', name: 'Sabio', icon: '🧙',
+    ability: 'Si el Demonio te mata, sabes que es uno de los 2 jugadores.',
+    firstNight: 0, otherNight: 35 },
+  // Outsiders SV
+  { id: 'mutant', edition: 'SV', team: 'OUTSIDER', name: 'Mutante', icon: '🧬',
+    ability: 'Si estás "loco" por creer que eres un Forastero, podrías ser ejecutado.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'sweetheart', edition: 'SV', team: 'OUTSIDER', name: 'Amor', icon: '💝',
+    ability: 'Cuando mueres, un jugador se emborracha para siempre.',
+    firstNight: 0, otherNight: 0 },
+  { id: 'barber', edition: 'SV', team: 'OUTSIDER', name: 'Barbero', icon: '✂️',
+    ability: 'Si mueres hoy o esta noche, el Demonio puede esta noche intercambiar los roles de dos jugadores (no al Demonio).',
+    firstNight: 0, otherNight: 0 },
+  { id: 'klutz', edition: 'SV', team: 'OUTSIDER', name: 'Torpe', icon: '🤦',
+    ability: 'Cuando aprendes que has muerto, debes inmediatamente señalar a un jugador vivo. Si ese jugador es maligno, el equipo bueno pierde.',
+    firstNight: 0, otherNight: 0 },
+  // Minions SV
+  { id: 'eviltwin', edition: 'SV', team: 'MINION', name: 'Gemelo Malvado', icon: '👿',
+    ability: 'Sabes quién es tu gemelo bueno. Los jugadores buenos saben que existe el Gemelo Malvado. Si tu gemelo bueno es ejecutado, los malignos ganan.',
+    firstNight: 19, otherNight: 0 },
+  { id: 'witch', edition: 'SV', team: 'MINION', name: 'Bruja', icon: '🧙‍♀️',
+    ability: 'Cada noche, elige a un jugador: si nomina mañana, muere. Si quedan solo 3 jugadores, no tienes habilidad.',
+    firstNight: 20, otherNight: 36 },
+  { id: 'cerenovus', edition: 'SV', team: 'MINION', name: 'Cerenovus', icon: '🎭',
+    ability: 'Cada noche, elige a un jugador y un rol de Aldeano: están "locos" por ser ese rol mañana o el Narrador podría ejecutarlos.',
+    firstNight: 21, otherNight: 37 },
+  { id: 'pithag', edition: 'SV', team: 'MINION', name: 'Pit-Hag', icon: '🌪️',
+    ability: 'Cada noche, elige a un jugador y un rol (no en juego actualmente): ese jugador se convierte en ese rol. Si hay 2+ Demonios, uno al azar se convierte en Lunático.',
+    firstNight: 22, otherNight: 38 },
+  // Demons SV
+  { id: 'fanggu', edition: 'SV', team: 'DEMON', name: 'Fang Gu', icon: '🧛',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. La primera vez que elijas a un Forastero, ese jugador se convierte en Fang Gu y tú mueres.',
+    firstNight: 0, otherNight: 39 },
+  { id: 'vigormortis', edition: 'SV', team: 'DEMON', name: 'Vigormortis', icon: '🦴',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. Los Secuaces malignos muertos conservan su habilidad y envenenan a un vecino vivo.',
+    firstNight: 0, otherNight: 40 },
+  { id: 'nodashii', edition: 'SV', team: 'DEMON', name: 'No Dashii', icon: '🌊',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. Tus dos vecinos aldeanos más cercanos están envenenados.',
+    firstNight: 0, otherNight: 41 },
+  { id: 'vortox', edition: 'SV', team: 'DEMON', name: 'Vortox', icon: '🌀',
+    ability: 'Cada noche (excepto la primera), elige a un jugador: muere. Los aldeanos siempre reciben información falsa. Cada día debe morir alguien por votación o el equipo bueno pierde.',
+    firstNight: 0, otherNight: 42 },
+];
+
+function getRolesByEdition(editionId) {
+  return ROLES.filter(r => r.edition === editionId);
+}
+
+function getRoleById(id) {
+  return ROLES.find(r => r.id === id);
+}
+
+function getTeamRoles(roles, team) {
+  return roles.filter(r => r.team === team);
+}
+
+
+
+
+// ─── State shape ────────────────────────────────────────────────────────────
+const DEFAULT_STATE = {
+  gameId: null,
+  phase: 'setup',        // setup | firstNight | day | night | ended
+  day: 0,
+  players: [],           // { id, name, roleId, alive, drunk, poisoned, protected, nominated, voted }
+  script: [],            // array of roleIds in use
+  log: [],               // { time, text, type }
+  nightOrder: [],        // computed
+  nightStep: 0,
+  winner: null,          // 'good' | 'evil'
+};
+
+let _state = { ...DEFAULT_STATE };
+let _listeners = [];
+
+// ─── Subscribe / notify ──────────────────────────────────────────────────────
+function subscribe(fn) {
+  _listeners.push(fn);
+  return () => { _listeners = _listeners.filter(l => l !== fn); };
+}
+
+function notify() {
+  _listeners.forEach(fn => fn({ ..._state }));
+  persist();
+}
+
+// ─── Persist to localStorage ─────────────────────────────────────────────────
+function persist() {
+  try {
+    localStorage.setItem('botc_state', JSON.stringify(_state));
+  } catch {}
+}
+
+function loadPersistedState() {
+  try {
+    const raw = localStorage.getItem('botc_state');
+    if (raw) {
+      _state = { ...DEFAULT_STATE, ...JSON.parse(raw) };
+      notify();
+    }
+  } catch {}
+}
+
+// ─── Getters ─────────────────────────────────────────────────────────────────
+function getState() { return { ..._state }; }
+function getPlayers() { return [..._state.players]; }
+function getLivePlayers() { return _state.players.filter(p => p.alive); }
+function getDeadPlayers() { return _state.players.filter(p => !p.alive); }
+
+// ─── Setup actions ────────────────────────────────────────────────────────────
+function newGame() {
+  const id = Math.random().toString(36).substr(2, 8).toUpperCase();
+  _state = { ...DEFAULT_STATE, gameId: id };
+  addLog('Nueva partida iniciada.', 'system');
+  notify();
+  return id;
+}
+
+function setScript(roleIds) {
+  _state.script = roleIds;
+  notify();
+}
+
+function setPlayers(names) {
+  _state.players = names.map((name, i) => ({
+    id: `p${i}`,
+    name,
+    roleId: null,
+    alive: true,
+    drunk: false,
+    poisoned: false,
+    protected: false,
+    nominated: false,
+    voted: false,
+    ghost_votes: 1,
+  }));
+  notify();
+}
+
+function assignRole(playerId, roleId) {
+  _state.players = _state.players.map(p =>
+    p.id === playerId ? { ...p, roleId } : p
+  );
+  notify();
+}
+
+function shuffleRoles() {
+  const available = [..._state.script];
+  const players = [..._state.players];
+  // Fisher-Yates
+  for (let i = available.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [available[i], available[j]] = [available[j], available[i]];
+  }
+  _state.players = players.map((p, i) => ({
+    ...p,
+    roleId: available[i] || null
+  }));
+  addLog('Roles asignados aleatoriamente.', 'system');
+  notify();
+}
+
+// ─── Phase control ─────────────────────────────────────────────────────────
+function startGame() {
+  _state.phase = 'firstNight';
+  _state.day = 0;
+  _state.nightStep = 0;
+  _state.nightOrder = computeNightOrder('first');
+  addLog('¡La partida comienza! Primera noche.', 'phase');
+  notify();
+}
+
+function advanceNightStep() {
+  if (_state.nightStep < _state.nightOrder.length - 1) {
+    _state.nightStep++;
+    notify();
+  }
+}
+
+function prevNightStep() {
+  if (_state.nightStep > 0) {
+    _state.nightStep--;
+    notify();
+  }
+}
+
+function startDay() {
+  _state.phase = 'day';
+  _state.day++;
+  // Reset daily flags
+  _state.players = _state.players.map(p => ({ ...p, nominated: false, voted: false, protected: false }));
+  addLog(`☀️ Día ${_state.day} comienza.`, 'phase');
+  notify();
+}
+
+function startNight() {
+  _state.phase = 'night';
+  _state.nightStep = 0;
+  _state.nightOrder = computeNightOrder('other');
+  addLog(`🌙 Noche ${_state.day + 1} comienza.`, 'phase');
+  notify();
+}
+
+function endGame(winner) {
+  _state.phase = 'ended';
+  _state.winner = winner;
+  addLog(`🏆 ¡${winner === 'good' ? 'El Bien' : 'El Mal'} gana!`, 'result');
+  notify();
+}
+
+// ─── Player actions ──────────────────────────────────────────────────────────
+function killPlayer(playerId, reason = '') {
+  const p = _state.players.find(p => p.id === playerId);
+  if (!p) return;
+  _state.players = _state.players.map(pl =>
+    pl.id === playerId ? { ...pl, alive: false } : pl
+  );
+  addLog(`💀 ${p.name} ha muerto${reason ? ' — ' + reason : ''}.`, 'death');
+  notify();
+}
+
+function revivePlayer(playerId) {
+  const p = _state.players.find(p => p.id === playerId);
+  if (!p) return;
+  _state.players = _state.players.map(pl =>
+    pl.id === playerId ? { ...pl, alive: true } : pl
+  );
+  addLog(`✨ ${p.name} ha revivido.`, 'event');
+  notify();
+}
+
+function toggleDrunk(playerId) {
+  const p = _state.players.find(p => p.id === playerId);
+  if (!p) return;
+  _state.players = _state.players.map(pl =>
+    pl.id === playerId ? { ...pl, drunk: !pl.drunk } : pl
+  );
+  addLog(`🍺 ${p.name} ${p.drunk ? 'ya no está' : 'está'} borracho/a.`, 'event');
+  notify();
+}
+
+function togglePoisoned(playerId) {
+  const p = _state.players.find(p => p.id === playerId);
+  if (!p) return;
+  _state.players = _state.players.map(pl =>
+    pl.id === playerId ? { ...pl, poisoned: !pl.poisoned } : pl
+  );
+  addLog(`☠️ ${p.name} ${p.poisoned ? 'ya no está' : 'está'} envenenado/a.`, 'event');
+  notify();
+}
+
+function toggleProtected(playerId) {
+  _state.players = _state.players.map(pl =>
+    pl.id === playerId ? { ...pl, protected: !pl.protected } : pl
+  );
+  notify();
+}
+
+function nominatePlayer(playerId) {
+  _state.players = _state.players.map(pl =>
+    pl.id === playerId ? { ...pl, nominated: true } : pl
+  );
+  const p = _state.players.find(p => p.id === playerId);
+  addLog(`📣 ${p?.name} ha sido nominado/a.`, 'nomination');
+  notify();
+}
+
+function executePlayer(playerId) {
+  const p = _state.players.find(p => p.id === playerId);
+  if (!p) return;
+  _state.players = _state.players.map(pl =>
+    pl.id === playerId ? { ...pl, alive: false, nominated: false } : pl
+  );
+  addLog(`⚖️ ${p.name} ha sido ejecutado/a.`, 'execution');
+  notify();
+}
+
+function swapRoles(p1id, p2id) {
+  const p1 = _state.players.find(p => p.id === p1id);
+  const p2 = _state.players.find(p => p.id === p2id);
+  if (!p1 || !p2) return;
+  _state.players = _state.players.map(pl => {
+    if (pl.id === p1id) return { ...pl, roleId: p2.roleId };
+    if (pl.id === p2id) return { ...pl, roleId: p1.roleId };
+    return pl;
+  });
+  addLog(`🔄 ${p1.name} y ${p2.name} han intercambiado roles.`, 'event');
+  notify();
+}
+
+// ─── Log ─────────────────────────────────────────────────────────────────────
+function addLog(text, type = 'info') {
+  _state.log = [{
+    id: Date.now() + Math.random(),
+    time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+    text,
+    type
+  }, ..._state.log].slice(0, 200);
+  notify();
+}
+
+// ─── Night order computation ─────────────────────────────────────────────────
+function computeNightOrder(which) {
+  const scriptRoles = ROLES.filter(r => _state.script.includes(r.id));
+  const key = which === 'first' ? 'firstNight' : 'otherNight';
+  return scriptRoles
+    .filter(r => r[key] > 0)
+    .sort((a, b) => a[key] - b[key])
+    .map(r => ({
+      roleId: r.id,
+      roleName: r.name,
+      icon: r.icon,
+      team: r.team,
+      ability: r.ability,
+      players: _state.players.filter(p => p.roleId === r.id && p.alive)
+    }));
+}
+
+// ─── QR token ────────────────────────────────────────────────────────────────
+function generatePlayerToken(playerId) {
+  const p = _state.players.find(p => p.id === playerId);
+  if (!p) return null;
+  const data = {
+    gid: _state.gameId,
+    pid: playerId,
+    name: p.name,
+    roleId: p.roleId,
+    ts: Date.now()
+  };
+  return btoa(JSON.stringify(data));
+}
+
+
+
+
+
+
+
+
+
+
+const TEAM_ORDER = ['TOWNSFOLK','OUTSIDER','MINION','DEMON'];
+const TEAM_NAMES = { TOWNSFOLK:'Aldeanos', OUTSIDER:'Forasteros', MINION:'Secuaces', DEMON:'Demonios' };
+
+let selectedEditions = ['TB'];
+let selectedRoles = [];
+let activeSheetPlayerId = null;
+
+// ── Init ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  loadPersistedState();
+  subscribe(renderAll);
+  newGameInit();
+  renderAll(getState());
+});
+
+function newGameInit() {
+  newGame();
+  addPlayerInput(); addPlayerInput(); addPlayerInput();
+  addPlayerInput(); addPlayerInput();
+  renderEditions();
+  updateRoleSelector();
+}
+
+// ── View switching ────────────────────────────────────────────
+function switchView(viewId, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + viewId).classList.add('active');
+  if (btn) btn.classList.add('active');
+};
+
+// ── Render all ────────────────────────────────────────────────
+function renderAll(state) {
+  renderPhaseBadge(state);
+  renderGrimoire(state);
+  renderNightView(state);
+  renderLog(state);
+  renderGrimoirePhaseControls(state);
+  if (state.phase === 'ended') showWinOverlay(state);
+}
+
+// ── Phase badge ───────────────────────────────────────────────
+function renderPhaseBadge(state) {
+  const badge = document.getElementById('phase-badge');
+  const dayEl = document.getElementById('header-day');
+  const map = {
+    setup: ['setup','Preparación'],
+    firstNight: ['night','Primera Noche'],
+    day: ['day', `Día ${state.day}`],
+    night: ['night', `Noche ${state.day + 1}`],
+    ended: ['setup', 'Fin']
+  };
+  const [cls, txt] = map[state.phase] || ['setup','—'];
+  badge.className = `phase-badge ${cls}`;
+  badge.textContent = txt;
+  dayEl.textContent = state.gameId ? `#${state.gameId}` : '';
+}
+
+// ── Editions ──────────────────────────────────────────────────
+function renderEditions() {
+  const el = document.getElementById('edition-grid');
+  el.innerHTML = '';
+  Object.values(EDITIONS).filter(e => e.id !== 'CUSTOM').forEach(ed => {
+    const div = document.createElement('div');
+    div.className = 'edition-pill' + (selectedEditions.includes(ed.id) ? ' selected' : '');
+    div.innerHTML = `<span class="edition-pill-icon">${ed.emoji}</span><span class="edition-pill-name">${ed.name}</span>`;
+    div.onclick = () => {
+      if (selectedEditions.includes(ed.id)) selectedEditions = selectedEditions.filter(e => e !== ed.id);
+      else selectedEditions.push(ed.id);
+      if (!selectedEditions.length) selectedEditions = [ed.id];
+      selectedRoles = [];
+      renderEditions();
+      updateRoleSelector();
+    };
+    el.appendChild(div);
+  });
+}
+
+// ── Role selector ─────────────────────────────────────────────
+function updateRoleSelector() {
+  const el = document.getElementById('role-selector');
+  el.innerHTML = '';
+  const roles = ROLES.filter(r => selectedEditions.includes(r.edition));
+
+  TEAM_ORDER.forEach(team => {
+    const teamRoles = roles.filter(r => r.team === team);
+    if (!teamRoles.length) return;
+    const sep = document.createElement('div');
+    sep.className = `team-sep ${team}`;
+    sep.textContent = TEAM_NAMES[team];
+    el.appendChild(sep);
+    const grid = document.createElement('div');
+    grid.className = 'role-grid';
+    teamRoles.forEach(role => {
+      const chip = document.createElement('div');
+      const sel = selectedRoles.includes(role.id);
+      chip.className = `role-chip team-${role.team}${sel ? ' selected' : ''}`;
+      chip.innerHTML = `<span class="role-chip-icon">${role.icon}</span><span class="role-chip-name">${role.name}</span>`;
+      chip.onclick = () => {
+        if (selectedRoles.includes(role.id)) selectedRoles = selectedRoles.filter(r => r !== role.id);
+        else selectedRoles.push(role.id);
+        updateRoleSelector();
+      };
+      grid.appendChild(chip);
+    });
+    el.appendChild(grid);
+  });
+
+  renderScriptStats();
+  renderCustomScriptSelector();
+}
+
+function renderScriptStats() {
+  const el = document.getElementById('script-stats');
+  const counts = {};
+  TEAM_ORDER.forEach(t => counts[t] = selectedRoles.filter(id => {
+    const r = ROLES.find(r => r.id === id); return r && r.team === t;
+  }).length);
+  el.innerHTML = Object.entries(counts).map(([t, c]) =>
+    `<div class="script-stat-row"><span>${TEAM_NAMES[t]}</span><span class="script-stat-val">${c}</span></div>`
+  ).join('') + `<div class="script-stat-row" style="margin-top:.25rem;border-top:1px solid var(--border);padding-top:.25rem;"><span>Total</span><span class="script-stat-val">${selectedRoles.length}</span></div>`;
+}
+
+// ── Players ───────────────────────────────────────────────────
+function addPlayerInput() {
+  const c = document.getElementById('player-inputs-container');
+  const row = document.createElement('div');
+  row.className = 'player-input-row';
+  const idx = c.children.length + 1;
+  row.innerHTML = `<input type="text" placeholder="Jugador ${idx}" value=""/><button class="remove-btn" onclick="this.parentElement.remove()">×</button>`;
+  c.appendChild(row);
+};
+
+function generateDefaultPlayers() {
+  const c = document.getElementById('player-inputs-container');
+  c.innerHTML = '';
+  const n = Math.floor(Math.random() * 11) + 5;
+  for (let i = 1; i <= n; i++) {
+    const row = document.createElement('div');
+    row.className = 'player-input-row';
+    row.innerHTML = `<input type="text" placeholder="Jugador ${i}" value="Jugador ${i}"/><button class="remove-btn" onclick="this.parentElement.remove()">×</button>`;
+    c.appendChild(row);
+  }
+};
+
+// ── Start game ────────────────────────────────────────────────
+function handleStartGame() {
+  const inputs = document.querySelectorAll('#player-inputs-container input');
+  const names = [...inputs].map(i => i.value.trim()).filter(Boolean);
+  if (names.length < 3) { alert('Necesitas al menos 3 jugadores.'); return; }
+  if (!selectedRoles.length) { alert('Selecciona al menos un rol para el script.'); return; }
+  if (selectedRoles.length < names.length) {
+    if (!confirm(`Tienes ${names.length} jugadores pero solo ${selectedRoles.length} roles. ¿Continuar?`)) return;
+  }
+
+  setPlayers(names);
+  setScript(selectedRoles);
+  shuffleRoles();
+  startGame();
+
+  switchView('grimoire', document.querySelector('[data-view="grimoire"]'));
+};
+
+// ── Grimoire phase controls ───────────────────────────────────
+function renderGrimoirePhaseControls(state) {
+  const el = document.getElementById('grimoire-phase-controls');
+  el.innerHTML = '';
+  const addBtn = (label, fn, cls = '') => {
+    const b = document.createElement('button');
+    b.className = `btn btn-sm ${cls}`;
+    b.textContent = label;
+    b.onclick = fn;
+    el.appendChild(b);
+  };
+  if (state.phase === 'firstNight' || state.phase === 'night') {
+    addBtn('☀️ Iniciar día', () => startDay());
+    addBtn('⚔️ Ver orden de noche', () => switchView('night', document.querySelector('[data-view="night"]')));
+  }
+  if (state.phase === 'day') {
+    addBtn('🌙 Iniciar noche', () => startNight());
+  }
+  if (state.phase !== 'setup' && state.phase !== 'ended') {
+    addBtn('✅ Bien gana', () => endGame('good'), 'btn-gold');
+    addBtn('☠️ Mal gana', () => endGame('evil'), '');
+  }
+}
+
+// ── Grimoire ──────────────────────────────────────────────────
+function renderGrimoire(state) {
+  const grid = document.getElementById('grimoire-grid');
+  if (!state.players?.length) {
+    grid.innerHTML = '<div class="empty-state">Configura los jugadores en Setup</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  state.players.forEach(p => {
+    const role = ROLES.find(r => r.id === p.roleId);
+    const token = document.createElement('div');
+    let cls = 'player-token';
+    if (!p.alive) cls += ' dead';
+    if (p.drunk) cls += ' drunk';
+    if (p.poisoned) cls += ' poisoned';
+    token.className = cls;
+    token.innerHTML = `
+      <div class="p-role-icon">${role?.icon || '❓'}</div>
+      <div class="p-role-name">${role?.name || 'Sin rol'}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-status-row">
+        <span class="p-status-dot ${p.alive ? 'dot-alive' : 'dot-dead'}"></span>
+        ${p.drunk ? '<span class="p-status-dot dot-drunk"></span>' : ''}
+        ${p.poisoned ? '<span class="p-status-dot dot-poisoned"></span>' : ''}
+      </div>
+    `;
+    token.onclick = () => openActionSheet(p, state);
+    grid.appendChild(token);
+  });
+}
+
+// ── Action sheet ──────────────────────────────────────────────
+function openActionSheet(player, state) {
+  activeSheetPlayerId = player.id;
+  const role = ROLES.find(r => r.id === player.roleId);
+  document.getElementById('as-role-icon').textContent = role?.icon || '❓';
+  document.getElementById('as-player-name').textContent = player.name + (role ? ` — ${role.name}` : '');
+  const grid = document.getElementById('action-grid');
+  grid.innerHTML = '';
+
+  const addAction = (icon, label, fn, cls = '') => {
+    const btn = document.createElement('div');
+    btn.className = `action-btn ${cls}`;
+    btn.innerHTML = `<span class="a-icon">${icon}</span>${label}`;
+    btn.onclick = () => { fn(); closeActionSheet(); };
+    grid.appendChild(btn);
+  };
+
+  // QR
+  addAction('📱', 'Ver QR', () => showQR(player));
+
+  // Kill / revive
+  if (player.alive) addAction('💀', 'Matar', () => killPlayer(player.id, 'Demonio'), 'danger');
+  else addAction('✨', 'Revivir', () => revivePlayer(player.id), 'success');
+
+  // Execute
+  if (player.alive) addAction('⚖️', 'Ejecutar', () => executePlayer(player.id), 'danger');
+
+  // Drunk
+  addAction('🍺', player.drunk ? 'Quitar borracho' : 'Borracho', () => toggleDrunk(player.id), 'warning');
+
+  // Poison
+  addAction('☠️', player.poisoned ? 'Quitar veneno' : 'Envenenar', () => togglePoisoned(player.id), 'warning');
+
+  // Role change
+  addAction('🔄', 'Cambiar rol', () => promptRoleChange(player));
+
+  document.getElementById('action-sheet').classList.add('open');
+}
+
+function promptRoleChange(player) {
+  const state = getState();
+  const roleIds = state.script;
+  const names = roleIds.map(id => ROLES.find(r => r.id === id)?.name || id).join('\n');
+  const pick = prompt(`Nuevo rol para ${player.name}:\n\n${roleIds.map((id,i) => `${i+1}. ${ROLES.find(r=>r.id===id)?.name}`).join('\n')}\n\nEscribe el número:`);
+  if (pick) {
+    const idx = parseInt(pick) - 1;
+    if (roleIds[idx]) assignRole(player.id, roleIds[idx]);
+  }
+}
+
+function closeActionSheet(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('action-sheet').classList.remove('open');
+};
+
+// ── QR ────────────────────────────────────────────────────────
+function showQR(player) {
+  const token = generatePlayerToken(player.id);
+  if (!token) return;
+  const role = ROLES.find(r => r.id === player.roleId);
+
+  const baseUrl = location.origin + location.pathname.replace('index.html','').replace(/\/$/, '');
+  const url = `${baseUrl}/player.html?t=${token}`;
+
+  document.getElementById('qr-player-name').textContent = player.name;
+  document.getElementById('qr-role-desc').textContent = role ? `${role.icon} ${role.name}` : '(sin rol)';
+  document.getElementById('qr-url').textContent = url;
+
+  const container = document.getElementById('qr-container');
+  container.innerHTML = '';
+  new QRCode(container, { text: url, width: 200, height: 200, colorDark: '#000', colorLight: '#fff' });
+
+  document.getElementById('qr-modal').classList.add('open');
+}
+
+function closeQR(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('qr-modal').classList.remove('open');
+};
+
+// ── Night view ────────────────────────────────────────────────
+function renderNightView(state) {
+  const titleEl = document.getElementById('night-view-title');
+  const dotsEl = document.getElementById('night-progress-dots');
+  const containerEl = document.getElementById('night-step-container');
+
+  const phase = state.phase;
+  const order = state.nightOrder || [];
+  const step = state.nightStep || 0;
+
+  if (phase !== 'firstNight' && phase !== 'night') {
+    titleEl.textContent = 'Orden de Noche';
+    containerEl.innerHTML = '<div class="empty-state">No es de noche ahora mismo.</div>';
+    dotsEl.innerHTML = '';
+    return;
+  }
+
+  titleEl.textContent = phase === 'firstNight' ? 'Primera Noche' : `Noche ${state.day + 1}`;
+
+  // Dots
+  dotsEl.innerHTML = '';
+  order.forEach((item, i) => {
+    const dot = document.createElement('div');
+    dot.className = `night-dot${i === step ? ' current' : ''}${i < step ? ' done' : ''}`;
+    dot.textContent = item.icon;
+    dot.title = item.roleName;
+    dot.onclick = () => { getState(); _jumpNightStep(i); };
+    dotsEl.appendChild(dot);
+  });
+
+  if (!order.length) {
+    containerEl.innerHTML = '<div class="empty-state">Sin acciones esta noche.</div>';
+    return;
+  }
+
+  const current = order[step];
+  if (!current) return;
+
+  containerEl.innerHTML = `
+    <div class="night-step-card fade-in">
+      <div class="night-step-role-icon">${current.icon}</div>
+      <div class="night-step-role">${current.roleName}</div>
+      <div class="night-step-ability">${current.ability}</div>
+      ${current.players.length ? `
+        <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.4rem;">Jugadores con este rol:</div>
+        <div class="night-step-players">
+          ${current.players.map(p => `<span class="night-player-chip">${p.name}</span>`).join('')}
+        </div>
+      ` : `<div style="font-size:.82rem;color:var(--text-muted);font-style:italic;margin-bottom:.75rem;">Ningún jugador vivo con este rol.</div>`}
+      <div class="night-nav">
+        <button class="btn btn-sm" onclick="window._nightPrev()" ${step === 0 ? 'disabled style="opacity:.3"' : ''}>← Anterior</button>
+        <button class="btn btn-sm btn-gold" onclick="window._nightNext()" ${step >= order.length - 1 ? '' : ''}>
+          ${step >= order.length - 1 ? '✅ Fin de noche' : 'Siguiente →'}
+        </button>
+      </div>
+    </div>
+    <div style="margin-top:.5rem;font-size:.78rem;color:var(--text-muted);text-align:center;">
+      Paso ${step + 1} de ${order.length}
+    </div>
+  `;
+}
+
+function _nightNext() {
+  const state = getState();
+  if (state.nightStep >= (state.nightOrder?.length || 0) - 1) {
+    startDay();
+    switchView('grimoire', document.querySelector('[data-view="grimoire"]'));
+  } else {
+    advanceNightStep();
+  }
+};
+function _nightPrev() { prevNightStep(); };
+function _jumpNightStep(i) {
+  const s = getState();
+  const diff = i - s.nightStep;
+  if (diff > 0) for (let x=0;x<diff;x++) advanceNightStep();
+  else for (let x=0;x<-diff;x++) prevNightStep();
+};
+
+// ── Log ───────────────────────────────────────────────────────
+function renderLog(state) {
+  const el = document.getElementById('log-list');
+  if (!state.log?.length) { el.innerHTML = '<div class="empty-state">Sin entradas aún.</div>'; return; }
+  el.innerHTML = state.log.map(e => `
+    <div class="log-entry ${e.type || ''}">
+      <span class="log-time">${e.time}</span>
+      <span class="log-text">${e.text}</span>
+    </div>
+  `).join('');
+}
+
+function addCustomLog() {
+  const txt = prompt('Nota manual:');
+  if (txt) addLog(txt, 'info');
+};
+function clearLog() {
+  if (confirm('¿Limpiar el log?')) {
+    getState(); // just trigger re-read
+    window._state_log_clear = true;
+  }
+};
+
+// ── Custom script view ────────────────────────────────────────
+function renderCustomScriptSelector() {
+  const el = document.getElementById('custom-script-selector');
+  if (!el) return;
+  el.innerHTML = '';
+  TEAM_ORDER.forEach(team => {
+    const teamRoles = ROLES.filter(r => r.team === team);
+    if (!teamRoles.length) return;
+    const sep = document.createElement('div');
+    sep.className = `team-sep ${team}`;
+    sep.textContent = `${TEAM_NAMES[team]} (todas las ediciones)`;
+    el.appendChild(sep);
+    const grid = document.createElement('div');
+    grid.className = 'role-grid';
+    teamRoles.forEach(role => {
+      const sel = selectedRoles.includes(role.id);
+      const chip = document.createElement('div');
+      chip.className = `role-chip team-${role.team}${sel ? ' selected' : ''}`;
+      chip.innerHTML = `
+        <span class="role-chip-icon">${role.icon}</span>
+        <span class="role-chip-name">${role.name}<br><span style="font-size:.7rem;opacity:.5">${EDITIONS[role.edition]?.name||''}</span></span>
+      `;
+      chip.onclick = () => {
+        if (selectedRoles.includes(role.id)) selectedRoles = selectedRoles.filter(r => r !== role.id);
+        else selectedRoles.push(role.id);
+        updateRoleSelector();
+      };
+      grid.appendChild(chip);
+    });
+    el.appendChild(grid);
+  });
+}
+
+// ── Export / Import script ────────────────────────────────────
+function exportScript() {
+  const data = {
+    name: 'Script personalizado — BotC App',
+    roles: selectedRoles.map(id => {
+      const r = ROLES.find(r => r.id === id);
+      return { id, name: r?.name, edition: r?.edition, team: r?.team };
+    })
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'botc-script.json';
+  a.click();
+};
+
+function importScript() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        const ids = (data.roles || []).map(r => r.id).filter(id => ROLES.find(r => r.id === id));
+        selectedRoles = ids;
+        updateRoleSelector();
+        alert(`Script importado: ${ids.length} roles.`);
+      } catch { alert('Error al leer el archivo JSON.'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+};
+
+// ── Win overlay ───────────────────────────────────────────────
+function showWinOverlay(state) {
+  const ov = document.getElementById('win-overlay');
+  document.getElementById('win-title').textContent = state.winner === 'good' ? '🌟 ¡El Bien Gana!' : '😈 ¡El Mal Gana!';
+  document.getElementById('win-team').textContent = state.winner === 'good'
+    ? 'Los Aldeanos han derrotado al Demonio' : 'El Demonio se ha impuesto sobre el pueblo';
+  ov.classList.add('show');
+}
+
+function resetGame() {
+  document.getElementById('win-overlay').classList.remove('show');
+  selectedRoles = [];
+  selectedEditions = ['TB'];
+  newGameInit();
+  switchView('setup', document.querySelector('[data-view="setup"]'));
+};
+
+
+
+// Expose to global scope
+window.switchView = switchView;
+window.addPlayerInput = addPlayerInput;
+window.generateDefaultPlayers = generateDefaultPlayers;
+window.handleStartGame = handleStartGame;
+window.closeActionSheet = closeActionSheet;
+window.closeQR = closeQR;
+window._nightNext = _nightNext;
+window._nightPrev = _nightPrev;
+window._jumpNightStep = _jumpNightStep;
+window.addCustomLog = addCustomLog;
+window.clearLog = clearLog;
+window.exportScript = exportScript;
+window.importScript = importScript;
+window.resetGame = resetGame;
+</script>
+</body>
+</html>
