@@ -479,28 +479,20 @@ function emit(){_L.forEach(fn=>fn(STATE));persist();}
 function persist(){try{localStorage.setItem('botc',JSON.stringify(STATE));}catch(e){}}
 function hydrate(){
   try{
-    const r=localStorage.getItem('botc');
-    if(!r) return;
-    const saved=JSON.parse(r);
-    // Only restore if there's an active game in progress
-    if(saved.phase&&saved.phase!=='setup'&&saved.phase!=='ended'&&saved.players?.length){
-      STATE={...STATE,...saved};
-      // After hydrate, switch to grimoire if game is active
-      setTimeout(()=>{
-        if(STATE.phase!=='setup'&&STATE.phase!=='ended'){
-          nav('grimoire',document.querySelector('[data-v="grimoire"]'));
-          showResumeToast();
-        }
-      },100);
-    }
-  }catch(e){}
-}
-function showResumeToast(){
-  const t=document.getElementById('ntoa');
-  t.textContent='🔄 Partida anterior restaurada. Puedes continuar.';
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t=setTimeout(()=>t.classList.remove('show'),4000);
+    const raw=localStorage.getItem('botc');
+    if(!raw) return;
+    const saved=JSON.parse(raw);
+    const activePhases=['firstNight','day','night'];
+    if(!activePhases.includes(saved.phase)) return;
+    if(!saved.players||saved.players.length<3) return;
+    STATE={...STATE,...saved};
+    setTimeout(()=>{
+      nav('grimoire',document.querySelector('[data-v="grimoire"]'));
+      const t=document.getElementById('ntoa');
+      t.textContent='🔄 Partida restaurada — '+saved.players.length+' jugadores';
+      t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3500);
+    },200);
+  }catch(e){ try{localStorage.removeItem('botc');}catch(e2){} }
 }
 function addLog(text,type='info'){STATE.log=[{id:Date.now()+Math.random(),time:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),text,type},...STATE.log].slice(0,300);}
 function livePlayers(){return STATE.players.filter(p=>p.alive);}
@@ -511,18 +503,46 @@ function buildNightOrder(which){const key=which==='first'?'firstNight':'otherNig
 // SETUP
 // ═══════════════════════════════════════
 let selEditions=['TB'],selRoles=[];
-function addPInput(){const c=document.getElementById('p-inputs');const n=c.children.length+1;const row=document.createElement('div');row.className='p-row';row.innerHTML=`<input type="text" placeholder="Jugador ${n}" value=""/><button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;c.appendChild(row);}
-function genPlayers(){const c=document.getElementById('p-inputs');c.innerHTML='';const n=Math.floor(Math.random()*11)+5;for(let i=1;i<=n;i++){const row=document.createElement('div');row.className='p-row';row.innerHTML=`<input type="text" placeholder="Jugador ${i}" value="Jugador ${i}"/><button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;c.appendChild(row);}}
+function getPlayerCount(){return [...document.querySelectorAll('#p-inputs input')].map(i=>i.value.trim()).filter(Boolean).length;}
+function addPInput(){
+  const c=document.getElementById('p-inputs');const n=c.children.length+1;
+  const row=document.createElement('div');row.className='p-row';
+  row.innerHTML=`<input type="text" placeholder="Jugador ${n}" value="" oninput="renderScriptStats()"/><button class="rm-btn" onclick="this.parentElement.remove();renderScriptStats()">×</button>`;
+  c.appendChild(row);renderScriptStats();
+}
+function genPlayers(){
+  const c=document.getElementById('p-inputs');c.innerHTML='';
+  // Also clear over-limit roles
+  const n=Math.floor(Math.random()*11)+5;
+  for(let i=1;i<=n;i++){const row=document.createElement('div');row.className='p-row';row.innerHTML=`<input type="text" placeholder="Jugador ${i}" value="Jugador ${i}" oninput="renderScriptStats()"/><button class="rm-btn" onclick="this.parentElement.remove();renderScriptStats()">×</button>`;c.appendChild(row);}
+  // Trim selRoles to new count if over limit
+  if(selRoles.length>n){selRoles=selRoles.slice(0,n);}
+  renderRoleSel();renderScriptStats();
+}
 window.addPInput=addPInput;window.genPlayers=genPlayers;
 
 function renderEditions(){const el=document.getElementById('ed-grid');el.innerHTML='';Object.values(EDITIONS).filter(e=>e.id!=='CUSTOM').forEach(ed=>{const d=document.createElement('div');d.className='ed-pill'+(selEditions.includes(ed.id)?' sel':'');d.innerHTML=`<span class="ed-icon">${ed.emoji}</span><span class="ed-name">${ed.name}</span>`;d.onclick=()=>{if(selEditions.includes(ed.id))selEditions=selEditions.filter(e=>e!==ed.id);else selEditions.push(ed.id);if(!selEditions.length)selEditions=[ed.id];selRoles=selRoles.filter(id=>ROLES.find(r=>r.id===id&&selEditions.includes(r.edition)));renderEditions();renderRoleSel();};el.appendChild(d);});}
-function renderRoleSel(){const el=document.getElementById('role-sel');el.innerHTML='';const TO=['TOWNSFOLK','OUTSIDER','MINION','DEMON'];const TN={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};TO.forEach(team=>{const roles=ROLES.filter(r=>selEditions.includes(r.edition)&&r.team===team);if(!roles.length)return;const sep=document.createElement('div');sep.className=`tsep ${team}`;sep.textContent=TN[team];el.appendChild(sep);const grid=document.createElement('div');grid.className='role-grid';roles.forEach(r=>{const sel=selRoles.includes(r.id);const c=document.createElement('div');c.className=`rc ${r.team}${sel?' sel':''}`;c.innerHTML=`<span>${r.icon}</span><span>${r.name}</span>`;c.onclick=()=>{selRoles.includes(r.id)?selRoles=selRoles.filter(x=>x!==r.id):selRoles.push(r.id);renderRoleSel();renderScriptStats();};grid.appendChild(c);});el.appendChild(grid);});renderScriptStats();}
+function renderRoleSel(){const el=document.getElementById('role-sel');el.innerHTML='';const TO=['TOWNSFOLK','OUTSIDER','MINION','DEMON'];const TN={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};TO.forEach(team=>{const roles=ROLES.filter(r=>selEditions.includes(r.edition)&&r.team===team);if(!roles.length)return;const sep=document.createElement('div');sep.className=`tsep ${team}`;sep.textContent=TN[team];el.appendChild(sep);const grid=document.createElement('div');grid.className='role-grid';roles.forEach(r=>{const sel=selRoles.includes(r.id);const c=document.createElement('div');c.className=`rc ${r.team}${sel?' sel':''}`;c.innerHTML=`<span>${r.icon}</span><span>${r.name}</span>`;c.onclick=()=>{
+  if(selRoles.includes(r.id)){
+    selRoles=selRoles.filter(x=>x!==r.id);
+  } else {
+    const max=getPlayerCount();
+    if(max>0&&selRoles.length>=max){
+      const t=document.getElementById('ntoa');
+      t.textContent=`⚠️ Máximo ${max} roles para ${max} jugadores`;
+      t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2500);
+      return;
+    }
+    selRoles.push(r.id);
+  }
+  renderRoleSel();renderScriptStats();
+};grid.appendChild(c);});el.appendChild(grid);});renderScriptStats();}
 function renderScriptStats(){
   const el=document.getElementById('script-stats');
   const TN={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};
   const counts={};
   ['TOWNSFOLK','OUTSIDER','MINION','DEMON'].forEach(t=>counts[t]=selRoles.filter(id=>{const r=roleById(id);return r&&r.team===t;}).length);
-  const playerCount=document.querySelectorAll('#p-inputs input').length;
+  const playerCount=getPlayerCount();
   const total=selRoles.length;
   const overLimit=total>playerCount&&playerCount>0;
   const hasDemon=selRoles.some(id=>{const r=roleById(id);return r&&r.team==='DEMON';});
@@ -537,7 +557,13 @@ function startGame(){
   const names=[...inputs].map(i=>i.value.trim()).filter(Boolean);
   if(names.length<3){alert('Necesitas al menos 3 jugadores.');return;}
   if(!selRoles.length){alert('Selecciona al menos un rol.');return;}
-  if(selRoles.length>names.length){alert(`Tienes más roles (${selRoles.length}) que jugadores (${names.length}). Elimina ${selRoles.length-names.length} rol${selRoles.length-names.length>1?'es':''} o añade más jugadores.`);return;}
+  if(selRoles.length!==names.length){
+    const diff=selRoles.length-names.length;
+    alert(diff>0
+      ? `Tienes ${diff} rol${diff>1?'es':''} de más. Necesitas exactamente ${names.length} roles para ${names.length} jugadores.`
+      : `Te faltan ${-diff} rol${-diff>1?'es':''}. Necesitas exactamente ${names.length} roles para ${names.length} jugadores.`
+    );return;
+  }
   const hasDemon=selRoles.some(id=>{const r=roleById(id);return r&&r.team==='DEMON';});
   if(!hasDemon){alert('El script necesita al menos un Demonio.');return;}
   _undoStack=[];document.getElementById('undo-btn').classList.remove('visible');
@@ -1164,6 +1190,16 @@ window.toggleMusic=toggleMusic;
 // INIT
 // ═══════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
+  // Clean up stale states before hydrating
+  try{
+    const raw=localStorage.getItem('botc');
+    if(raw){
+      const s=JSON.parse(raw);
+      if(!s.phase||s.phase==='setup'||s.phase==='ended'){
+        localStorage.removeItem('botc');
+      }
+    }
+  }catch(e){ try{localStorage.removeItem('botc');}catch(e2){} }
   hydrate();
   renderEditions();renderRoleSel();
   for(let i=0;i<5;i++) addPInput();
