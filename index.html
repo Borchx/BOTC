@@ -380,6 +380,88 @@ label { font-size: .85rem; color: var(--text-dim); display: block; margin-bottom
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .fade-in { animation: fadeIn .3s ease; }
+
+/* ─── Help modal ─────────────────────────────────────────────── */
+#help-modal {
+  position: fixed; inset: 0; z-index: 500;
+  background: #0a060899; backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+#help-modal.open { opacity: 1; pointer-events: all; }
+.help-box {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 6px; width: 92%; max-width: 480px;
+  max-height: 85dvh; display: flex; flex-direction: column;
+  transform: scale(.95); transition: transform .25s;
+}
+#help-modal.open .help-box { transform: scale(1); }
+.help-header {
+  padding: 1rem 1.25rem .75rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-shrink: 0;
+}
+.help-title { font-family: 'Cinzel Decorative', serif; font-size: .85rem; color: var(--gold); }
+.help-close { background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; line-height: 1; }
+.help-body { overflow-y: auto; padding: 1rem 1.25rem 1.5rem; }
+.help-section { margin-bottom: 1.25rem; }
+.help-section-title {
+  font-family: 'Cinzel Decorative', serif; font-size: .65rem; letter-spacing: .2em;
+  color: var(--gold-dim); text-transform: uppercase; margin-bottom: .5rem;
+  padding-bottom: .3rem; border-bottom: 1px solid var(--border);
+}
+.help-body p { font-size: .92rem; line-height: 1.65; color: var(--text); margin-bottom: .5rem; }
+.help-body ul { padding-left: 1.2rem; }
+.help-body li { font-size: .9rem; line-height: 1.65; color: var(--text-dim); margin-bottom: .25rem; }
+.help-body li strong { color: var(--text); }
+.help-team-row { display: flex; align-items: flex-start; gap: .6rem; margin-bottom: .5rem; }
+.help-team-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: .1rem; }
+.help-team-name { font-size: .85rem; font-weight: 600; color: var(--gold); }
+.help-team-desc { font-size: .82rem; color: var(--text-dim); line-height: 1.4; }
+.help-tip {
+  background: #1a120500; border: 1px solid var(--gold-dim);
+  border-radius: var(--radius); padding: .65rem .9rem;
+  font-size: .85rem; color: var(--gold); margin-top: .75rem; line-height: 1.5;
+}
+
+/* ─── Audio controls ─────────────────────────────────────────── */
+#audio-bar {
+  position: fixed; bottom: calc(var(--nav-h) + 6px); right: .75rem;
+  z-index: 90; display: flex; gap: .4rem; align-items: center;
+}
+.audio-pill {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 20px; padding: .3rem .75rem;
+  font-size: .65rem; color: var(--text-muted); cursor: pointer;
+  display: flex; align-items: center; gap: .3rem;
+  transition: all .2s; font-family: 'Cinzel Decorative', serif; letter-spacing: .05em;
+  box-shadow: 0 2px 8px #00000044;
+}
+.audio-pill.active { border-color: var(--gold-dim); color: var(--gold); background: #1a120a55; }
+.audio-pill:active { opacity: .7; }
+
+/* ─── Narrator toast ─────────────────────────────────────────── */
+#narrator-toast {
+  position: fixed; top: 62px; left: 50%; transform: translateX(-50%) translateY(-8px);
+  z-index: 400; background: #0f080af0; border: 1px solid var(--gold-dim);
+  border-radius: 4px; padding: .7rem 1.4rem;
+  font-family: 'Crimson Pro', serif; font-style: italic;
+  font-size: 1rem; color: var(--gold);
+  max-width: 88vw; text-align: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s, transform .4s;
+  backdrop-filter: blur(4px);
+}
+#narrator-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ─── Header icon buttons ────────────────────────────────────── */
+.header-icon-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 1.1rem; padding: .15rem .25rem;
+  opacity: .55; transition: opacity .2s; line-height: 1;
+}
+.header-icon-btn:active, .header-icon-btn.on { opacity: 1; }
 </style>
 </head>
 <body>
@@ -391,6 +473,9 @@ label { font-size: .85rem; color: var(--text-dim); display: block; margin-bottom
     <small>NARRADOR</small>
   </div>
   <div class="header-right">
+    <button class="header-icon-btn" id="btn-music" onclick="toggleMusic()" title="Música">🎵</button>
+    <button class="header-icon-btn" id="btn-narrator" onclick="toggleNarrator()" title="Narrador">🎙️</button>
+    <button class="header-icon-btn" onclick="openHelp()" title="Instrucciones">❓</button>
     <span class="phase-badge setup" id="phase-badge">Preparación</span>
     <span id="header-day" style="font-size:.75rem;color:var(--text-muted);font-family:monospace;"></span>
   </div>
@@ -1562,8 +1647,360 @@ function resetGame() {
 
 
 
-// Expose to global scope
-window.switchView = switchView;
+
+// ════════════════════════════════════════════════════════════════
+// HELP
+// ════════════════════════════════════════════════════════════════
+function openHelp() {
+  document.getElementById('help-modal').classList.add('open');
+}
+function closeHelp(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('help-modal').classList.remove('open');
+}
+window.openHelp = openHelp;
+window.closeHelp = closeHelp;
+
+// ════════════════════════════════════════════════════════════════
+// NARRATOR (Web Speech API)
+// ════════════════════════════════════════════════════════════════
+let narratorEnabled = false;
+let narratorVoice = null;
+
+function initNarrator() {
+  if (!window.speechSynthesis) return;
+  const loadVoices = () => {
+    const voices = speechSynthesis.getVoices();
+    narratorVoice = voices.find(v => v.lang.startsWith('es') && v.name.toLowerCase().includes('male'))
+      || voices.find(v => v.lang.startsWith('es'))
+      || voices[0];
+  };
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function speak(text) {
+  if (!narratorEnabled || !window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'es-ES';
+  utt.rate = 0.88;
+  utt.pitch = 0.85;
+  utt.volume = 1;
+  if (narratorVoice) utt.voice = narratorVoice;
+  speechSynthesis.speak(utt);
+  showNarratorToast(text);
+}
+
+function showNarratorToast(text) {
+  const toast = document.getElementById('narrator-toast');
+  toast.textContent = '🎙️ ' + text;
+  toast.classList.add('show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function toggleNarrator() {
+  narratorEnabled = !narratorEnabled;
+  const btn = document.getElementById('btn-narrator');
+  btn.classList.toggle('on', narratorEnabled);
+  btn.style.opacity = narratorEnabled ? '1' : '';
+  if (narratorEnabled) {
+    speak('Narrador activado. Que comience la oscuridad.');
+  } else {
+    speechSynthesis.cancel();
+    document.getElementById('narrator-toast').classList.remove('show');
+  }
+}
+window.toggleNarrator = toggleNarrator;
+
+// Phrases per phase
+const NARRATOR_PHRASES = {
+  firstNight: [
+    'Todos cerramos los ojos. El pueblo se duerme.',
+    'La oscuridad envuelve el pueblo. Todos a dormir.',
+    'La noche cae sobre el reloj de la torre. Cerrad los ojos.'
+  ],
+  night: [
+    'Se hace de noche. El pueblo duerme.',
+    'La luna se oculta. Todos cerramos los ojos.',
+    'Otra noche de pesadillas. El pueblo se duerme.'
+  ],
+  day: [
+    'El sol sale sobre el pueblo. Abrid los ojos.',
+    'Amanecer. El pueblo despierta... pero alguien ha muerto.',
+    'La luz del día revela la verdad. Abrid los ojos.'
+  ],
+  execution: [
+    'El pueblo ha tomado su decisión. Se hace justicia... o quizás no.',
+    'La sentencia ha sido dictada.',
+    'La horca reclama otra víctima.'
+  ],
+  goodWin: [
+    '¡El Bien triunfa! El Demonio ha sido destruido. La paz vuelve al pueblo.',
+    '¡Victoria para el pueblo! El mal ha sido derrotado.'
+  ],
+  evilWin: [
+    'Las tinieblas ganan. El Demonio se impone sobre el pueblo.',
+    'El mal triunfa. Nadie puede salvaros ahora.'
+  ]
+};
+
+function narratePhase(phase, winner) {
+  if (phase === 'firstNight') speak(rand(NARRATOR_PHRASES.firstNight));
+  else if (phase === 'night') speak(rand(NARRATOR_PHRASES.night));
+  else if (phase === 'day') speak(rand(NARRATOR_PHRASES.day));
+  else if (phase === 'ended') speak(rand(winner === 'good' ? NARRATOR_PHRASES.goodWin : NARRATOR_PHRASES.evilWin));
+}
+
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// Hook into phase changes
+let _lastPhase = null;
+function checkNarratePhase(state) {
+  if (state.phase !== _lastPhase) {
+    _lastPhase = state.phase;
+    narratePhase(state.phase, state.winner);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// MUSIC ENGINE (Web Audio API - procedural, no files needed)
+// ════════════════════════════════════════════════════════════════
+let audioCtx = null;
+let musicEnabled = false;
+let musicNodes = [];
+let musicPhase = 'setup';
+let musicScheduler = null;
+
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function toggleMusic() {
+  if (!musicEnabled) {
+    initAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    musicEnabled = true;
+    document.getElementById('btn-music').classList.add('on');
+    document.getElementById('btn-music').style.opacity = '1';
+    document.getElementById('audio-bar').style.display = 'flex';
+    startMusic(getState().phase);
+  } else {
+    musicEnabled = false;
+    document.getElementById('btn-music').classList.remove('on');
+    document.getElementById('btn-music').style.opacity = '';
+    document.getElementById('audio-bar').style.display = 'none';
+    stopMusic();
+  }
+}
+window.toggleMusic = toggleMusic;
+
+function stopMusic() {
+  clearTimeout(musicScheduler);
+  musicNodes.forEach(n => { try { n.stop(); } catch(e) {} });
+  musicNodes = [];
+}
+
+function startMusic(phase) {
+  stopMusic();
+  if (!musicEnabled || !audioCtx) return;
+
+  const isNight = phase === 'night' || phase === 'firstNight';
+  const isDay = phase === 'day';
+  const trackName = isNight ? 'Oscuridad' : isDay ? 'Amanecer' : 'Misterio';
+  document.getElementById('music-track-name').textContent = trackName;
+
+  if (isNight) playNightAmbience();
+  else if (isDay) playDayAmbience();
+  else playSetupAmbience();
+}
+
+function playSetupAmbience() {
+  if (!musicEnabled) return;
+  // Low drone + soft random plucks
+  const master = audioCtx.createGain();
+  master.gain.setValueAtTime(0, audioCtx.currentTime);
+  master.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 3);
+  master.connect(audioCtx.destination);
+  musicNodes.push(master);
+
+  // Drone
+  [55, 82.4, 110].forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    g.gain.value = 0.15 - i * 0.04;
+    osc.connect(g); g.connect(master);
+    osc.start();
+    musicNodes.push(osc);
+  });
+
+  // Clock ticks
+  scheduleTick(master, 0.8);
+}
+
+function scheduleTick(dest, interval) {
+  if (!musicEnabled) return;
+  const t = audioCtx.currentTime;
+  const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.05, audioCtx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 800);
+  const src = audioCtx.createBufferSource();
+  const g = audioCtx.createGain();
+  src.buffer = buf;
+  g.gain.value = 0.06;
+  src.connect(g); g.connect(dest);
+  src.start(t);
+  musicNodes.push(src);
+  musicScheduler = setTimeout(() => scheduleTick(dest, interval), interval * 1000);
+}
+
+function playNightAmbience() {
+  if (!musicEnabled) return;
+  document.getElementById('music-track-name').textContent = 'Oscuridad';
+
+  const master = audioCtx.createGain();
+  master.gain.setValueAtTime(0, audioCtx.currentTime);
+  master.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 4);
+  master.connect(audioCtx.destination);
+  musicNodes.push(master);
+
+  // Deep ominous drones
+  [36.7, 55, 73.4].forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = i === 0 ? 'sawtooth' : 'sine';
+    osc.frequency.value = freq;
+    // Slow vibrato
+    const lfo = audioCtx.createOscillator();
+    const lfoGain = audioCtx.createGain();
+    lfo.frequency.value = 0.15 + i * 0.05;
+    lfoGain.gain.value = 0.4;
+    lfo.connect(lfoGain); lfoGain.connect(osc.frequency);
+    lfo.start();
+    g.gain.value = 0.12 - i * 0.03;
+    osc.connect(g); g.connect(master);
+    osc.start();
+    musicNodes.push(osc, lfo);
+  });
+
+  // Wind noise
+  const bufSize = audioCtx.sampleRate * 2;
+  const noiseBuf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+  const nd = noiseBuf.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) nd[i] = Math.random() * 2 - 1;
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf; noise.loop = true;
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass'; filter.frequency.value = 400;
+  const noiseGain = audioCtx.createGain(); noiseGain.gain.value = 0.04;
+  noise.connect(filter); filter.connect(noiseGain); noiseGain.connect(master);
+  noise.start();
+  musicNodes.push(noise);
+
+  // Occasional deep bell toll
+  scheduleNightBell(master);
+}
+
+function scheduleNightBell(dest) {
+  if (!musicEnabled) return;
+  const delay = 8000 + Math.random() * 12000;
+  musicScheduler = setTimeout(() => {
+    if (!musicEnabled) return;
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(110, t);
+    osc.frequency.exponentialRampToValueAtTime(80, t + 3);
+    g.gain.setValueAtTime(0.25, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 4);
+    osc.connect(g); g.connect(dest);
+    osc.start(t); osc.stop(t + 4);
+    musicNodes.push(osc);
+    scheduleNightBell(dest);
+  }, delay);
+}
+
+function playDayAmbience() {
+  if (!musicEnabled) return;
+  document.getElementById('music-track-name').textContent = 'Amanecer';
+
+  const master = audioCtx.createGain();
+  master.gain.setValueAtTime(0, audioCtx.currentTime);
+  master.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 3);
+  master.connect(audioCtx.destination);
+  musicNodes.push(master);
+
+  // Brighter, higher drone
+  [220, 329.6, 440].forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    g.gain.value = 0.06 - i * 0.015;
+    osc.connect(g); g.connect(master);
+    osc.start();
+    musicNodes.push(osc);
+  });
+
+  // Soft plucked melody
+  scheduleDayMelody(master);
+}
+
+function scheduleDayMelody(dest) {
+  if (!musicEnabled) return;
+  const NOTES = [220, 246.9, 261.6, 293.7, 329.6, 349.2, 392, 440];
+  const t = audioCtx.currentTime;
+  const note = NOTES[Math.floor(Math.random() * NOTES.length)];
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.value = note;
+  g.gain.setValueAtTime(0.08, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 1.2);
+  osc.connect(g); g.connect(dest);
+  osc.start(t); osc.stop(t + 1.5);
+  musicNodes.push(osc);
+  const delay = 1500 + Math.random() * 2500;
+  musicScheduler = setTimeout(() => scheduleDayMelody(dest), delay);
+}
+
+// Update music when phase changes
+let _lastMusicPhase = null;
+function updateMusicPhase(state) {
+  if (state.phase !== _lastMusicPhase && musicEnabled) {
+    _lastMusicPhase = state.phase;
+    startMusic(state.phase);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// HOOK NARRATOR + MUSIC INTO renderAll
+// ════════════════════════════════════════════════════════════════
+const _origRenderAll = renderAll;
+// Patch subscribe to also call audio/narrator
+const _origSubscribe = subscribe;
+// We'll override renderAll to also call narrator + music
+window.addEventListener('DOMContentLoaded', function() {
+  // Re-subscribe a wrapper
+  subscribe(function(state) {
+    checkNarratePhase(state);
+    updateMusicPhase(state);
+  });
+  initNarrator();
+});
+
+// Expose to win overlay
+const _origShowWinOverlay = showWinOverlay;
+
+// ════════════════════════════════════════════════════════════════
+// END AUDIO/NARRATOR/HELP
+// ════════════════════════════════════════════════════════════════
+
 window.addPlayerInput = addPlayerInput;
 window.generateDefaultPlayers = generateDefaultPlayers;
 window.handleStartGame = handleStartGame;
@@ -1578,5 +2015,88 @@ window.exportScript = exportScript;
 window.importScript = importScript;
 window.resetGame = resetGame;
 </script>
+<!-- ═══════════════════════════════════════════════════════════ HELP MODAL -->
+<div id="help-modal" onclick="closeHelp(event)">
+  <div class="help-box">
+    <div class="help-header">
+      <span class="help-title">📖 Cómo Jugar</span>
+      <button class="help-close" onclick="closeHelp()">×</button>
+    </div>
+    <div class="help-body">
+
+      <div class="help-section">
+        <div class="help-section-title">¿Qué es Blood on the Clocktower?</div>
+        <p>Es un juego de deducción social para 5–20 jugadores. Hay un <strong>Narrador</strong> (tú) que gestiona la partida, y el resto son jugadores divididos en dos equipos: <strong>el Bien</strong> y el <strong>Mal</strong>.</p>
+        <p>El equipo del Bien intenta descubrir y ejecutar al Demonio. El equipo del Mal intenta que el Demonio sobreviva.</p>
+      </div>
+
+      <div class="help-section">
+        <div class="help-section-title">Los 4 tipos de rol</div>
+        <div class="help-team-row">
+          <span class="help-team-icon">🔵</span>
+          <div><div class="help-team-name">Aldeanos</div><div class="help-team-desc">Equipo del Bien. Reciben información cada noche para ayudar a identificar al Demonio.</div></div>
+        </div>
+        <div class="help-team-row">
+          <span class="help-team-icon">🩵</span>
+          <div><div class="help-team-name">Forasteros</div><div class="help-team-desc">Equipo del Bien, pero con habilidades que dificultan o complican la victoria buena.</div></div>
+        </div>
+        <div class="help-team-row">
+          <span class="help-team-icon">🟠</span>
+          <div><div class="help-team-name">Secuaces</div><div class="help-team-desc">Equipo del Mal. Conocen al Demonio y trabajan para protegerlo y engañar al pueblo.</div></div>
+        </div>
+        <div class="help-team-row">
+          <span class="help-team-icon">🔴</span>
+          <div><div class="help-team-name">Demonio</div><div class="help-team-desc">El objetivo principal del equipo del Bien. Mata jugadores cada noche. Si sobrevive hasta quedar 2 jugadores vivos, el Mal gana.</div></div>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <div class="help-section-title">Estructura de una partida</div>
+        <ul>
+          <li><strong>Setup:</strong> El Narrador asigna roles en secreto. Cada jugador escanea su QR y ve su rol.</li>
+          <li><strong>Primera Noche:</strong> El Narrador despierta a cada rol en orden para darles su información inicial. El Demonio y los Secuaces se conocen entre sí.</li>
+          <li><strong>Día:</strong> Los jugadores debaten, comparten información (¡pueden mentir!) y votan para ejecutar a un sospechoso.</li>
+          <li><strong>Noche:</strong> El pueblo duerme. El Demonio elige a quién matar. Otros roles actúan en orden.</li>
+          <li>El ciclo día/noche se repite hasta que el Bien ejecuta al Demonio (el Bien gana) o solo quedan 2 jugadores vivos sin ejecutar a nadie (el Mal gana).</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <div class="help-section-title">Rol del Narrador</div>
+        <ul>
+          <li>Eres imparcial: no ganas ni pierdes.</li>
+          <li>Despiertas a cada jugador en orden de noche (usa la pestaña 🌙 NOCHE).</li>
+          <li>Das información con gestos o señales silenciosas, nunca hablando.</li>
+          <li>Puedes dar información <strong>incorrecta</strong> a jugadores borrachos o envenenados.</li>
+          <li>Gestionas muertes, protecciones y efectos especiales desde el Grimorio.</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <div class="help-section-title">Cómo usar esta app</div>
+        <ul>
+          <li><strong>SETUP:</strong> Escribe los nombres, selecciona edición y roles, pulsa Comenzar.</li>
+          <li><strong>GRIMORIO:</strong> Pulsa en un jugador para gestionar su estado (matar, envenenar, borracho, QR...).</li>
+          <li><strong>NOCHE:</strong> Guía paso a paso de qué rol actúa y cuándo. Avanza con el botón.</li>
+          <li><strong>LOG:</strong> Historial automático de todo lo que ocurre en partida.</li>
+          <li><strong>SCRIPT:</strong> Crea scripts personalizados mezclando roles de todas las ediciones.</li>
+        </ul>
+      </div>
+
+      <div class="help-tip">
+        💡 <strong>Consejo:</strong> Activa el narrador (🎙️) para que la app anuncie las fases automáticamente en voz alta. Activa la música (🎵) para crear ambiente.
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ NARRATOR TOAST -->
+<div id="narrator-toast"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ AUDIO BAR -->
+<div id="audio-bar" style="display:none;">
+  <div class="audio-pill" id="music-label">🎵 <span id="music-track-name">Silencio</span></div>
+</div>
+
 </body>
-</html>
