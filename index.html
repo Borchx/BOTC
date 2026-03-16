@@ -8,7 +8,6 @@
 <meta name="theme-color" content="#0a0608"/>
 <title>Blood on the Clocktower</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -17,151 +16,197 @@
   --gold:#c9a84c;--gold-dim:#6a5228;
   --red:#8b1a2a;--red-dim:#3d0a12;
   --text:#e8d5b7;--text-dim:#7a6550;--text-muted:#4a3d30;
-  --guide:#1a2a1a;--guide-border:#2a5a2a;--guide-text:#8ad48a;
-  --radius:3px;--nav-h:58px;
+  --guide:#152015;--guide-border:#2a5a2a;--guide-text:#8ad48a;
+  --vote:#1a1a3a;--vote-border:#3a3a8a;--vote-text:#8a9aff;
+  --radius:4px;--nav-h:62px;
 }
 html,body{height:100%;overflow:hidden}
-body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:16px;display:flex;flex-direction:column}
-#hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:.5rem .75rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;min-height:50px}
-.app-title{font-family:'Cinzel Decorative',serif;font-size:.72rem;color:var(--gold);letter-spacing:.08em;line-height:1.25}
-.app-title small{display:block;font-size:.52rem;color:var(--gold-dim);letter-spacing:.15em}
-.hdr-right{display:flex;gap:.3rem;align-items:center}
-.hdr-btn{background:none;border:none;cursor:pointer;font-size:1.05rem;padding:.15rem .2rem;opacity:.5;transition:opacity .2s;line-height:1}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:17px;display:flex;flex-direction:column}
+
+/* ── Header ── */
+#hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:.55rem .85rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;min-height:52px}
+.app-title{font-family:'Cinzel Decorative',serif;font-size:.78rem;color:var(--gold);letter-spacing:.08em;line-height:1.25}
+.app-title small{display:block;font-size:.55rem;color:var(--gold-dim);letter-spacing:.15em}
+.hdr-right{display:flex;gap:.4rem;align-items:center}
+.hdr-btn{background:none;border:none;cursor:pointer;font-size:1.15rem;padding:.15rem .25rem;opacity:.5;transition:opacity .2s;line-height:1}
 .hdr-btn.on{opacity:1}
-.phase-pill{font-family:'Cinzel Decorative',serif;font-size:.5rem;letter-spacing:.12em;padding:.2rem .55rem;border-radius:20px;border:1px solid var(--border2);color:var(--gold-dim)}
+.phase-pill{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.12em;padding:.22rem .6rem;border-radius:20px;border:1px solid var(--border2);color:var(--gold-dim)}
 .phase-pill.day{border-color:#5a4a00;color:#c9a84c}
-.phase-pill.night{border-color:#1a1a5a;color:#5a7aff}
+.phase-pill.night{border-color:#1a1a5a;color:#7a9aff}
+
+/* ── Layout ── */
 #content{flex:1;overflow:hidden;position:relative}
-.view{display:none;height:100%;overflow-y:auto;padding:.9rem .9rem 80px}
+.view{display:none;height:100%;overflow-y:auto;padding:1rem 1rem 90px}
 .view.active{display:block}
+
+/* ── Nav ── */
 #nav{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;height:var(--nav-h)}
-.nb{flex:1;background:none;border:none;color:var(--text-muted);font-family:'Cinzel Decorative',serif;font-size:.45rem;letter-spacing:.06em;padding:.5rem .2rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.15rem;transition:color .2s}
-.nb .ni{font-size:1.2rem;line-height:1}
-.nb.active{color:var(--gold);background:#c9a84c06}
-.card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem;margin-bottom:.65rem}
-.stitle{font-family:'Cinzel Decorative',serif;font-size:.62rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.65rem;padding-bottom:.35rem;border-bottom:1px solid var(--border)}
-.btn{font-family:'Cinzel Decorative',serif;font-size:.62rem;letter-spacing:.08em;padding:.55rem 1.1rem;border-radius:var(--radius);border:1px solid var(--border2);cursor:pointer;background:none;color:var(--text);transition:opacity .2s}
-.btn:active{opacity:.6}
+.nb{flex:1;background:none;border:none;color:var(--text-muted);font-family:'Cinzel Decorative',serif;font-size:.48rem;letter-spacing:.06em;padding:.55rem .2rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.18rem;transition:color .2s}
+.nb .ni{font-size:1.35rem;line-height:1}
+.nb.active{color:var(--gold);background:#c9a84c07}
+
+/* ── Cards & buttons ── */
+.card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;margin-bottom:.7rem}
+.stitle{font-family:'Cinzel Decorative',serif;font-size:.65rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.7rem;padding-bottom:.38rem;border-bottom:1px solid var(--border)}
+.btn{font-family:'Cinzel Decorative',serif;font-size:.64rem;letter-spacing:.08em;padding:.58rem 1.15rem;border-radius:var(--radius);border:1px solid var(--border2);cursor:pointer;background:none;color:var(--text);transition:opacity .2s;-webkit-tap-highlight-color:transparent}
+.btn:active{opacity:.55}
 .btn-red{background:var(--red-dim);border-color:var(--red);color:#e8d5b7}
 .btn-gold{background:#1f1500;border-color:var(--gold-dim);color:var(--gold)}
-.btn-sm{font-size:.55rem;padding:.38rem .8rem}
-.btn-row{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.65rem}
-input[type=text],select{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-family:'Crimson Pro',serif;font-size:1rem;padding:.45rem .65rem;width:100%;outline:none}
-input:focus,select:focus{border-color:var(--gold-dim)}
-/* Setup */
-.p-row{display:flex;gap:.4rem;margin-bottom:.35rem;align-items:center}
-.p-row input{flex:1}
-.rm-btn{background:none;border:none;color:var(--text-muted);font-size:1.1rem;cursor:pointer;padding:.05rem .3rem;flex-shrink:0}
-.ed-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
-.ed-pill{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.55rem .7rem;cursor:pointer;display:flex;align-items:center;gap:.45rem;font-size:.88rem;color:var(--text-dim);transition:all .2s}
+.btn-sm{font-size:.58rem;padding:.4rem .85rem}
+.btn-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem}
+input[type=text],textarea,select{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-family:'Crimson Pro',serif;font-size:1rem;padding:.48rem .7rem;width:100%;outline:none;resize:none}
+input:focus,textarea:focus,select:focus{border-color:var(--gold-dim)}
+
+/* ── Setup ── */
+.p-row{display:flex;gap:.4rem;margin-bottom:.38rem;align-items:center}
+.p-row input{flex:1;font-size:1.05rem}
+.rm-btn{background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;padding:.05rem .3rem;flex-shrink:0}
+.ed-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.ed-pill{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.6rem .75rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;color:var(--text-dim);transition:all .2s}
 .ed-pill.sel{border-color:var(--gold-dim);color:var(--gold);background:#1a120500}
-.ed-icon{font-size:1.15rem}.ed-name{font-size:.72rem;line-height:1.2}
-.role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.35rem;margin-top:.4rem}
-.rc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.38rem .55rem;display:flex;align-items:center;gap:.38rem;cursor:pointer;font-size:.8rem;color:var(--text-dim);transition:all .2s}
+.ed-icon{font-size:1.2rem}.ed-name{font-size:.75rem;line-height:1.2}
+.role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:.38rem;margin-top:.45rem}
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.42rem .6rem;display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.85rem;color:var(--text-dim);transition:all .2s;-webkit-tap-highlight-color:transparent}
 .rc.sel{border-color:currentColor}
 .rc.sel.TOWNSFOLK{color:#5a9fd4;background:#1a3a6b12}.rc.sel.OUTSIDER{color:#5ac4d4;background:#1a5a6b12}
 .rc.sel.MINION{color:#d47055;background:#6b2a1a12}.rc.sel.DEMON{color:#d45570;background:#8b1a2a18}
-.tsep{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.18em;padding:.45rem 0 .2rem;color:var(--text-muted)}
+.tsep{font-family:'Cinzel Decorative',serif;font-size:.58rem;letter-spacing:.18em;padding:.5rem 0 .22rem;color:var(--text-muted)}
 .tsep.TOWNSFOLK{color:#2a5a8b}.tsep.OUTSIDER{color:#1a6a7b}.tsep.MINION{color:#7b3a2a}.tsep.DEMON{color:#8b1a2a}
-.sstat{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem;color:var(--text-dim)}
+.sstat{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.22rem;color:var(--text-dim)}
 .sstat span:last-child{color:var(--text)}
-/* Grimoire */
-.phase-bar{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem;align-items:center}
-.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.55rem}
-.ptok{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.7rem;cursor:pointer;position:relative;user-select:none;transition:border-color .2s}
-.ptok.dead{opacity:.42}
-.dead-cross{position:absolute;top:.25rem;right:.45rem;color:#c92c2c;font-size:.9rem}
-.p-icon{font-size:1.75rem}.p-rname{font-size:.72rem;color:var(--gold-dim);margin:.18rem 0}
-.p-name{font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.p-dots{display:flex;gap:.28rem;margin-top:.32rem}
-.dot{width:7px;height:7px;border-radius:50%}
+
+/* ── Phase bar ── */
+.phase-bar{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:.8rem;align-items:center}
+
+/* ── Grimoire tokens — LARGER for table view ── */
+.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem}
+.ptok{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.8rem .7rem;cursor:pointer;position:relative;user-select:none;transition:border-color .2s;-webkit-tap-highlight-color:transparent}
+.ptok:active{border-color:var(--gold-dim)}
+.ptok.dead{opacity:.4}
+.ptok.nominated{border-color:#c9a84c;box-shadow:0 0 0 1px #c9a84c44}
+.ptok.voted-yes{border-color:#5a9fd4}
+.dead-cross{position:absolute;top:.3rem;right:.5rem;color:#c92c2c;font-size:1rem;font-weight:bold}
+.p-icon{font-size:2rem;line-height:1}
+.p-rname{font-size:.78rem;color:var(--gold-dim);margin:.2rem 0 .1rem}
+.p-name{font-size:1rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.p-dots{display:flex;gap:.32rem;margin-top:.38rem;flex-wrap:wrap;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .dot-a{background:#2cc97a}.dot-d{background:#c92c2c}.dot-drunk{background:#c9842c}.dot-pois{background:#7ac92c}.dot-prot{background:#5a7aff}
-/* Narrator guide */
-.guide-card{background:var(--guide);border:1px solid var(--guide-border);border-radius:var(--radius);padding:.85rem;margin-bottom:.75rem}
-.guide-label{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.18em;color:var(--guide-text);opacity:.7;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
-.guide-label::before{content:'📜';font-size:.9rem}
-.guide-step{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.5rem;padding:.5rem .6rem;background:#ffffff08;border-radius:2px}
-.guide-step-num{font-family:'Cinzel Decorative',serif;font-size:.6rem;color:var(--guide-text);opacity:.6;flex-shrink:0;margin-top:.15rem;min-width:1.2rem}
-.guide-step-text{font-size:.88rem;line-height:1.55;color:var(--guide-text)}
-.guide-step-text strong{color:#aae8aa}
-.guide-quote{font-style:italic;color:#c8eec8;background:#ffffff0a;border-left:2px solid var(--guide-border);padding:.35rem .6rem;margin:.3rem 0;border-radius:0 2px 2px 0;font-size:.88rem;line-height:1.5}
-/* Night view */
-.n-dots{display:flex;gap:.28rem;flex-wrap:wrap;margin-bottom:.9rem}
-.ndot{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:all .18s}
+.vote-chip{font-size:.65rem;padding:.1rem .4rem;border-radius:20px;background:#5a9fd422;color:#5a9fd4;border:1px solid #5a9fd444;margin-left:.2rem}
+.p-note-preview{font-size:.72rem;color:var(--text-muted);font-style:italic;margin-top:.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+/* ── Vote counter ── */
+.vote-panel{background:var(--vote);border:1px solid var(--vote-border);border-radius:var(--radius);padding:.85rem;margin-bottom:.75rem}
+.vote-title{font-family:'Cinzel Decorative',serif;font-size:.62rem;letter-spacing:.15em;color:var(--vote-text);margin-bottom:.55rem;display:flex;justify-content:space-between;align-items:center}
+.vote-threshold{font-size:.75rem;color:var(--text-dim)}
+.vote-threshold strong{color:var(--vote-text)}
+.vote-bar-wrap{background:#ffffff0a;border-radius:20px;height:8px;margin:.5rem 0;overflow:hidden}
+.vote-bar-fill{height:100%;border-radius:20px;background:var(--vote-text);transition:width .3s ease}
+.vote-bar-fill.reached{background:#5ad4a0}
+.vote-players{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.55rem}
+.vp{font-size:.8rem;padding:.22rem .65rem;border-radius:20px;border:1px solid var(--border2);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;user-select:none}
+.vp.yes{background:#1a3a6b44;border-color:#5a9fd4;color:#5a9fd4}
+.vp.dead-voter{opacity:.4;cursor:default;text-decoration:line-through}
+.vote-result{font-family:'Cinzel Decorative',serif;font-size:.7rem;margin-top:.6rem;padding:.4rem .7rem;border-radius:var(--radius);text-align:center}
+.vote-result.pass{background:#1a5a3a33;color:#5ad4a0;border:1px solid #2a6a4a}
+.vote-result.fail{background:#3a1a1a33;color:#c97a7a;border:1px solid #5a2a2a}
+
+/* ── Guide card ── */
+.guide-card{background:var(--guide);border:1px solid var(--guide-border);border-radius:var(--radius);padding:.88rem;margin-bottom:.75rem}
+.guide-label{font-family:'Cinzel Decorative',serif;font-size:.58rem;letter-spacing:.15em;color:var(--guide-text);opacity:.75;text-transform:uppercase;margin-bottom:.52rem;display:flex;align-items:center;gap:.38rem}
+.guide-label::before{content:'📜';font-size:.95rem}
+.guide-step{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.48rem;padding:.48rem .58rem;background:#ffffff07;border-radius:2px}
+.gn{font-family:'Cinzel Decorative',serif;font-size:.58rem;color:var(--guide-text);opacity:.55;flex-shrink:0;margin-top:.18rem;min-width:1.1rem}
+.gt{font-size:.9rem;line-height:1.58;color:var(--guide-text)}
+.gt strong{color:#b0eeb0}
+.guide-quote{display:block;font-style:italic;color:#c8eec8;background:#ffffff0a;border-left:2px solid var(--guide-border);padding:.32rem .58rem;margin:.28rem 0;border-radius:0 2px 2px 0;font-size:.88rem;line-height:1.5}
+
+/* ── Night view ── */
+.n-dots{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.95rem}
+.ndot{width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;transition:all .18s;-webkit-tap-highlight-color:transparent}
 .ndot.cur{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-dim)}
-.ndot.done{opacity:.35}
-.nstep{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:1.15rem;margin-bottom:.65rem}
-.nstep-icon{font-size:2.4rem}.nstep-role{font-family:'Cinzel Decorative',serif;font-size:1.05rem;color:var(--gold);margin:.28rem 0}
-.nstep-ability{font-size:.92rem;line-height:1.65;color:var(--text);font-weight:300;margin-bottom:.85rem}
-.nstep-players{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.75rem}
-.npc{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:.18rem .7rem;font-size:.82rem;color:var(--text-dim)}
-.nnav{display:flex;gap:.65rem}
-.nnav .btn{flex:1;text-align:center}
-/* Action sheet */
-#sheet-bg{position:fixed;inset:0;z-index:200;background:#0a060880;backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .22s}
+.ndot.done{opacity:.32}
+.nstep{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:1.2rem;margin-bottom:.7rem}
+.nstep-icon{font-size:2.6rem}.nstep-role{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold);margin:.3rem 0}
+.nstep-ability{font-size:.95rem;line-height:1.68;color:var(--text);font-weight:300;margin-bottom:.9rem}
+.nstep-players{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
+.npc{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:.2rem .75rem;font-size:.88rem;color:var(--text-dim)}
+.nnav{display:flex;gap:.7rem}
+.nnav .btn{flex:1;text-align:center;font-size:.65rem;padding:.65rem}
+
+/* ── Action sheet ── */
+#sheet-bg{position:fixed;inset:0;z-index:200;background:#0a060888;backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .22s}
 #sheet-bg.open{opacity:1;pointer-events:all}
-#sheet{position:fixed;bottom:0;left:0;right:0;z-index:201;background:var(--surface2);border-top:1px solid var(--border2);border-radius:10px 10px 0 0;padding:1.15rem 1rem 2.2rem;transform:translateY(100%);transition:transform .28s ease}
+#sheet{position:fixed;bottom:0;left:0;right:0;z-index:201;background:var(--surface2);border-top:1px solid var(--border2);border-radius:12px 12px 0 0;padding:1.2rem 1rem 2.4rem;transform:translateY(100%);transition:transform .28s ease}
 #sheet.open{transform:translateY(0)}
-.sh-title{font-family:'Cinzel Decorative',serif;font-size:.82rem;color:var(--gold);margin-bottom:.9rem;display:flex;align-items:center;gap:.45rem}
-.act-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.45rem}
-.act-btn{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.6rem .4rem;text-align:center;cursor:pointer;font-family:'Crimson Pro',serif;font-size:.82rem;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.18rem;transition:background .15s;line-height:1.2}
-.act-btn .ai{font-size:1.25rem}
+.sh-title{font-family:'Cinzel Decorative',serif;font-size:.88rem;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.act-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem}
+.act-btn{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.65rem .4rem;text-align:center;cursor:pointer;font-family:'Crimson Pro',serif;font-size:.85rem;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.2rem;transition:background .15s;line-height:1.25;-webkit-tap-highlight-color:transparent}
+.act-btn .ai{font-size:1.35rem}
 .act-btn:active{background:var(--border)}
 .act-btn.danger{border-color:#5a1a2a;color:#d45570}
 .act-btn.warn{border-color:#5a3a1a;color:#d4955a}
 .act-btn.ok{border-color:#1a5a3a;color:#5ad4a0}
 .act-btn.info{border-color:#1a3a6b;color:#5a9fd4}
-/* QR */
-#qr-bg{position:fixed;inset:0;z-index:300;background:#0a0608bb;backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
-#qr-bg.open{opacity:1;pointer-events:all}
-.qr-box{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:1.4rem;max-width:310px;width:90%;text-align:center;transform:scale(.94);transition:transform .25s}
-#qr-bg.open .qr-box{transform:scale(1)}
-.qr-pname{font-family:'Cinzel Decorative',serif;font-size:.95rem;color:var(--gold);margin-bottom:.2rem}
-.qr-rname{font-size:.88rem;color:var(--text-dim);margin-bottom:.9rem}
-#qr-div{background:#fff;padding:.65rem;border-radius:3px;display:inline-block}
-.qr-hint{font-size:.68rem;color:var(--text-muted);margin-top:.6rem;word-break:break-all;line-height:1.4}
-/* Help */
+.act-btn.active-state{border-color:var(--gold-dim);color:var(--gold)}
+/* Note textarea in sheet */
+.note-area{margin-top:.85rem}
+.note-area label{font-size:.78rem;color:var(--text-muted);margin-bottom:.3rem;display:block}
+.note-area textarea{font-size:.92rem;min-height:60px;border-radius:var(--radius)}
+
+/* ── Help modal ── */
 #help-bg{position:fixed;inset:0;z-index:400;background:#0a060899;backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
 #help-bg.open{opacity:1;pointer-events:all}
 .help-box{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;width:92%;max-width:480px;max-height:86dvh;display:flex;flex-direction:column;transform:scale(.94);transition:transform .25s}
 #help-bg.open .help-box{transform:scale(1)}
-.help-hdr{padding:.9rem 1.1rem .7rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.help-hdr-t{font-family:'Cinzel Decorative',serif;font-size:.82rem;color:var(--gold)}
-.help-x{background:none;border:none;color:var(--text-muted);font-size:1.35rem;cursor:pointer;line-height:1;padding:.1rem .3rem}
-.hb{overflow-y:auto;padding:.9rem 1.1rem 1.5rem}
-.hs{margin-bottom:1.1rem}
-.hst{font-family:'Cinzel Decorative',serif;font-size:.58rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.4rem;padding-bottom:.25rem;border-bottom:1px solid var(--border)}
-.hb p{font-size:.9rem;line-height:1.65;color:var(--text);margin-bottom:.4rem}
-.hb ul{padding-left:1.1rem}
-.hb li{font-size:.88rem;line-height:1.65;color:var(--text-dim);margin-bottom:.2rem}
+.help-hdr{padding:.95rem 1.15rem .75rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.help-hdr-t{font-family:'Cinzel Decorative',serif;font-size:.85rem;color:var(--gold)}
+.help-x{background:none;border:none;color:var(--text-muted);font-size:1.4rem;cursor:pointer;line-height:1;padding:.1rem .35rem}
+.hb{overflow-y:auto;padding:.95rem 1.15rem 1.6rem}
+.hs{margin-bottom:1.15rem}
+.hst{font-family:'Cinzel Decorative',serif;font-size:.6rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.45rem;padding-bottom:.28rem;border-bottom:1px solid var(--border)}
+.hb p{font-size:.92rem;line-height:1.65;color:var(--text);margin-bottom:.45rem}
+.hb ul{padding-left:1.15rem}
+.hb li{font-size:.9rem;line-height:1.65;color:var(--text-dim);margin-bottom:.22rem}
 .hb li strong{color:var(--text)}
-.hteam{display:flex;align-items:flex-start;gap:.55rem;margin-bottom:.4rem}
-.hti{font-size:1.25rem;flex-shrink:0;margin-top:.08rem}
-.htn{font-size:.82rem;font-weight:600;color:var(--gold)}
-.htd{font-size:.8rem;color:var(--text-dim);line-height:1.4}
-.htip{background:#1a120500;border:1px solid var(--gold-dim);border-radius:var(--radius);padding:.6rem .85rem;font-size:.82rem;color:var(--gold);margin-top:.65rem;line-height:1.5}
-/* Win */
-#win{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;background:#0a060899;backdrop-filter:blur(8px);text-align:center;padding:2rem}
-#win.show{display:flex}
-.win-t{font-family:'Cinzel Decorative',serif;font-size:1.55rem;color:var(--gold);margin-bottom:.45rem}
-.win-s{font-size:1.1rem;color:var(--text);margin-bottom:1.5rem}
-/* Narrator toast */
-#ntoa{position:fixed;top:58px;left:50%;transform:translateX(-50%) translateY(-6px);z-index:350;background:#0f080af2;border:1px solid var(--gold-dim);border-radius:4px;padding:.6rem 1.3rem;font-family:'Crimson Pro',serif;font-style:italic;font-size:.97rem;color:var(--gold);max-width:86vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;backdrop-filter:blur(4px)}
+.hteam{display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.45rem}
+.hti{font-size:1.3rem;flex-shrink:0;margin-top:.08rem}
+.htn{font-size:.85rem;font-weight:600;color:var(--gold)}
+.htd{font-size:.82rem;color:var(--text-dim);line-height:1.4}
+.htip{background:#1a120500;border:1px solid var(--gold-dim);border-radius:var(--radius);padding:.65rem .9rem;font-size:.85rem;color:var(--gold);margin-top:.7rem;line-height:1.5}
+
+/* ── End summary ── */
+#summary-bg{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;background:#0a0608cc;backdrop-filter:blur(8px);padding:1.2rem}
+#summary-bg.show{display:flex}
+.summary-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;width:100%;max-width:460px;max-height:88dvh;overflow-y:auto;padding:1.4rem}
+.sum-title{font-family:'Cinzel Decorative',serif;font-size:1.45rem;color:var(--gold);text-align:center;margin-bottom:.35rem}
+.sum-sub{font-size:1rem;color:var(--text-dim);text-align:center;margin-bottom:1.2rem}
+.sum-section{margin-bottom:1rem}
+.sum-sec-title{font-family:'Cinzel Decorative',serif;font-size:.62rem;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border)}
+.sum-player{display:flex;align-items:center;gap:.65rem;padding:.48rem 0;border-bottom:1px solid #1a1015}
+.sum-player:last-child{border-bottom:none}
+.sum-p-icon{font-size:1.5rem;flex-shrink:0}
+.sum-p-name{font-size:.95rem;font-weight:600;flex:1}
+.sum-p-role{font-size:.82rem;color:var(--text-dim)}
+.sum-tag{font-size:.62rem;padding:.12rem .45rem;border-radius:20px;font-family:'Cinzel Decorative',serif;letter-spacing:.06em;flex-shrink:0}
+.sum-tag.alive{background:#1a5a3a33;color:#5ad4a0;border:1px solid #2a5a3a}
+.sum-tag.dead{background:#3a1a1a33;color:#c97a7a;border:1px solid #4a2a2a}
+.sum-tag.evil{background:#3a0a1a33;color:#d45570;border:1px solid #5a1a2a}
+.sum-p-note{font-size:.78rem;color:var(--text-muted);font-style:italic;margin-top:.18rem}
+
+/* ── Narrator toast ── */
+#ntoa{position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-6px);z-index:350;background:#0f080af5;border:1px solid var(--gold-dim);border-radius:4px;padding:.65rem 1.4rem;font-family:'Crimson Pro',serif;font-style:italic;font-size:1rem;color:var(--gold);max-width:88vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;backdrop-filter:blur(4px)}
 #ntoa.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* Log */
-.log-entry{padding:.45rem 0;border-bottom:1px solid #1a1015;display:flex;gap:.65rem;font-size:.88rem}
-.lt{color:var(--text-muted);font-size:.75rem;flex-shrink:0;margin-top:.1rem}
-.lm{flex:1;line-height:1.4}
-.log-entry.death .lm{color:#c95a5a}.log-entry.execution .lm{color:#c97a5a}
-.log-entry.phase .lm{color:var(--gold);font-style:italic}.log-entry.system .lm{color:var(--text-muted);font-style:italic}
-.log-entry.result .lm{color:#5ac97a;font-family:'Cinzel Decorative',serif;font-size:.82rem}
-/* Misc */
-.empty{text-align:center;color:var(--text-muted);padding:2rem;font-style:italic;font-size:.88rem}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.fu{animation:fadeUp .28s ease both}
+
+/* ── Misc ── */
+.empty{text-align:center;color:var(--text-muted);padding:2.5rem;font-style:italic;font-size:.92rem}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fu .28s ease both}
 </style>
 </head>
 <body>
+
+<!-- HEADER -->
 <div id="hdr">
   <div class="app-title">Blood on the Clocktower<small>NARRADOR</small></div>
   <div class="hdr-right">
@@ -171,7 +216,11 @@ input:focus,select:focus{border-color:var(--gold-dim)}
     <span class="phase-pill" id="phase-pill">Setup</span>
   </div>
 </div>
+
+<!-- VIEWS -->
 <div id="content">
+
+  <!-- SETUP -->
   <div class="view active" id="view-setup">
     <div class="card fu">
       <div class="stitle">Jugadores</div>
@@ -190,20 +239,27 @@ input:focus,select:focus{border-color:var(--gold-dim)}
       <div id="script-stats"></div>
       <div id="role-sel"></div>
     </div>
-    <button class="btn btn-red" style="width:100%;text-align:center;font-size:.78rem;padding:.75rem" onclick="startGame()">⚔️ Comenzar partida</button>
+    <button class="btn btn-red" style="width:100%;text-align:center;font-size:.82rem;padding:.82rem" onclick="startGame()">⚔️ Comenzar partida</button>
   </div>
+
+  <!-- GRIMOIRE -->
   <div class="view" id="view-grimoire">
     <div class="phase-bar" id="phase-bar"></div>
     <div id="grimoire-guide"></div>
+    <div id="vote-panel-container"></div>
     <div class="stitle">Grimorio</div>
     <div class="g-grid fu" id="g-grid"></div>
   </div>
+
+  <!-- NIGHT -->
   <div class="view" id="view-night">
     <div class="stitle" id="night-title">Orden de Noche</div>
     <div id="night-guide"></div>
     <div class="n-dots" id="n-dots"></div>
     <div id="n-step"></div>
   </div>
+
+  <!-- LOG -->
   <div class="view" id="view-log">
     <div class="stitle">Registro</div>
     <div class="btn-row" style="margin-bottom:.75rem">
@@ -211,70 +267,88 @@ input:focus,select:focus{border-color:var(--gold-dim)}
     </div>
     <div id="log-list"></div>
   </div>
+
 </div>
+
+<!-- NAV -->
 <div id="nav">
   <button class="nb active" data-v="setup" onclick="nav('setup',this)"><span class="ni">⚙️</span>SETUP</button>
   <button class="nb" data-v="grimoire" onclick="nav('grimoire',this)"><span class="ni">📖</span>GRIMORIO</button>
   <button class="nb" data-v="night" onclick="nav('night',this)"><span class="ni">🌙</span>NOCHE</button>
   <button class="nb" data-v="log" onclick="nav('log',this)"><span class="ni">📜</span>LOG</button>
 </div>
+
+<!-- ACTION SHEET -->
 <div id="sheet-bg" onclick="closeSheet()"></div>
 <div id="sheet">
   <div class="sh-title"><span id="sh-icon"></span><span id="sh-name"></span></div>
   <div class="act-grid" id="act-grid"></div>
+  <div class="note-area">
+    <label>📝 Notas del narrador sobre este jugador</label>
+    <textarea id="sh-note" placeholder="Pistas, sospechas, información dada…" oninput="saveNote()"></textarea>
+  </div>
   <button class="btn btn-sm" style="width:100%;margin-top:.75rem" onclick="closeSheet()">Cerrar</button>
 </div>
-<div id="qr-bg" onclick="closeQRBg(event)">
-  <div class="qr-box">
-    <div class="qr-pname" id="qr-pname">—</div>
-    <div class="qr-rname" id="qr-rname">—</div>
-    <div id="qr-div"></div>
-    <p class="qr-hint" id="qr-hint"></p>
-    <div class="btn-row" style="justify-content:center;margin-top:.75rem">
-      <button class="btn btn-sm" onclick="closeQR()">Cerrar</button>
-    </div>
-  </div>
-</div>
+
+<!-- HELP -->
 <div id="help-bg" onclick="closeHelpBg(event)">
   <div class="help-box">
     <div class="help-hdr"><span class="help-hdr-t">📖 Cómo Jugar</span><button class="help-x" onclick="closeHelp()">×</button></div>
     <div class="hb">
       <div class="hs"><div class="hst">¿Qué es Blood on the Clocktower?</div>
-        <p>Juego de deducción social para 5–20 jugadores. Un <strong>Narrador</strong> gestiona la partida. El resto divididos en <strong>Bien</strong> y <strong>Mal</strong>.</p>
-        <p>El Bien intenta descubrir y ejecutar al Demonio. El Mal intenta que sobreviva.</p></div>
+        <p>Juego de deducción social para 5–20 jugadores. Un <strong>Narrador</strong> gestiona la partida en secreto. El resto divididos en <strong>Bien</strong> y <strong>Mal</strong>.</p>
+        <p>El Bien intenta descubrir y ejecutar al Demonio antes de que sea demasiado tarde.</p></div>
       <div class="hs"><div class="hst">Los 4 tipos de rol</div>
         <div class="hteam"><span class="hti">🔵</span><div><div class="htn">Aldeanos</div><div class="htd">Bien. Reciben info cada noche para identificar al Demonio.</div></div></div>
-        <div class="hteam"><span class="hti">🩵</span><div><div class="htn">Forasteros</div><div class="htd">Bien, pero dificultan la victoria buena.</div></div></div>
-        <div class="hteam"><span class="hti">🟠</span><div><div class="htn">Secuaces</div><div class="htd">Mal. Conocen al Demonio y lo protegen.</div></div></div>
-        <div class="hteam"><span class="hti">🔴</span><div><div class="htn">Demonio</div><div class="htd">Mata cada noche. Si quedan 2 vivos sin ejecutar, el Mal gana.</div></div></div></div>
-      <div class="hs"><div class="hst">Estructura</div>
+        <div class="hteam"><span class="hti">🩵</span><div><div class="htn">Forasteros</div><div class="htd">Bien, pero con habilidades que complican la victoria buena.</div></div></div>
+        <div class="hteam"><span class="hti">🟠</span><div><div class="htn">Secuaces</div><div class="htd">Mal. Conocen al Demonio y trabajan para protegerlo.</div></div></div>
+        <div class="hteam"><span class="hti">🔴</span><div><div class="htn">Demonio</div><div class="htd">Mata cada noche. Con 2 vivos y sin ejecución, el Mal gana.</div></div></div></div>
+      <div class="hs"><div class="hst">Estructura de una partida</div>
         <ul>
-          <li><strong>Setup:</strong> Asigna roles, cada jugador escanea su QR.</li>
-          <li><strong>Primera Noche:</strong> Despiertas roles en orden para dar info inicial.</li>
-          <li><strong>Día:</strong> Debate y votación para ejecutar a un sospechoso.</li>
-          <li><strong>Noche:</strong> Demonio mata. Se repite el ciclo.</li>
+          <li><strong>Setup:</strong> Asigna roles aleatoriamente.</li>
+          <li><strong>Primera Noche:</strong> Despiertas roles en orden para dar información inicial.</li>
+          <li><strong>Día:</strong> Debate libre. Votación para ejecutar a un sospechoso.</li>
+          <li><strong>Noche:</strong> El Demonio mata. Se repite el ciclo.</li>
           <li>El Bien gana ejecutando al Demonio. El Mal gana con 2 vivos sin ejecución.</li>
         </ul></div>
-      <div class="hs"><div class="hst">Guía del Narrador</div>
-        <p>En las vistas <strong>Grimorio</strong> y <strong>Noche</strong> encontrarás un panel verde con instrucciones contextuales: qué decir al pueblo, qué preguntar a cada rol, y el hilo de la partida fase a fase.</p></div>
-      <div class="htip">💡 Activa 🎙️ para que la app narre las fases en voz alta y 🎵 para música de ambiente aleatoria.</div>
+      <div class="hs"><div class="hst">Funciones de esta app</div>
+        <ul>
+          <li><strong>Grimorio:</strong> Toca un jugador para gestionar su estado. El panel verde te dice qué hacer en cada momento.</li>
+          <li><strong>Contador de votos:</strong> Durante el día, aparece automáticamente. Toca los nombres para marcar quién vota.</li>
+          <li><strong>Notas:</strong> Al tocar un jugador, puedes escribir notas privadas del narrador (sospechas, info dada, etc.).</li>
+          <li><strong>Noche:</strong> Orden de actuación paso a paso con instrucciones para cada rol.</li>
+          <li><strong>Resumen final:</strong> Al terminar la partida, se muestra quién era quién y qué ocurrió.</li>
+        </ul></div>
+      <div class="htip">💡 Activa 🎙️ para narración en voz alta y 🎵 para música de ambiente aleatoria (4 estilos diferentes).</div>
     </div>
   </div>
 </div>
-<div id="win"><div class="win-t" id="win-t">Fin</div><div class="win-s" id="win-s"></div><button class="btn btn-gold" onclick="resetGame()">Nueva partida</button></div>
+
+<!-- END SUMMARY -->
+<div id="summary-bg">
+  <div class="summary-box">
+    <div class="sum-title" id="sum-title">Fin de partida</div>
+    <div class="sum-sub" id="sum-sub"></div>
+    <div id="sum-content"></div>
+    <div class="btn-row" style="justify-content:center;margin-top:1rem">
+      <button class="btn btn-gold" onclick="resetGame()">Nueva partida</button>
+    </div>
+  </div>
+</div>
+
+<!-- NARRATOR TOAST -->
 <div id="ntoa"></div>
 
 <script>
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // EDITIONS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 const EDITIONS={TB:{id:'TB',name:'Trouble Brewing',emoji:'🍺'},BMR:{id:'BMR',name:'Bad Moon Rising',emoji:'🌙'},SV:{id:'SV',name:'Sects & Violets',emoji:'💜'},CUSTOM:{id:'CUSTOM',name:'Personalizado',emoji:'⚙️'}};
 
-// ═══════════════════════════════════════════════════
-// ROLES  (inserted by build script)
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
+// ROLES
+// ═══════════════════════════════════════
 const ROLES=[
-  // TB Townsfolk
   {id:'washerwoman',edition:'TB',team:'TOWNSFOLK',name:'Lavandera',icon:'🧺',ability:'Sabes que uno de dos jugadores es un Aldeano específico, pero no cuál.',firstNight:1,otherNight:0},
   {id:'librarian',edition:'TB',team:'TOWNSFOLK',name:'Bibliotecario',icon:'📚',ability:'Sabes que uno de dos jugadores es un Forastero específico, pero no cuál.',firstNight:2,otherNight:0},
   {id:'investigator',edition:'TB',team:'TOWNSFOLK',name:'Investigador',icon:'🔍',ability:'Sabes que uno de dos jugadores es un Secuaz específico, pero no cuál.',firstNight:3,otherNight:0},
@@ -288,19 +362,15 @@ const ROLES=[
   {id:'slayer',edition:'TB',team:'TOWNSFOLK',name:'Cazador',icon:'🏹',ability:'Una vez por partida, elige a un jugador de día: si es el Demonio, muere.',firstNight:0,otherNight:0},
   {id:'soldier',edition:'TB',team:'TOWNSFOLK',name:'Soldado',icon:'⚔️',ability:'Eres inmune a los ataques del Demonio.',firstNight:0,otherNight:0},
   {id:'mayor',edition:'TB',team:'TOWNSFOLK',name:'Alcalde',icon:'🏛️',ability:'Si quedan 3 vivos y no se ejecuta, el Bien gana.',firstNight:0,otherNight:0},
-  // TB Outsiders
   {id:'butler',edition:'TB',team:'OUTSIDER',name:'Mayordomo',icon:'🤵',ability:'Cada noche elige a un jugador: mañana solo votas si ese jugador vota.',firstNight:7,otherNight:6},
-  {id:'drunk',edition:'TB',team:'OUTSIDER',name:'Borracho',icon:'🍺',ability:'No sabes que eres el Borracho. El Narrador te da info como otro rol, pero puede ser incorrecta.',firstNight:0,otherNight:0},
+  {id:'drunk',edition:'TB',team:'OUTSIDER',name:'Borracho',icon:'🍺',ability:'No sabes que eres el Borracho. Recibes info incorrecta.',firstNight:0,otherNight:0},
   {id:'recluse',edition:'TB',team:'OUTSIDER',name:'Recluso',icon:'🏚️',ability:'Puedes ser considerado maligno para habilidades de alineación.',firstNight:0,otherNight:0},
   {id:'saint',edition:'TB',team:'OUTSIDER',name:'Santo',icon:'✝️',ability:'Si el Bien te ejecuta, el Mal gana.',firstNight:0,otherNight:0},
-  // TB Minions
   {id:'poisoner',edition:'TB',team:'MINION',name:'Envenenador',icon:'☠️',ability:'Cada noche elige un jugador: está envenenado esta noche y el día siguiente.',firstNight:8,otherNight:7},
   {id:'spy',edition:'TB',team:'MINION',name:'Espía',icon:'🕵️',ability:'Cada noche ve el Grimorio. Puede ser considerado bueno.',firstNight:9,otherNight:8},
   {id:'scarletwoman',edition:'TB',team:'MINION',name:'Mujer Escarlata',icon:'💋',ability:'Si hay 5+ vivos y el Demonio muere, te conviertes en el Demonio.',firstNight:0,otherNight:0},
   {id:'baron',edition:'TB',team:'MINION',name:'Barón',icon:'🎩',ability:'Hay 2 Forasteros extra en esta partida.',firstNight:0,otherNight:0},
-  // TB Demon
-  {id:'imp',edition:'TB',team:'DEMON',name:'Duende',icon:'😈',ability:'Cada noche (excl. primera) elige un jugador: muere. Si te matas, un Secuaz se convierte en Duende.',firstNight:0,otherNight:9,kills:1},
-  // BMR Townsfolk
+  {id:'imp',edition:'TB',team:'DEMON',name:'Duende',icon:'😈',ability:'Cada noche (excl. primera) elige un jugador: muere. Si te matas, un Secuaz se convierte en Duende.',firstNight:0,otherNight:9},
   {id:'grandmother',edition:'BMR',team:'TOWNSFOLK',name:'Abuela',icon:'👵',ability:'Sabes el rol de un jugador. Si el Demonio mata a ese jugador, también mueres.',firstNight:10,otherNight:0},
   {id:'sailor',edition:'BMR',team:'TOWNSFOLK',name:'Marinero',icon:'⚓',ability:'Cada noche elige un vivo: uno de los dos no puede morir esta noche.',firstNight:11,otherNight:10},
   {id:'chambermaid',edition:'BMR',team:'TOWNSFOLK',name:'Doncella',icon:'🧹',ability:'Cada noche elige 2 vivos: sabes cuántos se despertaron por su habilidad.',firstNight:0,otherNight:11},
@@ -309,21 +379,17 @@ const ROLES=[
   {id:'gambler',edition:'BMR',team:'TOWNSFOLK',name:'Jugador',icon:'🎲',ability:'Cada noche adivina el rol de un jugador: si fallas, mueres.',firstNight:0,otherNight:14},
   {id:'gossip',edition:'BMR',team:'TOWNSFOLK',name:'Cotilla',icon:'💬',ability:'Cada día declara algo público. Esta noche, si era cierto, un jugador muere.',firstNight:0,otherNight:15},
   {id:'fool',edition:'BMR',team:'TOWNSFOLK',name:'Bufón',icon:'🃏',ability:'La primera vez que deberías morir, no mueres.',firstNight:0,otherNight:0},
-  // BMR Outsiders
   {id:'tinker',edition:'BMR',team:'OUTSIDER',name:'Hojalatero',icon:'🔧',ability:'Podrías morir en cualquier momento.',firstNight:0,otherNight:0},
   {id:'lunatic',edition:'BMR',team:'OUTSIDER',name:'Lunático',icon:'🌀',ability:'Crees que eres un Demonio pero no lo eres.',firstNight:0,otherNight:18},
   {id:'goon',edition:'BMR',team:'OUTSIDER',name:'Matón',icon:'💪',ability:'Cada vez que un maligno te elige de noche, cambias de equipo.',firstNight:0,otherNight:0},
-  // BMR Minions
   {id:'godfather',edition:'BMR',team:'MINION',name:'Padrino',icon:'🌹',ability:'Sabes qué Forasteros hay. Si uno muere de día, esta noche matas a un jugador.',firstNight:13,otherNight:19},
   {id:'devilsadvocate',edition:'BMR',team:'MINION',name:'Abogado del Diablo',icon:'⚖️',ability:'Cada noche elige un vivo: si es ejecutado mañana, no muere.',firstNight:0,otherNight:20},
   {id:'assassin',edition:'BMR',team:'MINION',name:'Asesino',icon:'🗡️',ability:'Una vez, elige un jugador de noche: muere aunque esté protegido.',firstNight:0,otherNight:21},
   {id:'mastermind',edition:'BMR',team:'MINION',name:'Cerebro',icon:'🧠',ability:'Si el Demonio muere ejecutado, el juego continúa un día y noche más.',firstNight:0,otherNight:0},
-  // BMR Demons
-  {id:'zombuul',edition:'BMR',team:'DEMON',name:'Zombuul',icon:'🧟',ability:'Cada noche, si no hubo muertos hoy, elige un jugador que muere. La primera vez que "mueras", no es real.',firstNight:0,otherNight:22,kills:1},
-  {id:'pukka',edition:'BMR',team:'DEMON',name:'Pukka',icon:'🐍',ability:'Cada noche envenena a alguien. El envenenado de anoche muere.',firstNight:0,otherNight:23,kills:1},
-  {id:'shabaloth',edition:'BMR',team:'DEMON',name:'Shabaloth',icon:'👹',ability:'Cada noche elige 2 jugadores: mueren.',firstNight:0,otherNight:24,kills:2},
-  {id:'po',edition:'BMR',team:'DEMON',name:'Po',icon:'💀',ability:'Cada noche puedes no atacar: la noche siguiente matas a 3.',firstNight:0,otherNight:25,kills:1},
-  // SV Townsfolk
+  {id:'zombuul',edition:'BMR',team:'DEMON',name:'Zombuul',icon:'🧟',ability:'Cada noche sin muertes hoy, elige un jugador que muere. La primera vez que "mueras", no es real.',firstNight:0,otherNight:22},
+  {id:'pukka',edition:'BMR',team:'DEMON',name:'Pukka',icon:'🐍',ability:'Cada noche envenena a alguien. El envenenado de anoche muere.',firstNight:0,otherNight:23},
+  {id:'shabaloth',edition:'BMR',team:'DEMON',name:'Shabaloth',icon:'👹',ability:'Cada noche elige 2 jugadores: mueren.',firstNight:0,otherNight:24},
+  {id:'po',edition:'BMR',team:'DEMON',name:'Po',icon:'💀',ability:'Cada noche puedes no atacar: la siguiente noche matas a 3.',firstNight:0,otherNight:25},
   {id:'clockmaker',edition:'SV',team:'TOWNSFOLK',name:'Relojero',icon:'⏰',ability:'Sabes los pasos entre el Demonio y su Secuaz más cercano.',firstNight:14,otherNight:0},
   {id:'dreamer',edition:'SV',team:'TOWNSFOLK',name:'Soñador',icon:'💭',ability:'Cada noche elige un jugador: sabes uno de sus dos posibles roles.',firstNight:15,otherNight:26},
   {id:'mathematician',edition:'SV',team:'TOWNSFOLK',name:'Matemático',icon:'➗',ability:'Cada noche sabes cuántas habilidades no funcionaron correctamente.',firstNight:0,otherNight:28},
@@ -333,45 +399,38 @@ const ROLES=[
   {id:'artist',edition:'SV',team:'TOWNSFOLK',name:'Artista',icon:'🎨',ability:'Una vez, hazle una pregunta sí/no al Narrador en privado.',firstNight:0,otherNight:0},
   {id:'juggler',edition:'SV',team:'TOWNSFOLK',name:'Malabarista',icon:'🤹',ability:'El primer día declara parejas jugador+rol. Esta noche sabes cuántas acertaste.',firstNight:0,otherNight:34},
   {id:'sage',edition:'SV',team:'TOWNSFOLK',name:'Sabio',icon:'🧙',ability:'Si el Demonio te mata, sabes que es uno de 2 jugadores.',firstNight:0,otherNight:35},
-  // SV Outsiders
   {id:'mutant',edition:'SV',team:'OUTSIDER',name:'Mutante',icon:'🧬',ability:'Si crees que eres Forastero, podrías ser ejecutado.',firstNight:0,otherNight:0},
   {id:'sweetheart',edition:'SV',team:'OUTSIDER',name:'Amor',icon:'💝',ability:'Cuando mueres, un jugador se emborracha para siempre.',firstNight:0,otherNight:0},
   {id:'barber',edition:'SV',team:'OUTSIDER',name:'Barbero',icon:'✂️',ability:'Si mueres hoy/esta noche, el Demonio puede intercambiar dos roles.',firstNight:0,otherNight:0},
   {id:'klutz',edition:'SV',team:'OUTSIDER',name:'Torpe',icon:'🤦',ability:'Al morir, señala un vivo: si es maligno, el Bien pierde.',firstNight:0,otherNight:0},
-  // SV Minions
   {id:'eviltwin',edition:'SV',team:'MINION',name:'Gemelo Malvado',icon:'👿',ability:'Conoces a tu gemelo bueno. Si tu gemelo es ejecutado, los malignos ganan.',firstNight:19,otherNight:0},
   {id:'witch',edition:'SV',team:'MINION',name:'Bruja',icon:'🧙‍♀️',ability:'Cada noche elige un jugador: si nomina mañana, muere.',firstNight:20,otherNight:36},
   {id:'pithag',edition:'SV',team:'MINION',name:'Pit-Hag',icon:'🌪️',ability:'Cada noche elige jugador + rol: ese jugador se convierte en ese rol.',firstNight:22,otherNight:38},
-  // SV Demons
-  {id:'fanggu',edition:'SV',team:'DEMON',name:'Fang Gu',icon:'🧛',ability:'Cada noche elige un jugador: muere. La primera vez que elijas un Forastero, te conviertes en él.',firstNight:0,otherNight:39,kills:1},
-  {id:'vigormortis',edition:'SV',team:'DEMON',name:'Vigormortis',icon:'🦴',ability:'Cada noche elige un jugador: muere. Secuaces muertos conservan su habilidad.',firstNight:0,otherNight:40,kills:1},
-  {id:'nodashii',edition:'SV',team:'DEMON',name:'No Dashii',icon:'🌊',ability:'Cada noche elige un jugador: muere. Tus dos vecinos aldeanos están envenenados.',firstNight:0,otherNight:41,kills:1},
-  {id:'vortox',edition:'SV',team:'DEMON',name:'Vortox',icon:'🌀',ability:'Cada noche elige un jugador: muere. Los aldeanos siempre reciben info falsa.',firstNight:0,otherNight:42,kills:1},
+  {id:'fanggu',edition:'SV',team:'DEMON',name:'Fang Gu',icon:'🧛',ability:'Cada noche elige un jugador: muere. La primera vez con un Forastero, te conviertes en él.',firstNight:0,otherNight:39},
+  {id:'vigormortis',edition:'SV',team:'DEMON',name:'Vigormortis',icon:'🦴',ability:'Cada noche elige un jugador: muere. Secuaces muertos conservan su habilidad.',firstNight:0,otherNight:40},
+  {id:'nodashii',edition:'SV',team:'DEMON',name:'No Dashii',icon:'🌊',ability:'Cada noche elige un jugador: muere. Sus dos vecinos aldeanos están envenenados.',firstNight:0,otherNight:41},
+  {id:'vortox',edition:'SV',team:'DEMON',name:'Vortox',icon:'🌀',ability:'Cada noche elige un jugador: muere. Toda info de Aldeanos es incorrecta.',firstNight:0,otherNight:42},
 ];
+function roleById(id){return ROLES.find(r=>r.id===id);}
 
-
-function roleById(id){ return ROLES.find(r=>r.id===id); }
-
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // STATE
-// ═══════════════════════════════════════════════════
-let STATE={gameId:null,phase:'setup',day:0,players:[],script:[],log:[],nightOrder:[],nightStep:0,winner:null};
-let _listeners=[];
-function subscribe(fn){_listeners.push(fn);}
-function emit(){_listeners.forEach(fn=>fn(STATE));persist();}
+// ═══════════════════════════════════════
+let STATE={gameId:null,phase:'setup',day:0,players:[],script:[],log:[],nightOrder:[],nightStep:0,winner:null,votes:{}};
+let _L=[];
+function subscribe(fn){_L.push(fn);}
+function emit(){_L.forEach(fn=>fn(STATE));persist();}
 function persist(){try{localStorage.setItem('botc',JSON.stringify(STATE));}catch(e){}}
 function hydrate(){try{const r=localStorage.getItem('botc');if(r)STATE={...STATE,...JSON.parse(r)};}catch(e){}}
 function addLog(text,type='info'){STATE.log=[{id:Date.now()+Math.random(),time:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),text,type},...STATE.log].slice(0,300);}
 function livePlayers(){return STATE.players.filter(p=>p.alive);}
 function demonPlayer(){return STATE.players.find(p=>{const r=roleById(p.roleId);return r&&r.team==='DEMON'&&p.alive;});}
 function buildNightOrder(which){const key=which==='first'?'firstNight':'otherNight';return ROLES.filter(r=>STATE.script.includes(r.id)&&r[key]>0).sort((a,b)=>a[key]-b[key]).map(r=>({roleId:r.id,name:r.name,icon:r.icon,team:r.team,ability:r.ability,players:STATE.players.filter(p=>p.roleId===r.id&&p.alive)}));}
-function playerToken(pid){const p=STATE.players.find(p=>p.id===pid);if(!p)return null;return btoa(JSON.stringify({gid:STATE.gameId,pid,name:p.name,roleId:p.roleId,ts:Date.now()}));}
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // SETUP
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 let selEditions=['TB'],selRoles=[];
-
 function addPInput(){const c=document.getElementById('p-inputs');const n=c.children.length+1;const row=document.createElement('div');row.className='p-row';row.innerHTML=`<input type="text" placeholder="Jugador ${n}" value=""/><button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;c.appendChild(row);}
 function genPlayers(){const c=document.getElementById('p-inputs');c.innerHTML='';const n=Math.floor(Math.random()*11)+5;for(let i=1;i<=n;i++){const row=document.createElement('div');row.className='p-row';row.innerHTML=`<input type="text" placeholder="Jugador ${i}" value="Jugador ${i}"/><button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;c.appendChild(row);}}
 window.addPInput=addPInput;window.genPlayers=genPlayers;
@@ -386,8 +445,8 @@ function startGame(){
   if(names.length<3){alert('Necesitas al menos 3 jugadores.');return;}
   if(!selRoles.length){alert('Selecciona al menos un rol.');return;}
   STATE.gameId=Math.random().toString(36).substr(2,8).toUpperCase();
-  STATE.phase='setup';STATE.day=0;STATE.winner=null;STATE.log=[];
-  STATE.players=names.map((name,i)=>({id:`p${i}`,name,roleId:null,alive:true,drunk:false,poisoned:false,protected:false,nominated:false,ghost_votes:1}));
+  STATE.phase='setup';STATE.day=0;STATE.winner=null;STATE.log=[];STATE.votes={};
+  STATE.players=names.map((name,i)=>({id:`p${i}`,name,roleId:null,alive:true,drunk:false,poisoned:false,protected:false,nominated:false,note:''}));
   STATE.script=[...selRoles];
   const avail=[...selRoles];
   for(let i=avail.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[avail[i],avail[j]]=[avail[j],avail[i]];}
@@ -395,130 +454,176 @@ function startGame(){
   addLog('Partida iniciada. Roles asignados.','system');
   STATE.phase='firstNight';STATE.nightOrder=buildNightOrder('first');STATE.nightStep=0;
   addLog('Primera noche comienza.','phase');
-  emit();
-  narratePhase('firstNight');updateMusicPhase('firstNight');
+  emit();narratePhase('firstNight');updateMusicPhase('firstNight');
   nav('grimoire',document.querySelector('[data-v="grimoire"]'));
 }
 window.startGame=startGame;
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // PHASES
-// ═══════════════════════════════════════════════════
-function doStartDay(){STATE.phase='day';STATE.day++;STATE.players=STATE.players.map(p=>({...p,nominated:false,protected:false}));addLog(`☀️ Día ${STATE.day}.`,'phase');emit();narratePhase('day');updateMusicPhase('day');checkWin();}
+// ═══════════════════════════════════════
+function doStartDay(){
+  STATE.phase='day';STATE.day++;
+  STATE.players=STATE.players.map(p=>({...p,nominated:false,protected:false}));
+  STATE.votes={};
+  addLog(`☀️ Día ${STATE.day}.`,'phase');
+  emit();narratePhase('day');updateMusicPhase('day');checkWin();
+}
 function doStartNight(){STATE.phase='night';STATE.nightStep=0;STATE.nightOrder=buildNightOrder('other');addLog(`🌙 Noche ${STATE.day+1}.`,'phase');emit();narratePhase('night');updateMusicPhase('night');}
-function doEndGame(winner){STATE.phase='ended';STATE.winner=winner;addLog(`🏆 ${winner==='good'?'¡El Bien gana!':'¡El Mal gana!'}`,'result');emit();narratePhase('ended',winner);document.getElementById('win-t').textContent=winner==='good'?'🌟 ¡El Bien Gana!':'😈 ¡El Mal Gana!';document.getElementById('win-s').textContent=winner==='good'?'Los aldeanos han derrotado al Demonio.':'El Demonio se impone sobre el pueblo.';document.getElementById('win').classList.add('show');}
+function doEndGame(winner){
+  STATE.phase='ended';STATE.winner=winner;
+  addLog(`🏆 ${winner==='good'?'¡El Bien gana!':'¡El Mal gana!'}`,'result');
+  emit();narratePhase('ended',winner);
+  showSummary(winner);
+}
 function checkWin(){if(!demonPlayer()){doEndGame('good');return;}if(livePlayers().length<=2&&STATE.phase==='day'){doEndGame('evil');}}
 function advNight(){if(STATE.nightStep<STATE.nightOrder.length-1){STATE.nightStep++;emit();}}
 function prevNight(){if(STATE.nightStep>0){STATE.nightStep--;emit();}}
 window.advNight=advNight;window.prevNight=prevNight;
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
+// VOTE COUNTER
+// ═══════════════════════════════════════
+function renderVotePanel(s){
+  const el=document.getElementById('vote-panel-container');
+  if(s.phase!=='day'){el.innerHTML='';return;}
+  const live=livePlayers();
+  const threshold=Math.floor(live.length/2)+1;
+  const votes=s.votes||{};
+  const voteCount=Object.values(votes).filter(Boolean).length;
+  const pct=Math.min(100,Math.round(voteCount/threshold*100));
+  const reached=voteCount>=threshold;
+
+  let html=`<div class="vote-panel fu">
+    <div class="vote-title">
+      <span>🗳️ Votación</span>
+      <span class="vote-threshold">Necesario: <strong>${threshold}</strong> votos</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.2rem">
+      <div style="flex:1">
+        <div class="vote-bar-wrap"><div class="vote-bar-fill${reached?' reached':''}" style="width:${pct}%"></div></div>
+      </div>
+      <span style="font-family:'Cinzel Decorative',serif;font-size:.85rem;color:${reached?'#5ad4a0':'var(--vote-text)'}">${voteCount}/${threshold}</span>
+    </div>
+    <div class="vote-players">`;
+  live.forEach(p=>{
+    const v=votes[p.id];
+    html+=`<span class="vp${v?' yes':''}" onclick="toggleVote('${p.id}')">${p.name}</span>`;
+  });
+  // Dead players with ghost votes
+  s.players.filter(p=>!p.alive&&p.ghost_votes>0).forEach(p=>{
+    const v=votes[p.id];
+    html+=`<span class="vp${v?' yes':''}" onclick="toggleVote('${p.id}')" style="opacity:.5" title="Voto fantasma">${p.name} 👻</span>`;
+  });
+  html+='</div>';
+  if(reached){html+=`<div class="vote-result pass">✅ Umbral alcanzado — se puede ejecutar</div>`;}
+  else if(voteCount>0){html+=`<div class="vote-result fail">Faltan ${threshold-voteCount} voto${threshold-voteCount!==1?'s':''} para ejecutar</div>`;}
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function toggleVote(pid){
+  if(!STATE.votes) STATE.votes={};
+  STATE.votes[pid]=!STATE.votes[pid];
+  emit();
+}
+window.toggleVote=toggleVote;
+
+// ═══════════════════════════════════════
 // NARRATOR GUIDE
-// ═══════════════════════════════════════════════════
-// Guide for each phase shown in Grimoire
+// ═══════════════════════════════════════
 function grimoireGuide(s){
   if(s.phase==='setup'||s.phase==='ended') return '';
   const live=livePlayers().length;
-  const dead=s.players.filter(p=>!p.alive).length;
-  const demon=demonPlayer();
-
+  const threshold=Math.floor(live/2)+1;
   if(s.phase==='firstNight') return guideCard('Primera Noche — Qué hacer',[
-    {n:'1',t:'Di en voz alta: <q>Todos cerramos los ojos. El pueblo se duerme.</q>'},
-    {n:'2',t:'Ve a la pestaña <strong>🌙 NOCHE</strong> y despierta a cada rol en orden, uno por uno.'},
-    {n:'3',t:'Para cada rol: toca suavemente en el hombro al jugador (o dile su nombre), haz el gesto correspondiente con las manos, recibe su respuesta en silencio.'},
-    {n:'4',t:'Los Secuaces y el Demonio se conocen entre sí: despiértalos juntos, que se señalen.'},
-    {n:'5',t:'Al terminar: <q>Todo el pueblo despierta. Buenos días.</q>'},
+    {n:'1',t:'<q>Todos cerramos los ojos. El pueblo se duerme.</q>'},
+    {n:'2',t:'Ve a la pestaña <strong>🌙 NOCHE</strong> y despierta cada rol en orden.'},
+    {n:'3',t:'Para cada rol: toca el hombro del jugador, comunícate en silencio con gestos, recibe su respuesta.'},
+    {n:'4',t:'Secuaces y Demonio se despiertan juntos para reconocerse.'},
+    {n:'5',t:'Al terminar: <q>El pueblo despierta. Buenos días.</q>'},
   ]);
-
   if(s.phase==='night') return guideCard(`Noche ${s.day+1} — Qué hacer`,[
-    {n:'1',t:'Di: <q>Todos cerramos los ojos. El pueblo se duerme.</q>'},
+    {n:'1',t:'<q>Todos cerramos los ojos. El pueblo se duerme.</q>'},
     {n:'2',t:'Ve a la pestaña <strong>🌙 NOCHE</strong> y sigue el orden de actuación.'},
-    {n:'3',t:'El Demonio elige a quién matar: señala a un jugador con el dedo. Tú marcas esa muerte en el Grimorio (ícono 💀).'},
-    {n:'4',t:'Al terminar: <q>Todo el pueblo despierta.</q> Anuncia quién ha muerto esta noche.'},
-    {n:'5',t:`Hay ${live} jugadores vivos y ${dead} muertos.${live<=4?' ⚠️ Queda poco pueblo — vigila la condición de victoria.':''}`},
+    {n:'3',t:'El Demonio señala a quién matar. Márcalo en el Grimorio (toca el token → Matar).'},
+    {n:'4',t:'<q>El pueblo despierta.</q> Anuncia quién ha muerto esta noche.'},
+    {n:'5',t:`Quedan <strong>${live}</strong> jugadores vivos.${live<=4?' ⚠️ Quedan pocos jugadores — vigila la condición de victoria.':''}`},
   ]);
-
-  if(s.phase==='day') return guideCard(`Día ${s.day} — Qué hacer`,[
-    {n:'1',t:'Anuncia los muertos de la noche. El pueblo puede hablar libremente.'},
-    {n:'2',t:'<strong>Nominaciones:</strong> Cualquier jugador puede nominar a otro. Cada jugador solo puede nominar una vez al día.'},
-    {n:'3',t:'<strong>Votación:</strong> Para ejecutar, se necesita más de la mitad de los jugadores vivos (<strong>más de ${Math.floor(live/2)}</strong> votos).'},
-    {n:'4',t:'Solo se ejecuta a quien consiga más votos (si supera el umbral). En caso de empate, nadie muere.'},
-    {n:'5',t:`${live<=3?'⚠️ Con 3 o menos vivos: si el Alcalde está vivo y no se ejecuta a nadie, el Bien gana.':'Si el día termina sin ejecución, la noche continúa sin que nadie muera por votación.'}`},
+  if(s.phase==='day') return guideCard(`Día ${s.day} — Debate y votación`,[
+    {n:'1',t:'Anuncia los muertos de la noche. El pueblo debate libremente.'},
+    {n:'2',t:'<strong>Nominar:</strong> Cualquier jugador vivo puede nominar a otro (una vez por día). El nominado puede defenderse.'},
+    {n:'3',t:`<strong>Votar:</strong> Se necesitan <strong>${threshold} votos</strong> (más de la mitad de los ${live} vivos). Usa el contador de arriba.`},
+    {n:'4',t:'Solo muere quien tenga más votos y supere el umbral. En empate, nadie muere.'},
+    {n:'5',t:live<=3?'⚠️ Con 3 o menos vivos: si el Alcalde está en juego y no se ejecuta, el Bien gana.':'Si nadie es ejecutado, comienza la noche sin más muertes de día.'},
   ]);
-
   return '';
 }
 
-// Guide shown in Night view for the current step
 function nightStepGuide(step){
   if(!step) return '';
-  const role=roleById(step.roleId);
-  if(!role) return '';
-
-  const guides={
-    // TB
-    washerwoman: ['Muestra a este jugador 2 fichas de jugador (uno es el Aldeano correcto, el otro un señuelo).',
-      'Señala también qué rol de Aldeano tienen (sin revelar cuál es cuál).'],
-    librarian: ['Muestra 2 fichas de jugador (uno es el Forastero, el otro un señuelo).',
-      'Si no hay Forasteros en juego, muestra "0" con los dedos.'],
-    investigator: ['Muestra 2 fichas (uno es el Secuaz, el otro señuelo). Señala qué Secuaz es.'],
-    chef: ['Muestra con los dedos cuántos pares de jugadores malignos son vecinos adyacentes en el círculo.'],
-    empath: ['Muestra 0, 1 o 2 con los dedos: cuántos de sus dos vecinos vivos son malignos.'],
-    fortuneteller: ['Este jugador señala 2 jugadores. Muestra 👍 (sí) o 👎 (no) si alguno es el Demonio.',
-      'Recuerda: hay un jugador bueno que siempre da positivo (falso positivo).'],
-    undertaker: ['Muestra la ficha del rol del jugador ejecutado hoy.'],
-    monk: ['Este jugador señala a alguien. Apunta en tu mente quién está protegido esta noche.'],
-    ravenkeeper: ['Solo actúa si este jugador murió esta noche. Señala quién y muéstrale su ficha de rol.'],
-    butler: ['Este jugador señala a otro. Esa persona es su "amo": mañana solo puede votar si su amo vota.'],
-    poisoner: ['Este jugador señala a alguien. Ese jugador está envenenado (márcalo en el Grimorio). Su habilidad dará info incorrecta esta noche.'],
-    spy: ['Muestra el Grimorio completo a este jugador en silencio. Puede ver todos los roles.'],
-    imp: ['Este jugador señala a quien quiere matar. Márcalo para morir al amanecer.',
-      'Si señala a sí mismo, un Secuaz al azar se convierte en el nuevo Duende.'],
-    // Empath/Undertaker covered above
-    godfather: ['Muéstrale la lista de Forasteros en juego.',
-      'Si un Forastero murió hoy, este jugador señala a quien quiere matar esta noche.'],
-    devilsadvocate: ['Este jugador señala a alguien. Si ese jugador es ejecutado mañana, no morirá.'],
-    assassin: ['Solo puede usarlo una vez. Si quiere, señala a alguien: muere aunque esté protegido.'],
-    zombuul: ['Si nadie murió hoy, este jugador puede señalar a quien matar.'],
-    pukka: ['Este jugador señala a alguien: queda envenenado. El envenenado de la noche anterior muere ahora.'],
-    shabaloth: ['Este jugador señala a 2 jugadores: ambos mueren.'],
-    po: ['Puede elegir no atacar (señala a nadie): la próxima noche podrá matar a 3.'],
-    eviltwin: ['Muéstrale quién es su gemelo bueno. Ambos se conocen.'],
-    witch: ['Señala a alguien: si esa persona nomina mañana, muere.'],
-    clockmaker: ['Muestra con los dedos cuántos pasos hay entre el Demonio y el Secuaz más cercano en el círculo.'],
-    dreamer: ['Este jugador señala a alguien. Muéstrale 2 fichas: la real y otra aleatoria distinta.'],
-    seamstress: ['Este jugador señala a 2 jugadores. Muestra 👍 si son del mismo equipo, 👎 si no.'],
-    philosopher: ['Este jugador señala un rol de Aldeano. Obtiene esa habilidad. Si ese rol está en juego, ese jugador queda borracho.'],
-    snakecharmer: ['Este jugador señala a alguien. Si es el Demonio, intercambian roles (y el nuevo Demonio queda envenenado).'],
-    juggler: ['Solo actúa la primera noche. Muéstrale cuántas de sus apuestas del día han acertado.'],
-    sage: ['Solo si murió esta noche. Señálale 2 jugadores: uno es el Demonio.'],
-    witch: ['Este jugador señala a alguien. Si nomina mañana, muere.'],
-    fanggu: ['Señala a alguien. Si es Forastero, ese jugador se convierte en Fang Gu y este muere (solo la primera vez).'],
-    vigormortis: ['Señala a alguien: muere. Los Secuaces muertos conservan su habilidad.'],
-    nodashii: ['Señala a alguien: muere. Sus dos vecinos aldeanos más cercanos están envenenados.'],
-    vortox: ['Señala a alguien: muere. Toda información de Aldeanos esta noche es incorrecta (dala al revés).'],
+  const r=roleById(step.roleId); if(!r) return '';
+  const G={
+    washerwoman:['Muestra 2 fichas: uno es el Aldeano correcto, el otro un señuelo. Señala también el rol.'],
+    librarian:['Muestra 2 fichas: uno es el Forastero, el otro señuelo. Si no hay Forasteros, muestra 0 con los dedos.'],
+    investigator:['Muestra 2 fichas: uno es el Secuaz correcto, el otro señuelo. Señala el tipo de Secuaz.'],
+    chef:['Cuenta los pares de malignos adyacentes en el círculo. Muéstraselo con los dedos.'],
+    empath:['Muestra 0, 1 o 2 con los dedos: cuántos de sus vecinos vivos son malignos.'],
+    fortuneteller:['El jugador señala 2 jugadores. Muestra 👍 si alguno es el Demonio, 👎 si no.','Recuerda: hay un falso positivo fijo (jugador bueno que siempre da positivo).'],
+    undertaker:['Muestra la ficha del rol del jugador ejecutado hoy.'],
+    monk:['El jugador señala a alguien. Apunta mentalmente quién está protegido esta noche.'],
+    ravenkeeper:['Solo actúa si murió esta noche. El jugador señala a alguien y tú le muestras su ficha de rol.'],
+    butler:['El jugador señala a su "amo". Mañana solo puede votar si el amo vota primero.'],
+    poisoner:['El jugador señala a alguien. Ese jugador queda envenenado (márcalo). Su habilidad dará info incorrecta.'],
+    spy:['Muéstrale el Grimorio completo en silencio. Puede ver todos los roles.'],
+    imp:['El jugador señala a quien quiere matar. Márcalo para morir al amanecer.','Si se señala a sí mismo, un Secuaz aleatorio se convierte en el nuevo Duende.'],
+    godfather:['Muéstrale la lista de Forasteros en juego.','Si un Forastero murió hoy de día, señala a quien quiere matar esta noche.'],
+    devilsadvocate:['El jugador señala a alguien. Si ese jugador es ejecutado mañana, no morirá.'],
+    assassin:['Solo puede usarlo una vez. Si quiere, señala a alguien: muere aunque esté protegido.'],
+    zombuul:['Si nadie murió hoy de día, puede señalar a quien matar esta noche.'],
+    pukka:['Señala a alguien: queda envenenado. El envenenado de la noche anterior muere ahora.'],
+    shabaloth:['Señala a 2 jugadores: ambos mueren esta noche.'],
+    po:['Puede elegir no atacar (señala a nadie): la próxima noche podrá matar a 3.'],
+    eviltwin:['Muéstrale quién es su gemelo bueno. Se reconocen mutuamente.'],
+    witch:['El jugador señala a alguien. Si esa persona nomina mañana, muere.'],
+    clockmaker:['Cuenta los pasos entre el Demonio y el Secuaz más cercano en el círculo. Muéstraselo con los dedos.'],
+    dreamer:['El jugador señala a alguien. Muéstrale 2 fichas: la real y una aleatoria diferente.'],
+    seamstress:['El jugador señala a 2 jugadores. Muestra 👍 si son del mismo equipo, 👎 si no.'],
+    philosopher:['El jugador señala un rol de Aldeano. Obtiene esa habilidad. Si ese rol está vivo, queda borracho.'],
+    snakecharmer:['El jugador señala a alguien. Si es el Demonio, intercambian roles (el nuevo Demonio queda envenenado).'],
+    juggler:['Muéstrale cuántas de sus apuestas del día acertaron.'],
+    sage:['Solo si murió esta noche. Señala 2 jugadores al jugador: uno de ellos es el Demonio.'],
+    fanggu:['Señala a alguien: muere. Si es Forastero (primera vez), ese jugador se convierte en Fang Gu y este muere.'],
+    vigormortis:['Señala a alguien: muere. Los Secuaces ya muertos conservan su habilidad.'],
+    nodashii:['Señala a alguien: muere. Sus dos vecinos aldeanos están envenenados permanentemente.'],
+    vortox:['Señala a alguien: muere. Toda la información de Aldeanos esta noche es incorrecta — dala al revés.'],
   };
-
-  const tips=guides[role.id];
-  if(!tips||!tips.length) return '';
-  return guideCard(`Qué hacer con ${role.name}`,tips.map((t,i)=>({n:`${i+1}`,t})));
+  const tips=G[r.id]; if(!tips?.length) return '';
+  return guideCard(`Qué hacer: ${r.name}`,tips.map((t,i)=>({n:`${i+1}`,t})));
 }
 
-function guideCard(title, steps){
-  const stepsHtml=steps.map(s=>`<div class="guide-step"><span class="guide-step-num">${s.n}</span><span class="guide-step-text">${s.t.replace(/<q>(.*?)<\/q>/g,'<span class="guide-quote">$1</span>')}</span></div>`).join('');
-  return `<div class="guide-card fu"><div class="guide-label">${title}</div>${stepsHtml}</div>`;
+function guideCard(title,steps){
+  return `<div class="guide-card fu"><div class="guide-label">${title}</div>${steps.map(s=>`<div class="guide-step"><span class="gn">${s.n}</span><span class="gt">${s.t.replace(/<q>(.*?)<\/q>/g,'<span class="guide-quote">$1</span>')}</span></div>`).join('')}</div>`;
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // RENDER
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 subscribe(function(s){
-  renderPhasePill(s);renderPhaseBar(s);renderGrimoire(s);renderNightView(s);renderLog(s);
+  renderPhasePill(s);renderPhaseBar(s);renderGrimoire(s);renderVotePanel(s);renderNightView(s);renderLog(s);
 });
 
 function renderPhasePill(s){const el=document.getElementById('phase-pill');const map={setup:['','Setup'],firstNight:['night','1ª Noche'],day:['day',`Día ${s.day}`],night:['night',`Noche ${s.day+1}`],ended:['','Fin']};const[cls,txt]=map[s.phase]||['',''];el.className=`phase-pill ${cls}`;el.textContent=txt;}
 
-function renderPhaseBar(s){const el=document.getElementById('phase-bar');el.innerHTML='';if(s.phase==='setup'||s.phase==='ended')return;const add=(label,fn,cls='')=>{const b=document.createElement('button');b.className=`btn btn-sm ${cls}`;b.textContent=label;b.onclick=fn;el.appendChild(b);};if(s.phase==='firstNight'||s.phase==='night')add('☀️ Iniciar día',doStartDay);if(s.phase==='day')add('🌙 Iniciar noche',doStartNight);add('✅ Bien gana',()=>doEndGame('good'),'btn-gold');add('☠️ Mal gana',()=>doEndGame('evil'),'');}
+function renderPhaseBar(s){
+  const el=document.getElementById('phase-bar');el.innerHTML='';
+  if(s.phase==='setup'||s.phase==='ended') return;
+  const add=(label,fn,cls='')=>{const b=document.createElement('button');b.className=`btn btn-sm ${cls}`;b.textContent=label;b.onclick=fn;el.appendChild(b);};
+  if(s.phase==='firstNight'||s.phase==='night') add('☀️ Iniciar día',doStartDay);
+  if(s.phase==='day') add('🌙 Iniciar noche',doStartNight);
+  add('✅ Bien gana',()=>doEndGame('good'),'btn-gold');
+  add('☠️ Mal gana',()=>doEndGame('evil'),'');
+}
 
 function renderGrimoire(s){
   document.getElementById('grimoire-guide').innerHTML=grimoireGuide(s);
@@ -527,18 +632,23 @@ function renderGrimoire(s){
   el.innerHTML='';
   s.players.forEach(p=>{
     const r=roleById(p.roleId);
+    const voteCount=Object.values(s.votes||{}).filter(Boolean).length;
+    const hasVoted=(s.votes||{})[p.id];
     const tok=document.createElement('div');
-    tok.className='ptok'+(p.alive?'':' dead');
-    tok.innerHTML=`${!p.alive?`<span class="dead-cross">✝</span>`:''}
+    let cls='ptok'+(p.alive?'':' dead')+(p.nominated?' nominated':'')+(hasVoted?' voted-yes':'');
+    tok.className=cls;
+    tok.innerHTML=`${!p.alive?'<span class="dead-cross">✝</span>':''}
       <div class="p-icon">${r?.icon||'❓'}</div>
       <div class="p-rname">${r?.name||'Sin rol'}</div>
       <div class="p-name">${p.name}</div>
       <div class="p-dots">
         <span class="dot ${p.alive?'dot-a':'dot-d'}"></span>
-        ${p.drunk?`<span class="dot dot-drunk"></span>`:''}
-        ${p.poisoned?`<span class="dot dot-pois"></span>`:''}
-        ${p.protected?`<span class="dot dot-prot"></span>`:''}
-      </div>`;
+        ${p.drunk?'<span class="dot dot-drunk" title="Borracho"></span>':''}
+        ${p.poisoned?'<span class="dot dot-pois" title="Envenenado"></span>':''}
+        ${p.protected?'<span class="dot dot-prot" title="Protegido"></span>':''}
+        ${hasVoted?'<span class="vote-chip">votó</span>':''}
+      </div>
+      ${p.note?`<div class="p-note-preview">${p.note}</div>`:''}`;
     tok.onclick=()=>openSheet(p,s);
     el.appendChild(tok);
   });
@@ -556,18 +666,17 @@ function renderNightView(s){
   order.forEach((item,i)=>{const d=document.createElement('div');d.className=`ndot${i===cur?' cur':''}${i<cur?' done':''}`;d.textContent=item.icon;d.title=item.name;d.onclick=()=>jumpNight(i);dots.appendChild(d);});
   if(!order.length){stepEl.innerHTML=`<div class="empty">Sin acciones esta noche.</div>`;return;}
   const c=order[cur];if(!c)return;
-  // Guide first, then step card
   guideEl.innerHTML=nightStepGuide(c);
   stepEl.innerHTML=`<div class="nstep fu">
     <div class="nstep-icon">${c.icon}</div>
     <div class="nstep-role">${c.name}</div>
     <div class="nstep-ability">${c.ability}</div>
-    ${c.players.length?`<div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem">Jugadores con este rol:</div><div class="nstep-players">${c.players.map(p=>`<span class="npc">${p.name}</span>`).join('')}</div>`:`<div style="font-size:.8rem;color:var(--text-muted);font-style:italic;margin-bottom:.75rem">Ningún jugador vivo con este rol.</div>`}
+    ${c.players.length?`<div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.38rem">Jugadores con este rol:</div><div class="nstep-players">${c.players.map(p=>`<span class="npc">${p.name}</span>`).join('')}</div>`:`<div style="font-size:.82rem;color:var(--text-muted);font-style:italic;margin-bottom:.78rem">Ningún jugador vivo con este rol.</div>`}
     <div class="nnav">
       <button class="btn btn-sm" onclick="prevNight()" ${cur===0?'disabled style="opacity:.3"':''}>← Anterior</button>
       <button class="btn btn-sm btn-gold" onclick="nightNext()">${cur>=order.length-1?'✅ Fin noche':'Siguiente →'}</button>
     </div>
-    <div style="margin-top:.4rem;font-size:.75rem;color:var(--text-muted);text-align:center">Paso ${cur+1} de ${order.length}</div>
+    <div style="margin-top:.45rem;font-size:.78rem;color:var(--text-muted);text-align:center">Paso ${cur+1} de ${order.length}</div>
   </div>`;
 }
 
@@ -579,202 +688,144 @@ function renderLog(s){const el=document.getElementById('log-list');if(!s.log?.le
 function addManualLog(){const t=prompt('Nota:');if(t){addLog(t,'info');emit();}}
 window.addManualLog=addManualLog;
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // ACTION SHEET
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
+let _sheetPid=null;
 function openSheet(player,state){
+  _sheetPid=player.id;
   const r=roleById(player.roleId);
   document.getElementById('sh-icon').textContent=r?.icon||'❓';
   document.getElementById('sh-name').textContent=`${player.name}${r?' — '+r.name:''}`;
+  document.getElementById('sh-note').value=player.note||'';
   const grid=document.getElementById('act-grid');grid.innerHTML='';
   const add=(icon,label,fn,cls='')=>{const b=document.createElement('div');b.className=`act-btn ${cls}`;b.innerHTML=`<span class="ai">${icon}</span>${label}`;b.onclick=()=>{fn();closeSheet();};grid.appendChild(b);};
-  add('📱','Ver QR',()=>showQR(player));
-  if(player.alive)add('💀','Matar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:false}:p);addLog(`💀 ${player.name} ha muerto.`,'death');emit();},'danger');
-  else add('✨','Revivir',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:true}:p);addLog(`✨ ${player.name} ha revivido.`,'system');emit();},'ok');
-  if(player.alive)add('⚖️','Ejecutar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:false}:p);addLog(`⚖️ ${player.name} ejecutado/a.`,'execution');emit();speak(`${player.name} ha sido ejecutado.`);},'danger');
-  add('🍺',player.drunk?'Quitar borracho':'Borracho',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,drunk:!p.drunk}:p);addLog(`🍺 ${player.name} ${player.drunk?'ya no está':'está'} borracho/a.`,'system');emit();},'warn');
-  add('☠️',player.poisoned?'Quitar veneno':'Envenenar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,poisoned:!p.poisoned}:p);addLog(`☠️ ${player.name} ${player.poisoned?'ya no está':'está'} envenenado/a.`,'system');emit();},'warn');
-  add('🛡️',player.protected?'Sin protección':'Proteger',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,protected:!p.protected}:p);emit();},'info');
+  if(player.alive) add('💀','Matar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:false}:p);addLog(`💀 ${player.name} ha muerto.`,'death');emit();},'danger');
+  else             add('✨','Revivir',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:true}:p);addLog(`✨ ${player.name} ha revivido.`,'system');emit();},'ok');
+  if(player.alive) add('⚖️','Ejecutar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:false}:p);addLog(`⚖️ ${player.name} ejecutado/a.`,'execution');emit();speak(`${player.name} ha sido ejecutado.`);},'danger');
+  add('🍺',player.drunk?'Quitar borracho':'Borracho',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,drunk:!p.drunk}:p);addLog(`🍺 ${player.name} ${player.drunk?'sobrio':'borracho'}.`,'system');emit();},'warn');
+  add('☠️',player.poisoned?'Quitar veneno':'Envenenar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,poisoned:!p.poisoned}:p);addLog(`☠️ ${player.name} ${player.poisoned?'desenvenenado':'envenenado'}.`,'system');emit();},'warn');
+  add('🛡️',player.protected?'Sin protec.':'Proteger',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,protected:!p.protected}:p);emit();},'info');
+  add('📣',player.nominated?'Sin nominar':'Nominar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,nominated:!p.nominated}:p);if(!player.nominated)addLog(`📣 ${player.name} nominado/a.`,'nomination');emit();},'');
   document.getElementById('sheet-bg').classList.add('open');
   document.getElementById('sheet').classList.add('open');
 }
 function closeSheet(){document.getElementById('sheet-bg').classList.remove('open');document.getElementById('sheet').classList.remove('open');}
-window.closeSheet=closeSheet;
-
-// ═══════════════════════════════════════════════════
-// QR
-// ═══════════════════════════════════════════════════
-function showQR(player){
-  const token=playerToken(player.id);if(!token)return;
-  const r=roleById(player.roleId);
-  const base=location.href.replace(/index\.html.*$/,'').replace(/[?#].*$/,'').replace(/\/$/,'');
-  const url=base+'/player.html?t='+encodeURIComponent(token);
-  document.getElementById('qr-pname').textContent=player.name;
-  document.getElementById('qr-rname').textContent=r?`${r.icon} ${r.name}`:'(sin rol)';
-  document.getElementById('qr-hint').textContent=url;
-  const div=document.getElementById('qr-div');div.innerHTML='';
-  new QRCode(div,{text:url,width:200,height:200,colorDark:'#000',colorLight:'#fff'});
-  document.getElementById('qr-bg').classList.add('open');
+function saveNote(){
+  if(!_sheetPid) return;
+  const val=document.getElementById('sh-note').value;
+  STATE.players=STATE.players.map(p=>p.id===_sheetPid?{...p,note:val}:p);
+  persist();
+  // Re-render grimoire tokens silently
+  renderGrimoire(STATE);
 }
-function closeQR(){document.getElementById('qr-bg').classList.remove('open');}
-function closeQRBg(e){if(e.target===document.getElementById('qr-bg'))closeQR();}
-window.closeQR=closeQR;window.closeQRBg=closeQRBg;
+window.closeSheet=closeSheet;window.saveNote=saveNote;
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
+// END SUMMARY
+// ═══════════════════════════════════════
+function showSummary(winner){
+  const s=STATE;
+  document.getElementById('sum-title').textContent=winner==='good'?'🌟 ¡El Bien Gana!':'😈 ¡El Mal Gana!';
+  document.getElementById('sum-sub').textContent=winner==='good'?'Los aldeanos han derrotado al Demonio.':'El Demonio se impone sobre el pueblo.';
+  const el=document.getElementById('sum-content');
+  // Group by team
+  const evilPlayers=s.players.filter(p=>{const r=roleById(p.roleId);return r&&(r.team==='DEMON'||r.team==='MINION');});
+  const goodPlayers=s.players.filter(p=>{const r=roleById(p.roleId);return r&&(r.team==='TOWNSFOLK'||r.team==='OUTSIDER');});
+  const renderGroup=(title,players)=>{
+    if(!players.length) return '';
+    return `<div class="sum-section">
+      <div class="sum-sec-title">${title}</div>
+      ${players.map(p=>{
+        const r=roleById(p.roleId);
+        return `<div class="sum-player">
+          <span class="sum-p-icon">${r?.icon||'❓'}</span>
+          <div style="flex:1;min-width:0">
+            <div class="sum-p-name">${p.name}</div>
+            <div class="sum-p-role">${r?.name||'?'} · ${r?.team==='DEMON'?'Demonio':r?.team==='MINION'?'Secuaz':r?.team==='OUTSIDER'?'Forastero':'Aldeano'}</div>
+            ${p.note?`<div class="sum-p-note">${p.note}</div>`:''}
+          </div>
+          <span class="sum-tag ${p.alive?'alive':'dead'}">${p.alive?'Vivo':'Muerto'}</span>
+          ${r&&(r.team==='DEMON'||r.team==='MINION')?`<span class="sum-tag evil">Mal</span>`:''}
+        </div>`;
+      }).join('')}
+    </div>`;
+  };
+  el.innerHTML=renderGroup('☠️ Equipo del Mal',evilPlayers)+renderGroup('✨ Equipo del Bien',goodPlayers);
+  document.getElementById('summary-bg').classList.add('show');
+}
+function resetGame(){
+  document.getElementById('summary-bg').classList.remove('show');
+  selRoles=[];selEditions=['TB'];
+  STATE={gameId:null,phase:'setup',day:0,players:[],script:[],log:[],nightOrder:[],nightStep:0,winner:null,votes:{}};
+  renderEditions();renderRoleSel();
+  nav('setup',document.querySelector('[data-v="setup"]'));emit();
+}
+window.resetGame=resetGame;
+
+// ═══════════════════════════════════════
 // HELP
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 function openHelp(){document.getElementById('help-bg').classList.add('open');}
 function closeHelp(){document.getElementById('help-bg').classList.remove('open');}
 function closeHelpBg(e){if(e.target===document.getElementById('help-bg'))closeHelp();}
 window.openHelp=openHelp;window.closeHelp=closeHelp;window.closeHelpBg=closeHelpBg;
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // NAVIGATION
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 function nav(viewId,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));document.getElementById('view-'+viewId).classList.add('active');if(btn)btn.classList.add('active');}
 window.nav=nav;
 
-// ═══════════════════════════════════════════════════
-// WIN / RESET
-// ═══════════════════════════════════════════════════
-function resetGame(){document.getElementById('win').classList.remove('show');selRoles=[];selEditions=['TB'];STATE={gameId:null,phase:'setup',day:0,players:[],script:[],log:[],nightOrder:[],nightStep:0,winner:null};renderEditions();renderRoleSel();nav('setup',document.querySelector('[data-v="setup"]'));emit();}
-window.resetGame=resetGame;
-
-// ═══════════════════════════════════════════════════
-// NARRATOR (Web Speech)
-// ═══════════════════════════════════════════════════
-let narratorOn=false,_prefVoice=null;
-function loadVoices(){if(!window.speechSynthesis)return;const vs=speechSynthesis.getVoices();_prefVoice=vs.find(v=>v.lang.startsWith('es')&&v.name.includes('Google'))||vs.find(v=>v.lang==='es-ES')||vs.find(v=>v.lang.startsWith('es'))||null;}
+// ═══════════════════════════════════════
+// NARRATOR
+// ═══════════════════════════════════════
+let narratorOn=false,_pv=null;
+function loadVoices(){if(!window.speechSynthesis)return;const vs=speechSynthesis.getVoices();_pv=vs.find(v=>v.lang.startsWith('es')&&v.name.includes('Google'))||vs.find(v=>v.lang==='es-ES')||vs.find(v=>v.lang.startsWith('es'))||null;}
 if(window.speechSynthesis){loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices);}
-function speak(text){if(!narratorOn||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='es-ES';u.rate=0.9;u.pitch=0.88;u.volume=0.95;if(_prefVoice)u.voice=_prefVoice;speechSynthesis.speak(u);showToast(text);}
+function speak(text){if(!narratorOn||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='es-ES';u.rate=0.9;u.pitch=0.88;u.volume=0.95;if(_pv)u.voice=_pv;speechSynthesis.speak(u);showToast(text);}
 function showToast(text){const t=document.getElementById('ntoa');t.textContent='🎙️ '+text;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),4500);}
-const PHRASES={firstNight:['El pueblo se duerme. Todos cierran los ojos.','La oscuridad cae. Cerrad los ojos.'],night:['El pueblo duerme. La oscuridad reina.','Se hace de noche. Cerrad los ojos.'],day:['El sol sale sobre el pueblo. Abrid los ojos.','Amanece. El pueblo despierta.'],goodWin:['La luz triunfa. El Demonio ha caído.','El bien gana. El pueblo está a salvo.'],evilWin:['La oscuridad gana. El Demonio ríe.','El mal triunfa sobre el pueblo.']};
+const PH={firstNight:['El pueblo se duerme. Todos cierran los ojos.','La oscuridad cae. Cerrad los ojos.'],night:['El pueblo duerme. La oscuridad reina.','Se hace de noche. Cerrad los ojos.'],day:['El sol sale. Abrid los ojos.','Amanece. El pueblo despierta.'],goodWin:['La luz triunfa. El Demonio ha caído.','El bien gana.'],evilWin:['La oscuridad gana.','El mal triunfa sobre el pueblo.']};
 function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
-function narratePhase(phase,winner){if(phase==='ended')speak(rand(winner==='good'?PHRASES.goodWin:PHRASES.evilWin));else if(PHRASES[phase])speak(rand(PHRASES[phase]));}
-function toggleNarrator(){narratorOn=!narratorOn;const b=document.getElementById('btn-narrator');b.classList.toggle('on',narratorOn);if(narratorOn)speak('Narrador activado.');else{speechSynthesis?.cancel();document.getElementById('ntoa').classList.remove('show');}}
+function narratePhase(phase,winner){if(phase==='ended')speak(rand(winner==='good'?PH.goodWin:PH.evilWin));else if(PH[phase])speak(rand(PH[phase]));}
+function toggleNarrator(){narratorOn=!narratorOn;document.getElementById('btn-narrator').classList.toggle('on',narratorOn);if(narratorOn)speak('Narrador activado.');else{speechSynthesis?.cancel();document.getElementById('ntoa').classList.remove('show');}}
 window.toggleNarrator=toggleNarrator;
 
-// ═══════════════════════════════════════════════════
-// MUSIC — 4 randomised ambiences, Web Audio
-// ═══════════════════════════════════════════════════
-let musicOn=false,actx=null,masterGain=null,_mNodes=[],_mTimer=null,_curMusicPhase=null;
-
+// ═══════════════════════════════════════
+// MUSIC — 4 random ambiences
+// ═══════════════════════════════════════
+let musicOn=false,actx=null,masterGain=null,_mN=[],_mT=null,_curMP=null;
 function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx;}
-
-function stopAllMusic(cb){
-  clearTimeout(_mTimer);
-  if(masterGain){
-    const ctx=getCtx();masterGain.gain.cancelScheduledValues(ctx.currentTime);masterGain.gain.setValueAtTime(masterGain.gain.value,ctx.currentTime);masterGain.gain.linearRampToValueAtTime(0,ctx.currentTime+1.2);
-    setTimeout(()=>{_mNodes.forEach(n=>{try{n.stop?.();n.disconnect?.();}catch(e){}});_mNodes=[];try{masterGain.disconnect();}catch(e){}masterGain=null;if(cb)cb();},1300);
-  } else {
-    _mNodes.forEach(n=>{try{n.stop?.();n.disconnect?.();}catch(e){}});_mNodes=[];if(cb)cb();
-  }
-}
-
-function makeMaster(vol=0.18,fadeIn=3){const ctx=getCtx();const g=ctx.createGain();g.gain.setValueAtTime(0,ctx.currentTime);g.gain.linearRampToValueAtTime(vol,ctx.currentTime+fadeIn);g.connect(ctx.destination);masterGain=g;return g;}
-
-function drone(dest,freq,vol,type='sine',vibRate=0,vibDepth=0){const ctx=getCtx();const o=ctx.createOscillator();const g=ctx.createGain();o.type=type;o.frequency.value=freq;g.gain.value=vol;if(vibRate>0){const lfo=ctx.createOscillator();const lg=ctx.createGain();lfo.frequency.value=vibRate;lg.gain.value=vibDepth;lfo.connect(lg);lg.connect(o.frequency);lfo.start();_mNodes.push(lfo,lg);}o.connect(g);g.connect(dest);o.start();_mNodes.push(o,g);}
-
-function noise(dest,freq=400,vol=0.03,type='lowpass'){const ctx=getCtx();const sz=ctx.sampleRate*3;const buf=ctx.createBuffer(1,sz,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<sz;i++)d[i]=Math.random()*2-1;const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;const flt=ctx.createBiquadFilter();flt.type=type;flt.frequency.value=freq;const g=ctx.createGain();g.gain.value=vol;src.connect(flt);flt.connect(g);g.connect(dest);src.start();_mNodes.push(src,flt,g);}
-
-function bell(dest,freq=110,vol=0.2,dur=5){const ctx=getCtx();const t=ctx.currentTime;const o=ctx.createOscillator();const g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(freq*0.7,t+dur);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+dur);o.connect(g);g.connect(dest);o.start(t);o.stop(t+dur);_mNodes.push(o,g);}
-
-function schedBell(dest,minMs,maxMs,freq=98){if(!musicOn)return;_mTimer=setTimeout(()=>{if(!musicOn||!masterGain)return;bell(dest,freq,0.18,5);schedBell(dest,minMs,maxMs,freq);},minMs+Math.random()*(maxMs-minMs));}
-
-function pluck(dest){if(!musicOn||!masterGain)return;const ctx=getCtx();const SCALE=[220,246.9,261.6,293.7,329.6,349.2,392,440,523.3,587.3];const f=SCALE[Math.floor(Math.random()*SCALE.length)];const o=ctx.createOscillator();const g=ctx.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0.07,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+1.8);o.connect(g);g.connect(dest);o.start();o.stop(ctx.currentTime+2);_mNodes.push(o,g);_mTimer=setTimeout(()=>pluck(dest),1500+Math.random()*3000);}
-
-function crackle(dest){if(!musicOn)return;const ctx=getCtx();const buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.06),ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/1200);const src=ctx.createBufferSource();const g=ctx.createGain();src.buffer=buf;g.gain.value=0.04;src.connect(g);g.connect(dest);src.start();_mNodes.push(src);_mTimer=setTimeout(()=>crackle(dest),400+Math.random()*600);}
-
-// ── 4 Ambiences ──────────────────────────────────────────────
-const AMBIENCES=['medieval','dark','tavern','cinematic'];
-let _curAmbience=null;
-
-function pickAmbience(phase){
-  // Pick randomly but weighted by phase feel
-  const nightOnes=['dark','medieval','cinematic'];
-  const dayOnes=['tavern','medieval','cinematic'];
-  const pool=(phase==='firstNight'||phase==='night')?nightOnes:dayOnes;
-  return pool[Math.floor(Math.random()*pool.length)];
-}
-
+function stopAllMusic(cb){clearTimeout(_mT);if(masterGain){const ctx=getCtx();masterGain.gain.cancelScheduledValues(ctx.currentTime);masterGain.gain.setValueAtTime(masterGain.gain.value,ctx.currentTime);masterGain.gain.linearRampToValueAtTime(0,ctx.currentTime+1.2);setTimeout(()=>{_mN.forEach(n=>{try{n.stop?.();n.disconnect?.();}catch(e){}});_mN=[];try{masterGain.disconnect();}catch(e){}masterGain=null;if(cb)cb();},1300);}else{_mN.forEach(n=>{try{n.stop?.();n.disconnect?.();}catch(e){}});_mN=[];if(cb)cb();}}
+function makeMaster(vol=0.18,fi=3){const ctx=getCtx();const g=ctx.createGain();g.gain.setValueAtTime(0,ctx.currentTime);g.gain.linearRampToValueAtTime(vol,ctx.currentTime+fi);g.connect(ctx.destination);masterGain=g;return g;}
+function drone(dest,freq,vol,type='sine',vr=0,vd=0){const ctx=getCtx();const o=ctx.createOscillator();const g=ctx.createGain();o.type=type;o.frequency.value=freq;g.gain.value=vol;if(vr>0){const lfo=ctx.createOscillator();const lg=ctx.createGain();lfo.frequency.value=vr;lg.gain.value=vd;lfo.connect(lg);lg.connect(o.frequency);lfo.start();_mN.push(lfo,lg);}o.connect(g);g.connect(dest);o.start();_mN.push(o,g);}
+function noise(dest,cutoff=400,vol=0.03,type='lowpass'){const ctx=getCtx();const sz=ctx.sampleRate*3;const buf=ctx.createBuffer(1,sz,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<sz;i++)d[i]=Math.random()*2-1;const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;const flt=ctx.createBiquadFilter();flt.type=type;flt.frequency.value=cutoff;const g=ctx.createGain();g.gain.value=vol;src.connect(flt);flt.connect(g);g.connect(dest);src.start();_mN.push(src,flt,g);}
+function bell(dest,freq=110,vol=0.2,dur=5){const ctx=getCtx();const t=ctx.currentTime;const o=ctx.createOscillator();const g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(freq*.7,t+dur);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+dur);o.connect(g);g.connect(dest);o.start(t);o.stop(t+dur);_mN.push(o,g);}
+function schedBell(dest,mn,mx,freq=98){if(!musicOn)return;_mT=setTimeout(()=>{if(!musicOn||!masterGain)return;bell(dest,freq,.18,5);schedBell(dest,mn,mx,freq);},mn+Math.random()*(mx-mn));}
+function pluck(dest){if(!musicOn||!masterGain)return;const ctx=getCtx();const S=[220,246.9,261.6,293.7,329.6,349.2,392,440,523.3,587.3];const f=S[Math.floor(Math.random()*S.length)];const o=ctx.createOscillator();const g=ctx.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(.07,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+1.8);o.connect(g);g.connect(dest);o.start();o.stop(ctx.currentTime+2);_mN.push(o,g);_mT=setTimeout(()=>pluck(dest),1500+Math.random()*3000);}
+function crackle(dest){if(!musicOn)return;const ctx=getCtx();const buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*.06),ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/1200);const src=ctx.createBufferSource();const g=ctx.createGain();src.buffer=buf;g.gain.value=.04;src.connect(g);g.connect(dest);src.start();_mN.push(src);_mT=setTimeout(()=>crackle(dest),400+Math.random()*600);}
 function startAmbience(name,phase){
-  const ctx=getCtx();
-  _curAmbience=name;
-  if(name==='medieval'){
-    // Rain + wind + distant fire crackle
-    const m=makeMaster(0.22,4);
-    noise(m,300,0.06,'lowpass');   // rain
-    noise(m,80,0.04,'lowpass');    // deep wind rumble
-    noise(m,1200,0.015,'bandpass');// high rain detail
-    if(phase==='night'||phase==='firstNight'){
-      drone(m,55,0.08,'sine',0.12,0.3);
-      schedBell(m,10000,22000,73);
-    } else {
-      drone(m,110,0.05,'sine',0.2,0.5);
-      pluck(m);
-    }
-    crackle(m);
-  } else if(name==='dark'){
-    // Ominous drones + wind + bell
-    const m=makeMaster(0.2,5);
-    drone(m,36.7,0.1,'sawtooth',0.1,0.5);
-    drone(m,55,0.07,'sine',0.15,0.3);
-    drone(m,73.4,0.05,'sine',0.08,0.2);
-    noise(m,500,0.04,'lowpass');
-    schedBell(m,8000,18000,98);
-    schedBell(m,14000,28000,55);
-  } else if(name==='tavern'){
-    // Warmer, higher, busier in day; quieter at night
-    const isDayPhase=phase==='day';
-    const m=makeMaster(isDayPhase?0.16:0.12,3);
-    drone(m,220,0.04,'sine',0.25,0.8);
-    drone(m,329.6,0.03,'sine',0.18,0.5);
-    drone(m,440,0.02,'triangle');
-    noise(m,800,0.025,'bandpass');  // chatter-like
-    pluck(m);
-    if(!isDayPhase){noise(m,200,0.03,'lowpass');}
-  } else if(name==='cinematic'){
-    // Strings-like drones + percussion hits
-    const m=makeMaster(0.18,4);
-    drone(m,55,0.08,'sawtooth',0.05,0.2);
-    drone(m,82.4,0.06,'sawtooth',0.07,0.15);
-    drone(m,110,0.05,'sawtooth',0.1,0.1);
-    noise(m,200,0.025,'lowpass');
-    if(phase==='night'||phase==='firstNight'){
-      schedBell(m,6000,14000,65);
-    } else {
-      pluck(m);
-      drone(m,220,0.03,'sine',0.2,0.4);
-    }
-  }
+  const isN=phase==='firstNight'||phase==='night';
+  if(name==='medieval'){const m=makeMaster(.22,4);noise(m,300,.06,'lowpass');noise(m,80,.04,'lowpass');noise(m,1200,.015,'bandpass');if(isN){drone(m,55,.08,'sine',.12,.3);schedBell(m,10000,22000,73);}else{drone(m,110,.05,'sine',.2,.5);pluck(m);}crackle(m);}
+  else if(name==='dark'){const m=makeMaster(.2,5);drone(m,36.7,.1,'sawtooth',.1,.5);drone(m,55,.07,'sine',.15,.3);drone(m,73.4,.05,'sine',.08,.2);noise(m,500,.04,'lowpass');schedBell(m,8000,18000,98);schedBell(m,14000,28000,55);}
+  else if(name==='tavern'){const m=makeMaster(isN?.12:.16,3);drone(m,220,.04,'sine',.25,.8);drone(m,329.6,.03,'sine',.18,.5);drone(m,440,.02,'triangle');noise(m,800,.025,'bandpass');pluck(m);if(!isN)noise(m,200,.03,'lowpass');}
+  else if(name==='cinematic'){const m=makeMaster(.18,4);drone(m,55,.08,'sawtooth',.05,.2);drone(m,82.4,.06,'sawtooth',.07,.15);drone(m,110,.05,'sawtooth',.1,.1);noise(m,200,.025,'lowpass');if(isN)schedBell(m,6000,14000,65);else pluck(m);}
 }
-
-function updateMusicPhase(phase){
-  if(!musicOn)return;
-  const mapped=(phase==='firstNight'||phase==='night')?'night':phase==='day'?'day':'setup';
-  if(mapped===_curMusicPhase)return;
-  _curMusicPhase=mapped;
-  const nextAmbience=pickAmbience(phase);
-  stopAllMusic(()=>{if(musicOn)startAmbience(nextAmbience,phase);});
-}
-
-function toggleMusic(){
-  musicOn=!musicOn;
-  document.getElementById('btn-music').classList.toggle('on',musicOn);
-  if(musicOn){getCtx();_curMusicPhase=null;updateMusicPhase(STATE.phase);}
-  else{stopAllMusic();_curMusicPhase=null;}
-}
+function pickAmbience(phase){const isN=phase==='firstNight'||phase==='night';const pool=isN?['dark','medieval','cinematic']:['tavern','medieval','cinematic'];return pool[Math.floor(Math.random()*pool.length)];}
+function updateMusicPhase(phase){if(!musicOn)return;const mapped=(phase==='firstNight'||phase==='night')?'night':phase==='day'?'day':'setup';if(mapped===_curMP)return;_curMP=mapped;stopAllMusic(()=>{if(musicOn)startAmbience(pickAmbience(phase),phase);});}
+function toggleMusic(){musicOn=!musicOn;document.getElementById('btn-music').classList.toggle('on',musicOn);if(musicOn){getCtx();_curMP=null;updateMusicPhase(STATE.phase);}else{stopAllMusic();_curMP=null;}}
 window.toggleMusic=toggleMusic;
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
   hydrate();
-  renderEditions();
-  renderRoleSel();
-  // Add 5 default player inputs
+  renderEditions();renderRoleSel();
   for(let i=0;i<5;i++) addPInput();
+  // Keep screen awake using NoSleep trick
+  const _ns=document.createElement('video');_ns.setAttribute('playsinline','');_ns.setAttribute('muted','');_ns.style.cssText='position:fixed;width:1px;height:1px;opacity:0;pointer-events:none';document.body.appendChild(_ns);
+  document.addEventListener('click',()=>{if(_ns.paused)_ns.play().catch(()=>{});},{once:true});
   emit();
 });
 </script>
