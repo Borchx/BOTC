@@ -7,6 +7,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="theme-color" content="#0a0608"/>
 <title>Blood on the Clocktower</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="BotC"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+<meta name="msapplication-TileImage" content="icons/icon-192.png"/>
+<meta name="msapplication-TileColor" content="#080c14"/>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -829,6 +836,17 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.addEventListener('click',()=>{if(_ns.paused)_ns.play().catch(()=>{});},{once:true});
   emit();
 });
+
+// ═══════════════════════════════════════
+// SERVICE WORKER (PWA)
+// ═══════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(r => console.log('SW registered'))
+      .catch(e => console.log('SW error', e));
+  });
+}
 </script>
 </body>
 </html>
