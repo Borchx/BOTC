@@ -17,12 +17,11 @@
   --gold:#c9a84c;--gold-dim:#6a5228;
   --red:#8b1a2a;--red-dim:#3d0a12;
   --text:#e8d5b7;--text-dim:#7a6550;--text-muted:#4a3d30;
+  --guide:#1a2a1a;--guide-border:#2a5a2a;--guide-text:#8ad48a;
   --radius:3px;--nav-h:58px;
 }
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:16px;display:flex;flex-direction:column}
-
-/* ── Header ── */
 #hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:.5rem .75rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;min-height:50px}
 .app-title{font-family:'Cinzel Decorative',serif;font-size:.72rem;color:var(--gold);letter-spacing:.08em;line-height:1.25}
 .app-title small{display:block;font-size:.52rem;color:var(--gold-dim);letter-spacing:.15em}
@@ -32,19 +31,13 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,se
 .phase-pill{font-family:'Cinzel Decorative',serif;font-size:.5rem;letter-spacing:.12em;padding:.2rem .55rem;border-radius:20px;border:1px solid var(--border2);color:var(--gold-dim)}
 .phase-pill.day{border-color:#5a4a00;color:#c9a84c}
 .phase-pill.night{border-color:#1a1a5a;color:#5a7aff}
-
-/* ── Content & views ── */
 #content{flex:1;overflow:hidden;position:relative}
 .view{display:none;height:100%;overflow-y:auto;padding:.9rem .9rem 80px}
 .view.active{display:block}
-
-/* ── Bottom nav ── */
 #nav{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;height:var(--nav-h)}
 .nb{flex:1;background:none;border:none;color:var(--text-muted);font-family:'Cinzel Decorative',serif;font-size:.45rem;letter-spacing:.06em;padding:.5rem .2rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.15rem;transition:color .2s}
 .nb .ni{font-size:1.2rem;line-height:1}
 .nb.active{color:var(--gold);background:#c9a84c06}
-
-/* ── Cards, buttons, inputs ── */
 .card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem;margin-bottom:.65rem}
 .stitle{font-family:'Cinzel Decorative',serif;font-size:.62rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.65rem;padding-bottom:.35rem;border-bottom:1px solid var(--border)}
 .btn{font-family:'Cinzel Decorative',serif;font-size:.62rem;letter-spacing:.08em;padding:.55rem 1.1rem;border-radius:var(--radius);border:1px solid var(--border2);cursor:pointer;background:none;color:var(--text);transition:opacity .2s}
@@ -55,57 +48,61 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,se
 .btn-row{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.65rem}
 input[type=text],select{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-family:'Crimson Pro',serif;font-size:1rem;padding:.45rem .65rem;width:100%;outline:none}
 input:focus,select:focus{border-color:var(--gold-dim)}
-label{font-size:.82rem;color:var(--text-dim);display:block;margin-bottom:.2rem}
-
-/* ── Setup ── */
+/* Setup */
 .p-row{display:flex;gap:.4rem;margin-bottom:.35rem;align-items:center}
 .p-row input{flex:1}
 .rm-btn{background:none;border:none;color:var(--text-muted);font-size:1.1rem;cursor:pointer;padding:.05rem .3rem;flex-shrink:0}
-.rm-btn:hover{color:#c92c2c}
 .ed-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
 .ed-pill{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.55rem .7rem;cursor:pointer;display:flex;align-items:center;gap:.45rem;font-size:.88rem;color:var(--text-dim);transition:all .2s}
 .ed-pill.sel{border-color:var(--gold-dim);color:var(--gold);background:#1a120500}
-.ed-icon{font-size:1.15rem}
-.ed-name{font-size:.72rem;line-height:1.2}
+.ed-icon{font-size:1.15rem}.ed-name{font-size:.72rem;line-height:1.2}
 .role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.35rem;margin-top:.4rem}
-.rc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.38rem .55rem;display:flex;align-items:center;gap:.38rem;cursor:pointer;transition:all .2s;font-size:.8rem;color:var(--text-dim)}
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.38rem .55rem;display:flex;align-items:center;gap:.38rem;cursor:pointer;font-size:.8rem;color:var(--text-dim);transition:all .2s}
 .rc.sel{border-color:currentColor}
-.rc.sel.TOWNSFOLK{color:#5a9fd4;background:#1a3a6b12}
-.rc.sel.OUTSIDER{color:#5ac4d4;background:#1a5a6b12}
-.rc.sel.MINION{color:#d47055;background:#6b2a1a12}
-.rc.sel.DEMON{color:#d45570;background:#8b1a2a18}
+.rc.sel.TOWNSFOLK{color:#5a9fd4;background:#1a3a6b12}.rc.sel.OUTSIDER{color:#5ac4d4;background:#1a5a6b12}
+.rc.sel.MINION{color:#d47055;background:#6b2a1a12}.rc.sel.DEMON{color:#d45570;background:#8b1a2a18}
 .tsep{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.18em;padding:.45rem 0 .2rem;color:var(--text-muted)}
 .tsep.TOWNSFOLK{color:#2a5a8b}.tsep.OUTSIDER{color:#1a6a7b}.tsep.MINION{color:#7b3a2a}.tsep.DEMON{color:#8b1a2a}
-.script-stat{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem;color:var(--text-dim)}
-.script-stat span:last-child{color:var(--text)}
-
-/* ── GM mode chooser ── */
-.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin:.5rem 0}
-.mode-card{background:var(--surface);border:2px solid var(--border2);border-radius:4px;padding:1rem .8rem;text-align:center;cursor:pointer;transition:all .25s}
-.mode-card.sel{border-color:var(--gold);background:#1a120500}
-.mode-icon{font-size:2rem;margin-bottom:.4rem}
-.mode-name{font-family:'Cinzel Decorative',serif;font-size:.7rem;color:var(--gold);letter-spacing:.1em;margin-bottom:.3rem}
-.mode-desc{font-size:.78rem;color:var(--text-dim);line-height:1.4}
-
-/* ── Grimoire ── */
+.sstat{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem;color:var(--text-dim)}
+.sstat span:last-child{color:var(--text)}
+/* Grimoire */
+.phase-bar{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem;align-items:center}
 .g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.55rem}
-.ptok{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.7rem;cursor:pointer;transition:border-color .2s;position:relative;user-select:none}
-.ptok.dead{opacity:.45}
-.ptok .dead-cross{position:absolute;top:.25rem;right:.45rem;color:#c92c2c;font-size:.9rem}
-.ptok .p-icon{font-size:1.75rem}
-.ptok .p-rname{font-size:.72rem;color:var(--gold-dim);margin:.18rem 0}
-.ptok .p-name{font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ptok .p-dots{display:flex;gap:.28rem;margin-top:.32rem}
+.ptok{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.7rem;cursor:pointer;position:relative;user-select:none;transition:border-color .2s}
+.ptok.dead{opacity:.42}
+.dead-cross{position:absolute;top:.25rem;right:.45rem;color:#c92c2c;font-size:.9rem}
+.p-icon{font-size:1.75rem}.p-rname{font-size:.72rem;color:var(--gold-dim);margin:.18rem 0}
+.p-name{font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-dots{display:flex;gap:.28rem;margin-top:.32rem}
 .dot{width:7px;height:7px;border-radius:50%}
 .dot-a{background:#2cc97a}.dot-d{background:#c92c2c}.dot-drunk{background:#c9842c}.dot-pois{background:#7ac92c}.dot-prot{background:#5a7aff}
-.phase-bar{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem;align-items:center}
-
-/* ── Action sheet ── */
+/* Narrator guide */
+.guide-card{background:var(--guide);border:1px solid var(--guide-border);border-radius:var(--radius);padding:.85rem;margin-bottom:.75rem}
+.guide-label{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.18em;color:var(--guide-text);opacity:.7;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.guide-label::before{content:'📜';font-size:.9rem}
+.guide-step{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.5rem;padding:.5rem .6rem;background:#ffffff08;border-radius:2px}
+.guide-step-num{font-family:'Cinzel Decorative',serif;font-size:.6rem;color:var(--guide-text);opacity:.6;flex-shrink:0;margin-top:.15rem;min-width:1.2rem}
+.guide-step-text{font-size:.88rem;line-height:1.55;color:var(--guide-text)}
+.guide-step-text strong{color:#aae8aa}
+.guide-quote{font-style:italic;color:#c8eec8;background:#ffffff0a;border-left:2px solid var(--guide-border);padding:.35rem .6rem;margin:.3rem 0;border-radius:0 2px 2px 0;font-size:.88rem;line-height:1.5}
+/* Night view */
+.n-dots{display:flex;gap:.28rem;flex-wrap:wrap;margin-bottom:.9rem}
+.ndot{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:all .18s}
+.ndot.cur{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-dim)}
+.ndot.done{opacity:.35}
+.nstep{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:1.15rem;margin-bottom:.65rem}
+.nstep-icon{font-size:2.4rem}.nstep-role{font-family:'Cinzel Decorative',serif;font-size:1.05rem;color:var(--gold);margin:.28rem 0}
+.nstep-ability{font-size:.92rem;line-height:1.65;color:var(--text);font-weight:300;margin-bottom:.85rem}
+.nstep-players{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.75rem}
+.npc{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:.18rem .7rem;font-size:.82rem;color:var(--text-dim)}
+.nnav{display:flex;gap:.65rem}
+.nnav .btn{flex:1;text-align:center}
+/* Action sheet */
 #sheet-bg{position:fixed;inset:0;z-index:200;background:#0a060880;backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .22s}
 #sheet-bg.open{opacity:1;pointer-events:all}
 #sheet{position:fixed;bottom:0;left:0;right:0;z-index:201;background:var(--surface2);border-top:1px solid var(--border2);border-radius:10px 10px 0 0;padding:1.15rem 1rem 2.2rem;transform:translateY(100%);transition:transform .28s ease}
 #sheet.open{transform:translateY(0)}
-.sheet-title{font-family:'Cinzel Decorative',serif;font-size:.82rem;color:var(--gold);margin-bottom:.9rem;display:flex;align-items:center;gap:.45rem}
+.sh-title{font-family:'Cinzel Decorative',serif;font-size:.82rem;color:var(--gold);margin-bottom:.9rem;display:flex;align-items:center;gap:.45rem}
 .act-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.45rem}
 .act-btn{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:.6rem .4rem;text-align:center;cursor:pointer;font-family:'Crimson Pro',serif;font-size:.82rem;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:.18rem;transition:background .15s;line-height:1.2}
 .act-btn .ai{font-size:1.25rem}
@@ -114,9 +111,7 @@ label{font-size:.82rem;color:var(--text-dim);display:block;margin-bottom:.2rem}
 .act-btn.warn{border-color:#5a3a1a;color:#d4955a}
 .act-btn.ok{border-color:#1a5a3a;color:#5ad4a0}
 .act-btn.info{border-color:#1a3a6b;color:#5a9fd4}
-.sheet-close{width:100%;margin-top:.75rem}
-
-/* ── QR modal ── */
+/* QR */
 #qr-bg{position:fixed;inset:0;z-index:300;background:#0a0608bb;backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
 #qr-bg.open{opacity:1;pointer-events:all}
 .qr-box{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:1.4rem;max-width:310px;width:90%;text-align:center;transform:scale(.94);transition:transform .25s}
@@ -125,86 +120,48 @@ label{font-size:.82rem;color:var(--text-dim);display:block;margin-bottom:.2rem}
 .qr-rname{font-size:.88rem;color:var(--text-dim);margin-bottom:.9rem}
 #qr-div{background:#fff;padding:.65rem;border-radius:3px;display:inline-block}
 .qr-hint{font-size:.68rem;color:var(--text-muted);margin-top:.6rem;word-break:break-all;line-height:1.4}
-
-/* ── Night order ── */
-.n-dots{display:flex;gap:.28rem;flex-wrap:wrap;margin-bottom:.9rem}
-.ndot{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:all .18s}
-.ndot.cur{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-dim)}
-.ndot.done{opacity:.35}
-.nstep{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:1.15rem}
-.nstep-icon{font-size:2.4rem}
-.nstep-role{font-family:'Cinzel Decorative',serif;font-size:1.05rem;color:var(--gold);margin:.28rem 0}
-.nstep-ability{font-size:.92rem;line-height:1.65;color:var(--text);font-weight:300;margin-bottom:.85rem}
-.nstep-players{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.75rem}
-.npc{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:.18rem .7rem;font-size:.82rem;color:var(--text-dim)}
-.nnav{display:flex;gap:.65rem}
-.nnav .btn{flex:1;text-align:center}
-
-/* ── Log ── */
-.log-entry{padding:.45rem 0;border-bottom:1px solid #1a1015;display:flex;gap:.65rem;font-size:.88rem}
-.lt{color:var(--text-muted);font-size:.75rem;flex-shrink:0;margin-top:.1rem}
-.lm{flex:1;line-height:1.4}
-.log-entry.death .lm{color:#c95a5a}
-.log-entry.execution .lm{color:#c97a5a}
-.log-entry.phase .lm{color:var(--gold);font-style:italic}
-.log-entry.system .lm{color:var(--text-muted);font-style:italic}
-.log-entry.result .lm{color:#5ac97a;font-family:'Cinzel Decorative',serif;font-size:.82rem}
-.log-entry.nomination .lm{color:#c9a04c}
-.log-entry.gm .lm{color:#a07aff}
-
-/* ── GM panel ── */
-.gm-phase-card{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:1rem;margin-bottom:.7rem}
-.gm-action-list{display:flex;flex-direction:column;gap:.5rem}
-.gm-action{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.65rem .9rem;display:flex;align-items:center;gap:.6rem;font-size:.88rem}
-.gm-action .gm-ai{font-size:1.2rem;flex-shrink:0}
-.gm-action .gm-at{flex:1;line-height:1.4}
-.gm-action .gm-ab{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.08em;padding:.28rem .65rem;border-radius:var(--radius);border:1px solid var(--border2);background:none;color:var(--gold);cursor:pointer;flex-shrink:0}
-.gm-action .gm-ab:active{opacity:.6}
-.gm-timer{font-family:monospace;font-size:2rem;text-align:center;color:var(--gold);padding:1rem;letter-spacing:.1em}
-.gm-badge{font-family:'Cinzel Decorative',serif;font-size:.55rem;letter-spacing:.1em;padding:.15rem .5rem;border-radius:20px;border:1px solid var(--border2);color:var(--text-muted);display:inline-block}
-.gm-badge.auto{border-color:#2a4a8b;color:#5a9fd4}
-.gm-badge.manual{border-color:#4a2a00;color:#c9842c}
-
-/* ── Win overlay ── */
-#win{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;background:#0a060899;backdrop-filter:blur(8px);text-align:center;padding:2rem}
-#win.show{display:flex}
-.win-title{font-family:'Cinzel Decorative',serif;font-size:1.55rem;color:var(--gold);margin-bottom:.45rem}
-.win-sub{font-size:1.1rem;color:var(--text);margin-bottom:1.5rem}
-
-/* ── Help modal ── */
+/* Help */
 #help-bg{position:fixed;inset:0;z-index:400;background:#0a060899;backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
 #help-bg.open{opacity:1;pointer-events:all}
 .help-box{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;width:92%;max-width:480px;max-height:86dvh;display:flex;flex-direction:column;transform:scale(.94);transition:transform .25s}
 #help-bg.open .help-box{transform:scale(1)}
 .help-hdr{padding:.9rem 1.1rem .7rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.help-hdr-title{font-family:'Cinzel Decorative',serif;font-size:.82rem;color:var(--gold)}
-.help-close-btn{background:none;border:none;color:var(--text-muted);font-size:1.35rem;cursor:pointer;line-height:1;padding:.1rem .3rem}
-.help-body{overflow-y:auto;padding:.9rem 1.1rem 1.5rem}
-.help-sec{margin-bottom:1.15rem}
-.help-sec-title{font-family:'Cinzel Decorative',serif;font-size:.58rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.45rem;padding-bottom:.28rem;border-bottom:1px solid var(--border)}
-.help-body p{font-size:.9rem;line-height:1.65;color:var(--text);margin-bottom:.45rem}
-.help-body ul{padding-left:1.1rem}
-.help-body li{font-size:.88rem;line-height:1.65;color:var(--text-dim);margin-bottom:.22rem}
-.help-body li strong{color:var(--text)}
-.help-team{display:flex;align-items:flex-start;gap:.55rem;margin-bottom:.45rem}
-.help-team-icon{font-size:1.25rem;flex-shrink:0;margin-top:.08rem}
-.help-team-name{font-size:.82rem;font-weight:600;color:var(--gold)}
-.help-team-desc{font-size:.8rem;color:var(--text-dim);line-height:1.4}
-.help-tip{background:#1a120500;border:1px solid var(--gold-dim);border-radius:var(--radius);padding:.6rem .85rem;font-size:.82rem;color:var(--gold);margin-top:.65rem;line-height:1.5}
-
-/* ── Narrator toast ── */
+.help-hdr-t{font-family:'Cinzel Decorative',serif;font-size:.82rem;color:var(--gold)}
+.help-x{background:none;border:none;color:var(--text-muted);font-size:1.35rem;cursor:pointer;line-height:1;padding:.1rem .3rem}
+.hb{overflow-y:auto;padding:.9rem 1.1rem 1.5rem}
+.hs{margin-bottom:1.1rem}
+.hst{font-family:'Cinzel Decorative',serif;font-size:.58rem;letter-spacing:.18em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:.4rem;padding-bottom:.25rem;border-bottom:1px solid var(--border)}
+.hb p{font-size:.9rem;line-height:1.65;color:var(--text);margin-bottom:.4rem}
+.hb ul{padding-left:1.1rem}
+.hb li{font-size:.88rem;line-height:1.65;color:var(--text-dim);margin-bottom:.2rem}
+.hb li strong{color:var(--text)}
+.hteam{display:flex;align-items:flex-start;gap:.55rem;margin-bottom:.4rem}
+.hti{font-size:1.25rem;flex-shrink:0;margin-top:.08rem}
+.htn{font-size:.82rem;font-weight:600;color:var(--gold)}
+.htd{font-size:.8rem;color:var(--text-dim);line-height:1.4}
+.htip{background:#1a120500;border:1px solid var(--gold-dim);border-radius:var(--radius);padding:.6rem .85rem;font-size:.82rem;color:var(--gold);margin-top:.65rem;line-height:1.5}
+/* Win */
+#win{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;background:#0a060899;backdrop-filter:blur(8px);text-align:center;padding:2rem}
+#win.show{display:flex}
+.win-t{font-family:'Cinzel Decorative',serif;font-size:1.55rem;color:var(--gold);margin-bottom:.45rem}
+.win-s{font-size:1.1rem;color:var(--text);margin-bottom:1.5rem}
+/* Narrator toast */
 #ntoa{position:fixed;top:58px;left:50%;transform:translateX(-50%) translateY(-6px);z-index:350;background:#0f080af2;border:1px solid var(--gold-dim);border-radius:4px;padding:.6rem 1.3rem;font-family:'Crimson Pro',serif;font-style:italic;font-size:.97rem;color:var(--gold);max-width:86vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;backdrop-filter:blur(4px)}
 #ntoa.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── Misc ── */
+/* Log */
+.log-entry{padding:.45rem 0;border-bottom:1px solid #1a1015;display:flex;gap:.65rem;font-size:.88rem}
+.lt{color:var(--text-muted);font-size:.75rem;flex-shrink:0;margin-top:.1rem}
+.lm{flex:1;line-height:1.4}
+.log-entry.death .lm{color:#c95a5a}.log-entry.execution .lm{color:#c97a5a}
+.log-entry.phase .lm{color:var(--gold);font-style:italic}.log-entry.system .lm{color:var(--text-muted);font-style:italic}
+.log-entry.result .lm{color:#5ac97a;font-family:'Cinzel Decorative',serif;font-size:.82rem}
+/* Misc */
 .empty{text-align:center;color:var(--text-muted);padding:2rem;font-style:italic;font-size:.88rem}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.fadeup{animation:fadeUp .3s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fadeUp .28s ease both}
 </style>
 </head>
 <body>
-
-<!-- HEADER -->
 <div id="hdr">
   <div class="app-title">Blood on the Clocktower<small>NARRADOR</small></div>
   <div class="hdr-right">
@@ -214,29 +171,9 @@ label{font-size:.82rem;color:var(--text-dim);display:block;margin-bottom:.2rem}
     <span class="phase-pill" id="phase-pill">Setup</span>
   </div>
 </div>
-
-<!-- CONTENT -->
 <div id="content">
-
-  <!-- VIEW: SETUP -->
   <div class="view active" id="view-setup">
-    <div class="card fadeup">
-      <div class="stitle">Modo de juego</div>
-      <div class="mode-grid">
-        <div class="mode-card sel" id="mode-manual" onclick="selectMode('manual')">
-          <div class="mode-icon">🧙</div>
-          <div class="mode-name">Manual</div>
-          <div class="mode-desc">Tú eres el Narrador. Controlas cada paso de la partida.</div>
-        </div>
-        <div class="mode-card" id="mode-auto" onclick="selectMode('auto')">
-          <div class="mode-icon">🤖</div>
-          <div class="mode-name">GM Auto</div>
-          <div class="mode-desc">La app actúa como GM: gestiona noches, muertes y fases sola.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
+    <div class="card fu">
       <div class="stitle">Jugadores</div>
       <div id="p-inputs"></div>
       <div class="btn-row">
@@ -244,44 +181,29 @@ label{font-size:.82rem;color:var(--text-dim);display:block;margin-bottom:.2rem}
         <button class="btn btn-sm" onclick="genPlayers()">Generar 5–15</button>
       </div>
     </div>
-
     <div class="card">
       <div class="stitle">Edición</div>
       <div class="ed-grid" id="ed-grid"></div>
     </div>
-
     <div class="card">
       <div class="stitle">Roles del script</div>
       <div id="script-stats"></div>
       <div id="role-sel"></div>
     </div>
-
-    <button class="btn btn-red" style="width:100%;text-align:center;font-size:.78rem;padding:.75rem" onclick="startGame()">
-      ⚔️ Comenzar partida
-    </button>
+    <button class="btn btn-red" style="width:100%;text-align:center;font-size:.78rem;padding:.75rem" onclick="startGame()">⚔️ Comenzar partida</button>
   </div>
-
-  <!-- VIEW: GRIMOIRE -->
   <div class="view" id="view-grimoire">
     <div class="phase-bar" id="phase-bar"></div>
+    <div id="grimoire-guide"></div>
     <div class="stitle">Grimorio</div>
-    <div class="g-grid fadeup" id="g-grid"></div>
+    <div class="g-grid fu" id="g-grid"></div>
   </div>
-
-  <!-- VIEW: NIGHT -->
   <div class="view" id="view-night">
     <div class="stitle" id="night-title">Orden de Noche</div>
+    <div id="night-guide"></div>
     <div class="n-dots" id="n-dots"></div>
     <div id="n-step"></div>
   </div>
-
-  <!-- VIEW: GM -->
-  <div class="view" id="view-gm">
-    <div class="stitle">GM Automático <span class="gm-badge auto" id="gm-mode-badge">AUTO</span></div>
-    <div id="gm-content"></div>
-  </div>
-
-  <!-- VIEW: LOG -->
   <div class="view" id="view-log">
     <div class="stitle">Registro</div>
     <div class="btn-row" style="margin-bottom:.75rem">
@@ -289,28 +211,20 @@ label{font-size:.82rem;color:var(--text-dim);display:block;margin-bottom:.2rem}
     </div>
     <div id="log-list"></div>
   </div>
-
-</div><!-- /content -->
-
-<!-- BOTTOM NAV -->
+</div>
 <div id="nav">
   <button class="nb active" data-v="setup" onclick="nav('setup',this)"><span class="ni">⚙️</span>SETUP</button>
   <button class="nb" data-v="grimoire" onclick="nav('grimoire',this)"><span class="ni">📖</span>GRIMORIO</button>
   <button class="nb" data-v="night" onclick="nav('night',this)"><span class="ni">🌙</span>NOCHE</button>
-  <button class="nb" id="nav-gm" style="display:none" data-v="gm" onclick="nav('gm',this)"><span class="ni">🤖</span>GM</button>
   <button class="nb" data-v="log" onclick="nav('log',this)"><span class="ni">📜</span>LOG</button>
 </div>
-
-<!-- ACTION SHEET (backdrop separate from sheet) -->
 <div id="sheet-bg" onclick="closeSheet()"></div>
 <div id="sheet">
-  <div class="sheet-title"><span id="sh-icon"></span><span id="sh-name"></span></div>
+  <div class="sh-title"><span id="sh-icon"></span><span id="sh-name"></span></div>
   <div class="act-grid" id="act-grid"></div>
-  <button class="btn btn-sm sheet-close" onclick="closeSheet()">Cerrar</button>
+  <button class="btn btn-sm" style="width:100%;margin-top:.75rem" onclick="closeSheet()">Cerrar</button>
 </div>
-
-<!-- QR MODAL -->
-<div id="qr-bg" onclick="closeQR(event)">
+<div id="qr-bg" onclick="closeQRBg(event)">
   <div class="qr-box">
     <div class="qr-pname" id="qr-pname">—</div>
     <div class="qr-rname" id="qr-rname">—</div>
@@ -321,71 +235,44 @@ label{font-size:.82rem;color:var(--text-dim);display:block;margin-bottom:.2rem}
     </div>
   </div>
 </div>
-
-<!-- HELP -->
-<div id="help-bg" onclick="closeHelp(event)">
+<div id="help-bg" onclick="closeHelpBg(event)">
   <div class="help-box">
-    <div class="help-hdr">
-      <span class="help-hdr-title">📖 Cómo Jugar</span>
-      <button class="help-close-btn" onclick="closeHelp()">×</button>
-    </div>
-    <div class="help-body">
-      <div class="help-sec">
-        <div class="help-sec-title">¿Qué es Blood on the Clocktower?</div>
-        <p>Juego de deducción social para 5–20 jugadores. Hay un <strong>Narrador</strong> que gestiona la partida, y el resto divididos en <strong>Bien</strong> y <strong>Mal</strong>.</p>
-        <p>El Bien intenta descubrir y ejecutar al Demonio. El Mal intenta que el Demonio sobreviva.</p>
-      </div>
-      <div class="help-sec">
-        <div class="help-sec-title">Los 4 tipos de rol</div>
-        <div class="help-team"><span class="help-team-icon">🔵</span><div><div class="help-team-name">Aldeanos</div><div class="help-team-desc">Bien. Reciben información cada noche para identificar al Demonio.</div></div></div>
-        <div class="help-team"><span class="help-team-icon">🩵</span><div><div class="help-team-name">Forasteros</div><div class="help-team-desc">Bien, pero con habilidades que dificultan la victoria buena.</div></div></div>
-        <div class="help-team"><span class="help-team-icon">🟠</span><div><div class="help-team-name">Secuaces</div><div class="help-team-desc">Mal. Conocen al Demonio y trabajan para protegerlo.</div></div></div>
-        <div class="help-team"><span class="help-team-icon">🔴</span><div><div class="help-team-name">Demonio</div><div class="help-team-desc">Mata cada noche. Si quedan 2 jugadores vivos sin ejecutar, el Mal gana.</div></div></div>
-      </div>
-      <div class="help-sec">
-        <div class="help-sec-title">Estructura de una partida</div>
+    <div class="help-hdr"><span class="help-hdr-t">📖 Cómo Jugar</span><button class="help-x" onclick="closeHelp()">×</button></div>
+    <div class="hb">
+      <div class="hs"><div class="hst">¿Qué es Blood on the Clocktower?</div>
+        <p>Juego de deducción social para 5–20 jugadores. Un <strong>Narrador</strong> gestiona la partida. El resto divididos en <strong>Bien</strong> y <strong>Mal</strong>.</p>
+        <p>El Bien intenta descubrir y ejecutar al Demonio. El Mal intenta que sobreviva.</p></div>
+      <div class="hs"><div class="hst">Los 4 tipos de rol</div>
+        <div class="hteam"><span class="hti">🔵</span><div><div class="htn">Aldeanos</div><div class="htd">Bien. Reciben info cada noche para identificar al Demonio.</div></div></div>
+        <div class="hteam"><span class="hti">🩵</span><div><div class="htn">Forasteros</div><div class="htd">Bien, pero dificultan la victoria buena.</div></div></div>
+        <div class="hteam"><span class="hti">🟠</span><div><div class="htn">Secuaces</div><div class="htd">Mal. Conocen al Demonio y lo protegen.</div></div></div>
+        <div class="hteam"><span class="hti">🔴</span><div><div class="htn">Demonio</div><div class="htd">Mata cada noche. Si quedan 2 vivos sin ejecutar, el Mal gana.</div></div></div></div>
+      <div class="hs"><div class="hst">Estructura</div>
         <ul>
-          <li><strong>Setup:</strong> El Narrador asigna roles. Cada jugador escanea su QR.</li>
-          <li><strong>Primera Noche:</strong> Se despiertan los roles en orden para dar información.</li>
+          <li><strong>Setup:</strong> Asigna roles, cada jugador escanea su QR.</li>
+          <li><strong>Primera Noche:</strong> Despiertas roles en orden para dar info inicial.</li>
           <li><strong>Día:</strong> Debate y votación para ejecutar a un sospechoso.</li>
-          <li><strong>Noche:</strong> El Demonio mata. Se repite el ciclo.</li>
-          <li>El Bien gana ejecutando al Demonio. El Mal gana llegando a 2 vivos sin ejecución.</li>
-        </ul>
-      </div>
-      <div class="help-sec">
-        <div class="help-sec-title">Modo GM Automático</div>
-        <p>Selecciona "GM Auto" en el setup. La app gestionará las noches, decidirá a quién mata el Demonio según las reglas, avanzará las fases y guiará a los jugadores. Ideal para partidas sin Narrador experto.</p>
-      </div>
-      <div class="help-sec">
-        <div class="help-sec-title">Usar esta app</div>
-        <ul>
-          <li><strong>SETUP:</strong> Nombres, edición, roles → Comenzar.</li>
-          <li><strong>GRIMORIO:</strong> Pulsa un jugador para gestionar su estado o generar su QR.</li>
-          <li><strong>NOCHE:</strong> Orden de actuación paso a paso.</li>
-          <li><strong>GM:</strong> Panel automático (solo en modo Auto).</li>
-          <li><strong>LOG:</strong> Historial de la partida.</li>
-        </ul>
-      </div>
-      <div class="help-tip">💡 Activa 🎙️ para que la app narre las fases en voz alta y 🎵 para música de ambiente.</div>
+          <li><strong>Noche:</strong> Demonio mata. Se repite el ciclo.</li>
+          <li>El Bien gana ejecutando al Demonio. El Mal gana con 2 vivos sin ejecución.</li>
+        </ul></div>
+      <div class="hs"><div class="hst">Guía del Narrador</div>
+        <p>En las vistas <strong>Grimorio</strong> y <strong>Noche</strong> encontrarás un panel verde con instrucciones contextuales: qué decir al pueblo, qué preguntar a cada rol, y el hilo de la partida fase a fase.</p></div>
+      <div class="htip">💡 Activa 🎙️ para que la app narre las fases en voz alta y 🎵 para música de ambiente aleatoria.</div>
     </div>
   </div>
 </div>
-
-<!-- WIN -->
-<div id="win">
-  <div class="win-title" id="win-title">Fin</div>
-  <div class="win-sub" id="win-sub"></div>
-  <button class="btn btn-gold" onclick="resetGame()">Nueva partida</button>
-</div>
-
-<!-- NARRATOR TOAST -->
+<div id="win"><div class="win-t" id="win-t">Fin</div><div class="win-s" id="win-s"></div><button class="btn btn-gold" onclick="resetGame()">Nueva partida</button></div>
 <div id="ntoa"></div>
 
 <script>
-// ════════════════════════════════════════════════════════
-// DATA
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// EDITIONS
+// ═══════════════════════════════════════════════════
 const EDITIONS={TB:{id:'TB',name:'Trouble Brewing',emoji:'🍺'},BMR:{id:'BMR',name:'Bad Moon Rising',emoji:'🌙'},SV:{id:'SV',name:'Sects & Violets',emoji:'💜'},CUSTOM:{id:'CUSTOM',name:'Personalizado',emoji:'⚙️'}};
+
+// ═══════════════════════════════════════════════════
+// ROLES  (inserted by build script)
+// ═══════════════════════════════════════════════════
 const ROLES=[
   // TB Townsfolk
   {id:'washerwoman',edition:'TB',team:'TOWNSFOLK',name:'Lavandera',icon:'🧺',ability:'Sabes que uno de dos jugadores es un Aldeano específico, pero no cuál.',firstNight:1,otherNight:0},
@@ -462,387 +349,187 @@ const ROLES=[
   {id:'vortox',edition:'SV',team:'DEMON',name:'Vortox',icon:'🌀',ability:'Cada noche elige un jugador: muere. Los aldeanos siempre reciben info falsa.',firstNight:0,otherNight:42,kills:1},
 ];
 
+
 function roleById(id){ return ROLES.find(r=>r.id===id); }
 
-// ════════════════════════════════════════════════════════
-// GAME STATE
-// ════════════════════════════════════════════════════════
-let STATE = {
-  gameId: null, phase:'setup', day:0,
-  players:[], script:[], log:[],
-  nightOrder:[], nightStep:0,
-  winner:null, gmMode:'manual',
-  gmPending:[], // actions GM needs to resolve
-};
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let STATE={gameId:null,phase:'setup',day:0,players:[],script:[],log:[],nightOrder:[],nightStep:0,winner:null};
 let _listeners=[];
+function subscribe(fn){_listeners.push(fn);}
+function emit(){_listeners.forEach(fn=>fn(STATE));persist();}
+function persist(){try{localStorage.setItem('botc',JSON.stringify(STATE));}catch(e){}}
+function hydrate(){try{const r=localStorage.getItem('botc');if(r)STATE={...STATE,...JSON.parse(r)};}catch(e){}}
+function addLog(text,type='info'){STATE.log=[{id:Date.now()+Math.random(),time:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),text,type},...STATE.log].slice(0,300);}
+function livePlayers(){return STATE.players.filter(p=>p.alive);}
+function demonPlayer(){return STATE.players.find(p=>{const r=roleById(p.roleId);return r&&r.team==='DEMON'&&p.alive;});}
+function buildNightOrder(which){const key=which==='first'?'firstNight':'otherNight';return ROLES.filter(r=>STATE.script.includes(r.id)&&r[key]>0).sort((a,b)=>a[key]-b[key]).map(r=>({roleId:r.id,name:r.name,icon:r.icon,team:r.team,ability:r.ability,players:STATE.players.filter(p=>p.roleId===r.id&&p.alive)}));}
+function playerToken(pid){const p=STATE.players.find(p=>p.id===pid);if(!p)return null;return btoa(JSON.stringify({gid:STATE.gameId,pid,name:p.name,roleId:p.roleId,ts:Date.now()}));}
 
-function subscribe(fn){ _listeners.push(fn); }
-function emit(){ _listeners.forEach(fn=>fn(STATE)); persist(); }
+// ═══════════════════════════════════════════════════
+// SETUP
+// ═══════════════════════════════════════════════════
+let selEditions=['TB'],selRoles=[];
 
-function persist(){ try{ localStorage.setItem('botc',JSON.stringify(STATE)); }catch(e){} }
-function hydrate(){ try{ const r=localStorage.getItem('botc'); if(r) STATE={...STATE,...JSON.parse(r)}; }catch(e){} }
+function addPInput(){const c=document.getElementById('p-inputs');const n=c.children.length+1;const row=document.createElement('div');row.className='p-row';row.innerHTML=`<input type="text" placeholder="Jugador ${n}" value=""/><button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;c.appendChild(row);}
+function genPlayers(){const c=document.getElementById('p-inputs');c.innerHTML='';const n=Math.floor(Math.random()*11)+5;for(let i=1;i<=n;i++){const row=document.createElement('div');row.className='p-row';row.innerHTML=`<input type="text" placeholder="Jugador ${i}" value="Jugador ${i}"/><button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;c.appendChild(row);}}
+window.addPInput=addPInput;window.genPlayers=genPlayers;
 
-function addLog(text,type='info'){
-  STATE.log=[{id:Date.now()+Math.random(),time:new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),text,type},...STATE.log].slice(0,300);
-}
-
-function livePlayers(){ return STATE.players.filter(p=>p.alive); }
-function evilPlayers(){ return STATE.players.filter(p=>{ const r=roleById(p.roleId); return r&&(r.team==='MINION'||r.team==='DEMON'); }); }
-function demonPlayer(){ return STATE.players.find(p=>{ const r=roleById(p.roleId); return r&&r.team==='DEMON'&&p.alive; }); }
-
-function nightOrder(which){
-  const key=which==='first'?'firstNight':'otherNight';
-  return ROLES.filter(r=>STATE.script.includes(r.id)&&r[key]>0)
-    .sort((a,b)=>a[key]-b[key])
-    .map(r=>({roleId:r.id,name:r.name,icon:r.icon,team:r.team,ability:r.ability,
-      players:STATE.players.filter(p=>p.roleId===r.id&&p.alive)}));
-}
-
-function playerToken(pid){
-  const p=STATE.players.find(p=>p.id===pid); if(!p) return null;
-  return btoa(JSON.stringify({gid:STATE.gameId,pid,name:p.name,roleId:p.roleId,ts:Date.now()}));
-}
-
-// ════════════════════════════════════════════════════════
-// SETUP STATE
-// ════════════════════════════════════════════════════════
-let selEditions=['TB'];
-let selRoles=[];
-let gameMode='manual';
-
-function selectMode(m){
-  gameMode=m;
-  document.getElementById('mode-manual').classList.toggle('sel',m==='manual');
-  document.getElementById('mode-auto').classList.toggle('sel',m==='auto');
-}
-window.selectMode=selectMode;
-
-function addPInput(){
-  const c=document.getElementById('p-inputs');
-  const n=c.children.length+1;
-  const row=document.createElement('div'); row.className='p-row';
-  row.innerHTML=`<input type="text" placeholder="Jugador ${n}" value=""/><button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;
-  c.appendChild(row);
-}
-window.addPInput=addPInput;
-
-function genPlayers(){
-  const c=document.getElementById('p-inputs'); c.innerHTML='';
-  const n=Math.floor(Math.random()*11)+5;
-  for(let i=1;i<=n;i++){
-    const row=document.createElement('div'); row.className='p-row';
-    row.innerHTML=`<input type="text" placeholder="Jugador ${i}" value="Jugador ${i}"/><button class="rm-btn" onclick="this.parentElement.remove()">×</button>`;
-    c.appendChild(row);
-  }
-}
-window.genPlayers=genPlayers;
-
-function renderEditions(){
-  const el=document.getElementById('ed-grid'); el.innerHTML='';
-  Object.values(EDITIONS).filter(e=>e.id!=='CUSTOM').forEach(ed=>{
-    const d=document.createElement('div');
-    d.className='ed-pill'+(selEditions.includes(ed.id)?' sel':'');
-    d.innerHTML=`<span class="ed-icon">${ed.emoji}</span><span class="ed-name">${ed.name}</span>`;
-    d.onclick=()=>{
-      if(selEditions.includes(ed.id)) selEditions=selEditions.filter(e=>e!==ed.id);
-      else selEditions.push(ed.id);
-      if(!selEditions.length) selEditions=[ed.id];
-      selRoles=selRoles.filter(id=>ROLES.find(r=>r.id===id&&selEditions.includes(r.edition)));
-      renderEditions(); renderRoleSel();
-    };
-    el.appendChild(d);
-  });
-}
-
-function renderRoleSel(){
-  const el=document.getElementById('role-sel'); el.innerHTML='';
-  const TORDER=['TOWNSFOLK','OUTSIDER','MINION','DEMON'];
-  const TNAMES={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};
-  TORDER.forEach(team=>{
-    const roles=ROLES.filter(r=>selEditions.includes(r.edition)&&r.team===team);
-    if(!roles.length) return;
-    const sep=document.createElement('div'); sep.className=`tsep ${team}`; sep.textContent=TNAMES[team]; el.appendChild(sep);
-    const grid=document.createElement('div'); grid.className='role-grid';
-    roles.forEach(r=>{
-      const sel=selRoles.includes(r.id);
-      const c=document.createElement('div');
-      c.className=`rc ${r.team}${sel?' sel':''}`;
-      c.innerHTML=`<span>${r.icon}</span><span>${r.name}</span>`;
-      c.onclick=()=>{ selRoles.includes(r.id)?selRoles=selRoles.filter(x=>x!==r.id):selRoles.push(r.id); renderRoleSel(); renderScriptStats(); };
-      grid.appendChild(c);
-    });
-    el.appendChild(grid);
-  });
-  renderScriptStats();
-}
-
-function renderScriptStats(){
-  const el=document.getElementById('script-stats');
-  const TNAMES={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};
-  const counts={};
-  ['TOWNSFOLK','OUTSIDER','MINION','DEMON'].forEach(t=>counts[t]=selRoles.filter(id=>{ const r=roleById(id); return r&&r.team===t; }).length);
-  el.innerHTML=Object.entries(counts).map(([t,c])=>`<div class="script-stat"><span>${TNAMES[t]}</span><span>${c}</span></div>`).join('')
-    +`<div class="script-stat" style="border-top:1px solid var(--border);padding-top:.2rem;margin-top:.2rem"><span>Total</span><span>${selRoles.length}</span></div>`;
-}
+function renderEditions(){const el=document.getElementById('ed-grid');el.innerHTML='';Object.values(EDITIONS).filter(e=>e.id!=='CUSTOM').forEach(ed=>{const d=document.createElement('div');d.className='ed-pill'+(selEditions.includes(ed.id)?' sel':'');d.innerHTML=`<span class="ed-icon">${ed.emoji}</span><span class="ed-name">${ed.name}</span>`;d.onclick=()=>{if(selEditions.includes(ed.id))selEditions=selEditions.filter(e=>e!==ed.id);else selEditions.push(ed.id);if(!selEditions.length)selEditions=[ed.id];selRoles=selRoles.filter(id=>ROLES.find(r=>r.id===id&&selEditions.includes(r.edition)));renderEditions();renderRoleSel();};el.appendChild(d);});}
+function renderRoleSel(){const el=document.getElementById('role-sel');el.innerHTML='';const TO=['TOWNSFOLK','OUTSIDER','MINION','DEMON'];const TN={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};TO.forEach(team=>{const roles=ROLES.filter(r=>selEditions.includes(r.edition)&&r.team===team);if(!roles.length)return;const sep=document.createElement('div');sep.className=`tsep ${team}`;sep.textContent=TN[team];el.appendChild(sep);const grid=document.createElement('div');grid.className='role-grid';roles.forEach(r=>{const sel=selRoles.includes(r.id);const c=document.createElement('div');c.className=`rc ${r.team}${sel?' sel':''}`;c.innerHTML=`<span>${r.icon}</span><span>${r.name}</span>`;c.onclick=()=>{selRoles.includes(r.id)?selRoles=selRoles.filter(x=>x!==r.id):selRoles.push(r.id);renderRoleSel();renderScriptStats();};grid.appendChild(c);});el.appendChild(grid);});renderScriptStats();}
+function renderScriptStats(){const el=document.getElementById('script-stats');const TN={TOWNSFOLK:'Aldeanos',OUTSIDER:'Forasteros',MINION:'Secuaces',DEMON:'Demonios'};const counts={};['TOWNSFOLK','OUTSIDER','MINION','DEMON'].forEach(t=>counts[t]=selRoles.filter(id=>{const r=roleById(id);return r&&r.team===t;}).length);el.innerHTML=Object.entries(counts).map(([t,c])=>`<div class="sstat"><span>${TN[t]}</span><span>${c}</span></div>`).join('')+`<div class="sstat" style="border-top:1px solid var(--border);padding-top:.2rem;margin-top:.2rem"><span>Total</span><span>${selRoles.length}</span></div>`;}
 
 function startGame(){
   const inputs=document.querySelectorAll('#p-inputs input');
   const names=[...inputs].map(i=>i.value.trim()).filter(Boolean);
-  if(names.length<3){ alert('Necesitas al menos 3 jugadores.'); return; }
-  if(!selRoles.length){ alert('Selecciona al menos un rol.'); return; }
-
-  // New game
+  if(names.length<3){alert('Necesitas al menos 3 jugadores.');return;}
+  if(!selRoles.length){alert('Selecciona al menos un rol.');return;}
   STATE.gameId=Math.random().toString(36).substr(2,8).toUpperCase();
-  STATE.phase='setup'; STATE.day=0; STATE.winner=null; STATE.log=[];
-  STATE.gmMode=gameMode;
+  STATE.phase='setup';STATE.day=0;STATE.winner=null;STATE.log=[];
   STATE.players=names.map((name,i)=>({id:`p${i}`,name,roleId:null,alive:true,drunk:false,poisoned:false,protected:false,nominated:false,ghost_votes:1}));
   STATE.script=[...selRoles];
-
-  // Shuffle roles
   const avail=[...selRoles];
-  for(let i=avail.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [avail[i],avail[j]]=[avail[j],avail[i]]; }
+  for(let i=avail.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[avail[i],avail[j]]=[avail[j],avail[i]];}
   STATE.players=STATE.players.map((p,i)=>({...p,roleId:avail[i]||null}));
-
   addLog('Partida iniciada. Roles asignados.','system');
-
-  // Show/hide GM tab
-  document.getElementById('nav-gm').style.display=gameMode==='auto'?'':'none';
-
-  STATE.phase='firstNight';
-  STATE.nightOrder=nightOrder('first');
-  STATE.nightStep=0;
+  STATE.phase='firstNight';STATE.nightOrder=buildNightOrder('first');STATE.nightStep=0;
   addLog('Primera noche comienza.','phase');
   emit();
-  narratePhase('firstNight');
-  updateMusicPhase('firstNight');
-
-  if(gameMode==='auto') gmStartNight();
-
+  narratePhase('firstNight');updateMusicPhase('firstNight');
   nav('grimoire',document.querySelector('[data-v="grimoire"]'));
 }
 window.startGame=startGame;
 
-// ════════════════════════════════════════════════════════
-// PHASE CONTROL
-// ════════════════════════════════════════════════════════
-function doStartDay(){
-  STATE.phase='day'; STATE.day++;
-  STATE.players=STATE.players.map(p=>({...p,nominated:false,protected:false}));
-  addLog(`☀️ Día ${STATE.day}.`,'phase');
-  emit();
-  narratePhase('day');
-  updateMusicPhase('day');
-  if(STATE.gmMode==='auto') gmRunDay();
-  checkWinCondition();
-}
+// ═══════════════════════════════════════════════════
+// PHASES
+// ═══════════════════════════════════════════════════
+function doStartDay(){STATE.phase='day';STATE.day++;STATE.players=STATE.players.map(p=>({...p,nominated:false,protected:false}));addLog(`☀️ Día ${STATE.day}.`,'phase');emit();narratePhase('day');updateMusicPhase('day');checkWin();}
+function doStartNight(){STATE.phase='night';STATE.nightStep=0;STATE.nightOrder=buildNightOrder('other');addLog(`🌙 Noche ${STATE.day+1}.`,'phase');emit();narratePhase('night');updateMusicPhase('night');}
+function doEndGame(winner){STATE.phase='ended';STATE.winner=winner;addLog(`🏆 ${winner==='good'?'¡El Bien gana!':'¡El Mal gana!'}`,'result');emit();narratePhase('ended',winner);document.getElementById('win-t').textContent=winner==='good'?'🌟 ¡El Bien Gana!':'😈 ¡El Mal Gana!';document.getElementById('win-s').textContent=winner==='good'?'Los aldeanos han derrotado al Demonio.':'El Demonio se impone sobre el pueblo.';document.getElementById('win').classList.add('show');}
+function checkWin(){if(!demonPlayer()){doEndGame('good');return;}if(livePlayers().length<=2&&STATE.phase==='day'){doEndGame('evil');}}
+function advNight(){if(STATE.nightStep<STATE.nightOrder.length-1){STATE.nightStep++;emit();}}
+function prevNight(){if(STATE.nightStep>0){STATE.nightStep--;emit();}}
+window.advNight=advNight;window.prevNight=prevNight;
 
-function doStartNight(){
-  STATE.phase='night'; STATE.nightStep=0;
-  STATE.nightOrder=nightOrder('other');
-  addLog(`🌙 Noche ${STATE.day+1}.`,'phase');
-  emit();
-  narratePhase('night');
-  updateMusicPhase('night');
-  if(STATE.gmMode==='auto') gmStartNight();
-}
-
-function doEndGame(winner){
-  STATE.phase='ended'; STATE.winner=winner;
-  addLog(`🏆 ${winner==='good'?'¡El Bien gana!':'¡El Mal gana!'}`,'result');
-  emit();
-  narratePhase('ended',winner);
-  document.getElementById('win-title').textContent=winner==='good'?'🌟 ¡El Bien Gana!':'😈 ¡El Mal Gana!';
-  document.getElementById('win-sub').textContent=winner==='good'?'Los aldeanos han derrotado al Demonio.':'El Demonio se impone sobre el pueblo.';
-  document.getElementById('win').classList.add('show');
-}
-
-function checkWinCondition(){
+// ═══════════════════════════════════════════════════
+// NARRATOR GUIDE
+// ═══════════════════════════════════════════════════
+// Guide for each phase shown in Grimoire
+function grimoireGuide(s){
+  if(s.phase==='setup'||s.phase==='ended') return '';
+  const live=livePlayers().length;
+  const dead=s.players.filter(p=>!p.alive).length;
   const demon=demonPlayer();
-  const live=livePlayers();
-  if(!demon){ doEndGame('good'); return; }
-  if(live.length<=2 && STATE.phase==='day'){ doEndGame('evil'); return; }
+
+  if(s.phase==='firstNight') return guideCard('Primera Noche — Qué hacer',[
+    {n:'1',t:'Di en voz alta: <q>Todos cerramos los ojos. El pueblo se duerme.</q>'},
+    {n:'2',t:'Ve a la pestaña <strong>🌙 NOCHE</strong> y despierta a cada rol en orden, uno por uno.'},
+    {n:'3',t:'Para cada rol: toca suavemente en el hombro al jugador (o dile su nombre), haz el gesto correspondiente con las manos, recibe su respuesta en silencio.'},
+    {n:'4',t:'Los Secuaces y el Demonio se conocen entre sí: despiértalos juntos, que se señalen.'},
+    {n:'5',t:'Al terminar: <q>Todo el pueblo despierta. Buenos días.</q>'},
+  ]);
+
+  if(s.phase==='night') return guideCard(`Noche ${s.day+1} — Qué hacer`,[
+    {n:'1',t:'Di: <q>Todos cerramos los ojos. El pueblo se duerme.</q>'},
+    {n:'2',t:'Ve a la pestaña <strong>🌙 NOCHE</strong> y sigue el orden de actuación.'},
+    {n:'3',t:'El Demonio elige a quién matar: señala a un jugador con el dedo. Tú marcas esa muerte en el Grimorio (ícono 💀).'},
+    {n:'4',t:'Al terminar: <q>Todo el pueblo despierta.</q> Anuncia quién ha muerto esta noche.'},
+    {n:'5',t:`Hay ${live} jugadores vivos y ${dead} muertos.${live<=4?' ⚠️ Queda poco pueblo — vigila la condición de victoria.':''}`},
+  ]);
+
+  if(s.phase==='day') return guideCard(`Día ${s.day} — Qué hacer`,[
+    {n:'1',t:'Anuncia los muertos de la noche. El pueblo puede hablar libremente.'},
+    {n:'2',t:'<strong>Nominaciones:</strong> Cualquier jugador puede nominar a otro. Cada jugador solo puede nominar una vez al día.'},
+    {n:'3',t:'<strong>Votación:</strong> Para ejecutar, se necesita más de la mitad de los jugadores vivos (<strong>más de ${Math.floor(live/2)}</strong> votos).'},
+    {n:'4',t:'Solo se ejecuta a quien consiga más votos (si supera el umbral). En caso de empate, nadie muere.'},
+    {n:'5',t:`${live<=3?'⚠️ Con 3 o menos vivos: si el Alcalde está vivo y no se ejecuta a nadie, el Bien gana.':'Si el día termina sin ejecución, la noche continúa sin que nadie muera por votación.'}`},
+  ]);
+
+  return '';
 }
 
-// Night step
-function advNight(){ if(STATE.nightStep<STATE.nightOrder.length-1){ STATE.nightStep++; emit(); } }
-function prevNight(){ if(STATE.nightStep>0){ STATE.nightStep--; emit(); } }
-window.advNight=advNight; window.prevNight=prevNight;
+// Guide shown in Night view for the current step
+function nightStepGuide(step){
+  if(!step) return '';
+  const role=roleById(step.roleId);
+  if(!role) return '';
 
-// ════════════════════════════════════════════════════════
-// GM AUTO MODE
-// ════════════════════════════════════════════════════════
-let gmTimer=null;
+  const guides={
+    // TB
+    washerwoman: ['Muestra a este jugador 2 fichas de jugador (uno es el Aldeano correcto, el otro un señuelo).',
+      'Señala también qué rol de Aldeano tienen (sin revelar cuál es cuál).'],
+    librarian: ['Muestra 2 fichas de jugador (uno es el Forastero, el otro un señuelo).',
+      'Si no hay Forasteros en juego, muestra "0" con los dedos.'],
+    investigator: ['Muestra 2 fichas (uno es el Secuaz, el otro señuelo). Señala qué Secuaz es.'],
+    chef: ['Muestra con los dedos cuántos pares de jugadores malignos son vecinos adyacentes en el círculo.'],
+    empath: ['Muestra 0, 1 o 2 con los dedos: cuántos de sus dos vecinos vivos son malignos.'],
+    fortuneteller: ['Este jugador señala 2 jugadores. Muestra 👍 (sí) o 👎 (no) si alguno es el Demonio.',
+      'Recuerda: hay un jugador bueno que siempre da positivo (falso positivo).'],
+    undertaker: ['Muestra la ficha del rol del jugador ejecutado hoy.'],
+    monk: ['Este jugador señala a alguien. Apunta en tu mente quién está protegido esta noche.'],
+    ravenkeeper: ['Solo actúa si este jugador murió esta noche. Señala quién y muéstrale su ficha de rol.'],
+    butler: ['Este jugador señala a otro. Esa persona es su "amo": mañana solo puede votar si su amo vota.'],
+    poisoner: ['Este jugador señala a alguien. Ese jugador está envenenado (márcalo en el Grimorio). Su habilidad dará info incorrecta esta noche.'],
+    spy: ['Muestra el Grimorio completo a este jugador en silencio. Puede ver todos los roles.'],
+    imp: ['Este jugador señala a quien quiere matar. Márcalo para morir al amanecer.',
+      'Si señala a sí mismo, un Secuaz al azar se convierte en el nuevo Duende.'],
+    // Empath/Undertaker covered above
+    godfather: ['Muéstrale la lista de Forasteros en juego.',
+      'Si un Forastero murió hoy, este jugador señala a quien quiere matar esta noche.'],
+    devilsadvocate: ['Este jugador señala a alguien. Si ese jugador es ejecutado mañana, no morirá.'],
+    assassin: ['Solo puede usarlo una vez. Si quiere, señala a alguien: muere aunque esté protegido.'],
+    zombuul: ['Si nadie murió hoy, este jugador puede señalar a quien matar.'],
+    pukka: ['Este jugador señala a alguien: queda envenenado. El envenenado de la noche anterior muere ahora.'],
+    shabaloth: ['Este jugador señala a 2 jugadores: ambos mueren.'],
+    po: ['Puede elegir no atacar (señala a nadie): la próxima noche podrá matar a 3.'],
+    eviltwin: ['Muéstrale quién es su gemelo bueno. Ambos se conocen.'],
+    witch: ['Señala a alguien: si esa persona nomina mañana, muere.'],
+    clockmaker: ['Muestra con los dedos cuántos pasos hay entre el Demonio y el Secuaz más cercano en el círculo.'],
+    dreamer: ['Este jugador señala a alguien. Muéstrale 2 fichas: la real y otra aleatoria distinta.'],
+    seamstress: ['Este jugador señala a 2 jugadores. Muestra 👍 si son del mismo equipo, 👎 si no.'],
+    philosopher: ['Este jugador señala un rol de Aldeano. Obtiene esa habilidad. Si ese rol está en juego, ese jugador queda borracho.'],
+    snakecharmer: ['Este jugador señala a alguien. Si es el Demonio, intercambian roles (y el nuevo Demonio queda envenenado).'],
+    juggler: ['Solo actúa la primera noche. Muéstrale cuántas de sus apuestas del día han acertado.'],
+    sage: ['Solo si murió esta noche. Señálale 2 jugadores: uno es el Demonio.'],
+    witch: ['Este jugador señala a alguien. Si nomina mañana, muere.'],
+    fanggu: ['Señala a alguien. Si es Forastero, ese jugador se convierte en Fang Gu y este muere (solo la primera vez).'],
+    vigormortis: ['Señala a alguien: muere. Los Secuaces muertos conservan su habilidad.'],
+    nodashii: ['Señala a alguien: muere. Sus dos vecinos aldeanos más cercanos están envenenados.'],
+    vortox: ['Señala a alguien: muere. Toda información de Aldeanos esta noche es incorrecta (dala al revés).'],
+  };
 
-function gmStartNight(){
-  // Determine demon kills
-  const demon=demonPlayer(); if(!demon) return;
-  const demonRole=roleById(demon.roleId);
-  const kills=demonRole?.kills||1;
-  const live=livePlayers().filter(p=>p.id!==demon.id&&!p.protected);
-  if(!live.length) return;
-
-  // Pick targets (avoid protected)
-  const targets=[];
-  for(let i=0;i<kills&&i<live.length;i++){
-    const pool=live.filter(p=>!targets.includes(p.id));
-    if(!pool.length) break;
-    targets.push(pool[Math.floor(Math.random()*pool.length)].id);
-  }
-
-  // Apply minion effects
-  applyMinionNightEffects();
-
-  // After a delay, apply kills (simulates night passing)
-  const delayMs = STATE.gmMode==='auto' ? 3000 : 0;
-  gmTimer=setTimeout(()=>{
-    targets.forEach(pid=>{
-      const p=STATE.players.find(p=>p.id===pid);
-      if(!p||!p.alive||p.protected) return;
-      STATE.players=STATE.players.map(pl=>pl.id===pid?{...pl,alive:false}:pl);
-      addLog(`💀 ${p.name} ha muerto durante la noche.`,'death');
-      speak(`${p.name} ha muerto esta noche.`);
-    });
-    emit();
-    // Transition to day
-    gmTimer=setTimeout(()=>doStartDay(), 4000);
-  }, delayMs);
+  const tips=guides[role.id];
+  if(!tips||!tips.length) return '';
+  return guideCard(`Qué hacer con ${role.name}`,tips.map((t,i)=>({n:`${i+1}`,t})));
 }
 
-function applyMinionNightEffects(){
-  // Poisoner: pick a random target to poison
-  STATE.players.forEach(p=>{
-    if(!p.alive) return;
-    const r=roleById(p.roleId);
-    if(r&&r.id==='poisoner'){
-      const live=livePlayers().filter(lp=>lp.id!==p.id&&!lp.poisoned);
-      if(live.length){
-        const t=live[Math.floor(Math.random()*live.length)];
-        STATE.players=STATE.players.map(pl=>pl.id===t.id?{...pl,poisoned:true}:pl);
-        addLog(`☠️ ${t.name} ha sido envenenado/a.`,'gm');
-      }
-    }
-  });
+function guideCard(title, steps){
+  const stepsHtml=steps.map(s=>`<div class="guide-step"><span class="guide-step-num">${s.n}</span><span class="guide-step-text">${s.t.replace(/<q>(.*?)<\/q>/g,'<span class="guide-quote">$1</span>')}</span></div>`).join('');
+  return `<div class="guide-card fu"><div class="guide-label">${title}</div>${stepsHtml}</div>`;
 }
 
-function gmRunDay(){
-  // Simulate day: pick a player to execute by "vote"
-  // In auto mode, pick a random alive player (weighted toward evil slightly for balance)
-  const live=livePlayers();
-  if(live.length<=2){ checkWinCondition(); return; }
-
-  addLog('🗣️ El pueblo debate...','gm');
-
-  // Simulate debate time, then execute
-  gmTimer=setTimeout(()=>{
-    const weights=live.map(p=>{ const r=roleById(p.roleId); return r&&(r.team==='MINION'||r.team==='DEMON')?1:2; });
-    const total=weights.reduce((a,b)=>a+b,0);
-    let rand=Math.random()*total, chosen=live[0];
-    for(let i=0;i<live.length;i++){ rand-=weights[i]; if(rand<=0){ chosen=live[i]; break; } }
-
-    STATE.players=STATE.players.map(p=>p.id===chosen.id?{...p,alive:false,nominated:false}:p);
-    addLog(`⚖️ ${chosen.name} ha sido ejecutado/a por el pueblo.`,'execution');
-    speak(`El pueblo ha ejecutado a ${chosen.name}.`);
-    emit();
-    checkWinCondition();
-
-    if(STATE.phase!=='ended'){
-      gmTimer=setTimeout(()=>doStartNight(), 3500);
-    }
-  }, 5000);
-}
-
-function renderGMView(){
-  const el=document.getElementById('gm-content');
-  const s=STATE;
-  if(s.phase==='setup'||s.phase==='ended'){ el.innerHTML=`<div class="empty">No hay partida activa.</div>`; return; }
-
-  let html=`<div class="gm-phase-card">`;
-  html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">`;
-  html+=`<span style="font-family:'Cinzel Decorative',serif;font-size:.85rem;color:var(--gold)">${s.phase==='day'?`☀️ Día ${s.day}`:`🌙 Noche ${s.day+(s.phase==='firstNight'?1:1)}`}</span>`;
-  html+=`<span class="gm-badge auto">AUTO ACTIVO</span></div>`;
-
-  if(s.gmMode==='auto'){
-    html+=`<p style="font-size:.85rem;color:var(--text-dim);line-height:1.55">El GM automático está gestionando esta fase. Las acciones se ejecutan con retrasos simulados para crear tensión.</p>`;
-    html+=`<div class="btn-row" style="margin-top:.75rem">`;
-    if(s.phase==='day'){ html+=`<button class="btn btn-sm btn-gold" onclick="skipGMDelay()">Avanzar ahora</button>`; }
-    html+=`<button class="btn btn-sm" style="color:#c95a5a;border-color:#5a1a2a" onclick="switchToManual()">Cambiar a manual</button>`;
-    html+=`</div>`;
-  }
-  html+=`</div>`;
-
-  // Show current night kills or day execution
-  html+=`<div class="stitle" style="margin-top:.5rem">Jugadores vivos (${livePlayers().length})</div>`;
-  html+=`<div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.75rem">`;
-  s.players.forEach(p=>{
-    const r=roleById(p.roleId);
-    html+=`<span style="background:var(--surface);border:1px solid ${p.alive?'var(--border2)':'#3a1010'};border-radius:20px;padding:.18rem .7rem;font-size:.82rem;color:${p.alive?'var(--text)':'#c95a5a'};opacity:${p.alive?1:.5}">${r?.icon||'❓'} ${p.name}</span>`;
-  });
-  html+=`</div>`;
-
-  el.innerHTML=html;
-}
-
-function skipGMDelay(){
-  clearTimeout(gmTimer);
-  if(STATE.phase==='day') doStartNight();
-  else doStartDay();
-}
-window.skipGMDelay=skipGMDelay;
-
-function switchToManual(){
-  clearTimeout(gmTimer);
-  STATE.gmMode='manual';
-  addLog('Cambiado a modo manual.','system');
-  emit();
-  nav('grimoire',document.querySelector('[data-v="grimoire"]'));
-}
-window.switchToManual=switchToManual;
-
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // RENDER
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 subscribe(function(s){
-  renderPhasePill(s);
-  renderPhaseBar(s);
-  renderGrimoire(s);
-  renderNightView(s);
-  renderLog(s);
-  renderGMView(s);
+  renderPhasePill(s);renderPhaseBar(s);renderGrimoire(s);renderNightView(s);renderLog(s);
 });
 
-function renderPhasePill(s){
-  const el=document.getElementById('phase-pill');
-  const map={setup:['','Setup'],firstNight:['night','1ª Noche'],day:['day',`Día ${s.day}`],night:['night',`Noche ${s.day+1}`],ended:['','Fin']};
-  const [cls,txt]=map[s.phase]||['',''];
-  el.className=`phase-pill ${cls}`; el.textContent=txt;
-}
+function renderPhasePill(s){const el=document.getElementById('phase-pill');const map={setup:['','Setup'],firstNight:['night','1ª Noche'],day:['day',`Día ${s.day}`],night:['night',`Noche ${s.day+1}`],ended:['','Fin']};const[cls,txt]=map[s.phase]||['',''];el.className=`phase-pill ${cls}`;el.textContent=txt;}
 
-function renderPhaseBar(s){
-  const el=document.getElementById('phase-bar');
-  el.innerHTML='';
-  if(s.phase==='setup'||s.phase==='ended') return;
-  const add=(label,fn,cls='')=>{ const b=document.createElement('button'); b.className=`btn btn-sm ${cls}`; b.textContent=label; b.onclick=fn; el.appendChild(b); };
-  if(s.gmMode==='manual'){
-    if(s.phase==='firstNight'||s.phase==='night') add('☀️ Iniciar día',doStartDay);
-    if(s.phase==='day') add('🌙 Iniciar noche',doStartNight);
-  } else {
-    const badge=document.createElement('span'); badge.className='gm-badge auto'; badge.textContent='🤖 GM Auto activo'; el.appendChild(badge);
-  }
-  add('✅ Bien gana',()=>doEndGame('good'),'btn-gold');
-  add('☠️ Mal gana',()=>doEndGame('evil'),'');
-}
+function renderPhaseBar(s){const el=document.getElementById('phase-bar');el.innerHTML='';if(s.phase==='setup'||s.phase==='ended')return;const add=(label,fn,cls='')=>{const b=document.createElement('button');b.className=`btn btn-sm ${cls}`;b.textContent=label;b.onclick=fn;el.appendChild(b);};if(s.phase==='firstNight'||s.phase==='night')add('☀️ Iniciar día',doStartDay);if(s.phase==='day')add('🌙 Iniciar noche',doStartNight);add('✅ Bien gana',()=>doEndGame('good'),'btn-gold');add('☠️ Mal gana',()=>doEndGame('evil'),'');}
 
 function renderGrimoire(s){
+  document.getElementById('grimoire-guide').innerHTML=grimoireGuide(s);
   const el=document.getElementById('g-grid');
-  if(!s.players?.length){ el.innerHTML=`<div class="empty">Sin jugadores. Configura en Setup.</div>`; return; }
+  if(!s.players?.length){el.innerHTML=`<div class="empty">Sin jugadores. Configura en Setup.</div>`;return;}
   el.innerHTML='';
   s.players.forEach(p=>{
     const r=roleById(p.roleId);
     const tok=document.createElement('div');
-    let cls='ptok'; if(!p.alive) cls+=' dead';
-    tok.className=cls;
-    tok.innerHTML=`
-      ${!p.alive?`<span class="dead-cross">✝</span>`:''}
+    tok.className='ptok'+(p.alive?'':' dead');
+    tok.innerHTML=`${!p.alive?`<span class="dead-cross">✝</span>`:''}
       <div class="p-icon">${r?.icon||'❓'}</div>
       <div class="p-rname">${r?.name||'Sin rol'}</div>
       <div class="p-name">${p.name}</div>
@@ -860,341 +547,234 @@ function renderGrimoire(s){
 function renderNightView(s){
   const title=document.getElementById('night-title');
   const dots=document.getElementById('n-dots');
-  const step=document.getElementById('n-step');
-  const phase=s.phase; const order=s.nightOrder||[]; const cur=s.nightStep||0;
+  const stepEl=document.getElementById('n-step');
+  const guideEl=document.getElementById('night-guide');
+  const phase=s.phase;const order=s.nightOrder||[];const cur=s.nightStep||0;
   title.textContent=phase==='firstNight'?'Primera Noche':`Noche ${s.day+1}`;
-  dots.innerHTML=''; step.innerHTML='';
-  if(phase!=='firstNight'&&phase!=='night'){ step.innerHTML=`<div class="empty">No es de noche.</div>`; return; }
-  order.forEach((item,i)=>{
-    const d=document.createElement('div');
-    d.className=`ndot${i===cur?' cur':''}${i<cur?' done':''}`;
-    d.textContent=item.icon; d.title=item.name; d.onclick=()=>jumpNight(i);
-    dots.appendChild(d);
-  });
-  if(!order.length){ step.innerHTML=`<div class="empty">Sin acciones esta noche.</div>`; return; }
-  const c=order[cur]; if(!c) return;
-  step.innerHTML=`<div class="nstep fadeup">
+  dots.innerHTML='';stepEl.innerHTML='';guideEl.innerHTML='';
+  if(phase!=='firstNight'&&phase!=='night'){stepEl.innerHTML=`<div class="empty">No es de noche.</div>`;return;}
+  order.forEach((item,i)=>{const d=document.createElement('div');d.className=`ndot${i===cur?' cur':''}${i<cur?' done':''}`;d.textContent=item.icon;d.title=item.name;d.onclick=()=>jumpNight(i);dots.appendChild(d);});
+  if(!order.length){stepEl.innerHTML=`<div class="empty">Sin acciones esta noche.</div>`;return;}
+  const c=order[cur];if(!c)return;
+  // Guide first, then step card
+  guideEl.innerHTML=nightStepGuide(c);
+  stepEl.innerHTML=`<div class="nstep fu">
     <div class="nstep-icon">${c.icon}</div>
     <div class="nstep-role">${c.name}</div>
     <div class="nstep-ability">${c.ability}</div>
     ${c.players.length?`<div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.35rem">Jugadores con este rol:</div><div class="nstep-players">${c.players.map(p=>`<span class="npc">${p.name}</span>`).join('')}</div>`:`<div style="font-size:.8rem;color:var(--text-muted);font-style:italic;margin-bottom:.75rem">Ningún jugador vivo con este rol.</div>`}
     <div class="nnav">
-      <button class="btn btn-sm nnav" onclick="prevNight()" ${cur===0?'disabled style="opacity:.3"':''}>← Anterior</button>
+      <button class="btn btn-sm" onclick="prevNight()" ${cur===0?'disabled style="opacity:.3"':''}>← Anterior</button>
       <button class="btn btn-sm btn-gold" onclick="nightNext()">${cur>=order.length-1?'✅ Fin noche':'Siguiente →'}</button>
     </div>
     <div style="margin-top:.4rem;font-size:.75rem;color:var(--text-muted);text-align:center">Paso ${cur+1} de ${order.length}</div>
   </div>`;
 }
 
-function nightNext(){
-  const s=STATE;
-  if(s.nightStep>=(s.nightOrder?.length||0)-1){ doStartDay(); nav('grimoire',document.querySelector('[data-v="grimoire"]')); }
-  else advNight();
-}
-function jumpNight(i){ const d=i-STATE.nightStep; if(d>0) for(let x=0;x<d;x++) advNight(); else for(let x=0;x<-d;x++) prevNight(); }
-window.nightNext=nightNext; window.jumpNight=jumpNight;
+function nightNext(){const s=STATE;if(s.nightStep>=(s.nightOrder?.length||0)-1){doStartDay();nav('grimoire',document.querySelector('[data-v="grimoire"]'));}else advNight();}
+function jumpNight(i){const d=i-STATE.nightStep;if(d>0)for(let x=0;x<d;x++)advNight();else for(let x=0;x<-d;x++)prevNight();}
+window.nightNext=nightNext;window.jumpNight=jumpNight;
 
-function renderLog(s){
-  const el=document.getElementById('log-list');
-  if(!s.log?.length){ el.innerHTML=`<div class="empty">Sin entradas aún.</div>`; return; }
-  el.innerHTML=s.log.map(e=>`<div class="log-entry ${e.type||''}"><span class="lt">${e.time}</span><span class="lm">${e.text}</span></div>`).join('');
-}
-
-function addManualLog(){ const t=prompt('Nota:'); if(t){ addLog(t,'info'); emit(); } }
+function renderLog(s){const el=document.getElementById('log-list');if(!s.log?.length){el.innerHTML=`<div class="empty">Sin entradas aún.</div>`;return;}el.innerHTML=s.log.map(e=>`<div class="log-entry ${e.type||''}"><span class="lt">${e.time}</span><span class="lm">${e.text}</span></div>`).join('');}
+function addManualLog(){const t=prompt('Nota:');if(t){addLog(t,'info');emit();}}
 window.addManualLog=addManualLog;
 
-// ════════════════════════════════════════════════════════
-// ACTION SHEET  — backdrop and sheet are separate elements
-// ════════════════════════════════════════════════════════
-let _sheetPid=null;
-
+// ═══════════════════════════════════════════════════
+// ACTION SHEET
+// ═══════════════════════════════════════════════════
 function openSheet(player,state){
-  _sheetPid=player.id;
   const r=roleById(player.roleId);
   document.getElementById('sh-icon').textContent=r?.icon||'❓';
   document.getElementById('sh-name').textContent=`${player.name}${r?' — '+r.name:''}`;
-  const grid=document.getElementById('act-grid'); grid.innerHTML='';
-
-  const add=(icon,label,fn,cls='')=>{
-    const b=document.createElement('div'); b.className=`act-btn ${cls}`;
-    b.innerHTML=`<span class="ai">${icon}</span>${label}`;
-    b.onclick=()=>{ fn(); closeSheet(); };
-    grid.appendChild(b);
-  };
-
+  const grid=document.getElementById('act-grid');grid.innerHTML='';
+  const add=(icon,label,fn,cls='')=>{const b=document.createElement('div');b.className=`act-btn ${cls}`;b.innerHTML=`<span class="ai">${icon}</span>${label}`;b.onclick=()=>{fn();closeSheet();};grid.appendChild(b);};
   add('📱','Ver QR',()=>showQR(player));
-  if(player.alive) add('💀','Matar',()=>{ STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:false}:p); addLog(`💀 ${player.name} ha muerto.`,'death'); emit(); },'danger');
-  else add('✨','Revivir',()=>{ STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:true}:p); addLog(`✨ ${player.name} ha revivido.`,'system'); emit(); },'ok');
-  if(player.alive) add('⚖️','Ejecutar',()=>{ STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:false}:p); addLog(`⚖️ ${player.name} ejecutado/a.`,'execution'); emit(); speak(`${player.name} ha sido ejecutado.`); },'danger');
-  add('🍺',player.drunk?'Sin borracho':'Borracho',()=>{ STATE.players=STATE.players.map(p=>p.id===player.id?{...p,drunk:!p.drunk}:p); addLog(`🍺 ${player.name} ${player.drunk?'ya no está':'está'} borracho/a.`,'system'); emit(); },'warn');
-  add('☠️',player.poisoned?'Sin veneno':'Envenenar',()=>{ STATE.players=STATE.players.map(p=>p.id===player.id?{...p,poisoned:!p.poisoned}:p); addLog(`☠️ ${player.name} ${player.poisoned?'ya no está':'está'} envenenado/a.`,'system'); emit(); },'warn');
-  add('🛡️',player.protected?'Sin protección':'Proteger',()=>{ STATE.players=STATE.players.map(p=>p.id===player.id?{...p,protected:!p.protected}:p); emit(); },'info');
-
+  if(player.alive)add('💀','Matar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:false}:p);addLog(`💀 ${player.name} ha muerto.`,'death');emit();},'danger');
+  else add('✨','Revivir',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:true}:p);addLog(`✨ ${player.name} ha revivido.`,'system');emit();},'ok');
+  if(player.alive)add('⚖️','Ejecutar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,alive:false}:p);addLog(`⚖️ ${player.name} ejecutado/a.`,'execution');emit();speak(`${player.name} ha sido ejecutado.`);},'danger');
+  add('🍺',player.drunk?'Quitar borracho':'Borracho',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,drunk:!p.drunk}:p);addLog(`🍺 ${player.name} ${player.drunk?'ya no está':'está'} borracho/a.`,'system');emit();},'warn');
+  add('☠️',player.poisoned?'Quitar veneno':'Envenenar',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,poisoned:!p.poisoned}:p);addLog(`☠️ ${player.name} ${player.poisoned?'ya no está':'está'} envenenado/a.`,'system');emit();},'warn');
+  add('🛡️',player.protected?'Sin protección':'Proteger',()=>{STATE.players=STATE.players.map(p=>p.id===player.id?{...p,protected:!p.protected}:p);emit();},'info');
   document.getElementById('sheet-bg').classList.add('open');
   document.getElementById('sheet').classList.add('open');
 }
-
-function closeSheet(){
-  document.getElementById('sheet-bg').classList.remove('open');
-  document.getElementById('sheet').classList.remove('open');
-}
+function closeSheet(){document.getElementById('sheet-bg').classList.remove('open');document.getElementById('sheet').classList.remove('open');}
 window.closeSheet=closeSheet;
 
-// ════════════════════════════════════════════════════════
-// QR  — uses current page URL as base
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// QR
+// ═══════════════════════════════════════════════════
 function showQR(player){
-  const token=playerToken(player.id); if(!token) return;
+  const token=playerToken(player.id);if(!token)return;
   const r=roleById(player.roleId);
-
-  // Build URL from current location
-  const base=location.href.replace(/index\.html.*$/,'').replace(/\?.*$/,'');
-  const url=base+'player.html?t='+encodeURIComponent(token);
-
+  const base=location.href.replace(/index\.html.*$/,'').replace(/[?#].*$/,'').replace(/\/$/,'');
+  const url=base+'/player.html?t='+encodeURIComponent(token);
   document.getElementById('qr-pname').textContent=player.name;
   document.getElementById('qr-rname').textContent=r?`${r.icon} ${r.name}`:'(sin rol)';
   document.getElementById('qr-hint').textContent=url;
-  const div=document.getElementById('qr-div'); div.innerHTML='';
+  const div=document.getElementById('qr-div');div.innerHTML='';
   new QRCode(div,{text:url,width:200,height:200,colorDark:'#000',colorLight:'#fff'});
   document.getElementById('qr-bg').classList.add('open');
 }
+function closeQR(){document.getElementById('qr-bg').classList.remove('open');}
+function closeQRBg(e){if(e.target===document.getElementById('qr-bg'))closeQR();}
+window.closeQR=closeQR;window.closeQRBg=closeQRBg;
 
-function closeQR(e){
-  if(e&&e.target!==document.getElementById('qr-bg')) return;
-  document.getElementById('qr-bg').classList.remove('open');
-}
-window.closeQR=closeQR;
-
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // HELP
-// ════════════════════════════════════════════════════════
-function openHelp(){ document.getElementById('help-bg').classList.add('open'); }
-function closeHelp(e){ if(e&&e.target!==document.getElementById('help-bg')) return; document.getElementById('help-bg').classList.remove('open'); }
-window.openHelp=openHelp; window.closeHelp=closeHelp;
+// ═══════════════════════════════════════════════════
+function openHelp(){document.getElementById('help-bg').classList.add('open');}
+function closeHelp(){document.getElementById('help-bg').classList.remove('open');}
+function closeHelpBg(e){if(e.target===document.getElementById('help-bg'))closeHelp();}
+window.openHelp=openHelp;window.closeHelp=closeHelp;window.closeHelpBg=closeHelpBg;
 
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // NAVIGATION
-// ════════════════════════════════════════════════════════
-function nav(viewId, btn){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  document.getElementById('view-'+viewId).classList.add('active');
-  if(btn) btn.classList.add('active');
-}
+// ═══════════════════════════════════════════════════
+function nav(viewId,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));document.getElementById('view-'+viewId).classList.add('active');if(btn)btn.classList.add('active');}
 window.nav=nav;
 
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // WIN / RESET
-// ════════════════════════════════════════════════════════
-function resetGame(){
-  clearTimeout(gmTimer);
-  document.getElementById('win').classList.remove('show');
-  selRoles=[]; selEditions=['TB']; gameMode='manual';
-  STATE={gameId:null,phase:'setup',day:0,players:[],script:[],log:[],nightOrder:[],nightStep:0,winner:null,gmMode:'manual',gmPending:[]};
-  renderEditions(); renderRoleSel();
-  nav('setup',document.querySelector('[data-v="setup"]'));
-  emit();
-}
+// ═══════════════════════════════════════════════════
+function resetGame(){document.getElementById('win').classList.remove('show');selRoles=[];selEditions=['TB'];STATE={gameId:null,phase:'setup',day:0,players:[],script:[],log:[],nightOrder:[],nightStep:0,winner:null};renderEditions();renderRoleSel();nav('setup',document.querySelector('[data-v="setup"]'));emit();}
 window.resetGame=resetGame;
 
-// ════════════════════════════════════════════════════════
-// NARRATOR
-// ════════════════════════════════════════════════════════
-let narratorOn=false;
-let _voiceLoaded=false;
-let _prefVoice=null;
-
-function loadVoices(){
-  if(!window.speechSynthesis) return;
-  const vs=speechSynthesis.getVoices();
-  // Prefer Spanish voices, prefer Google voices (more natural)
-  _prefVoice=vs.find(v=>v.lang.startsWith('es')&&v.name.includes('Google'))
-    ||vs.find(v=>v.lang==='es-ES')
-    ||vs.find(v=>v.lang.startsWith('es'))
-    ||null;
-  _voiceLoaded=true;
-}
-if(window.speechSynthesis){
-  loadVoices();
-  speechSynthesis.addEventListener('voiceschanged',loadVoices);
-}
-
-function speak(text){
-  if(!narratorOn||!window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='es-ES'; u.rate=0.92; u.pitch=0.9; u.volume=0.95;
-  if(_prefVoice) u.voice=_prefVoice;
-  speechSynthesis.speak(u);
-  showToast(text);
-}
-
-function showToast(text){
-  const t=document.getElementById('ntoa');
-  t.textContent='🎙️ '+text;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t=setTimeout(()=>t.classList.remove('show'),4500);
-}
-
-const PHRASES={
-  firstNight:['El pueblo se duerme. Todos cierran los ojos.','La oscuridad cae sobre el pueblo. Cerrad los ojos.','La noche llega. Todo el mundo a dormir.'],
-  night:['El pueblo duerme. La oscuridad reina.','Se hace de noche. Cerrad todos los ojos.','Otra noche de misterio. El pueblo duerme.'],
-  day:['El sol sale sobre el pueblo. Abrid los ojos.','Amanece. El pueblo despierta.','Un nuevo día comienza. Abrid los ojos.'],
-  goodWin:['La luz triunfa. El Demonio ha caído.','El bien gana. El pueblo está a salvo.'],
-  evilWin:['La oscuridad gana. El Demonio ríe.','El mal triunfa sobre el pueblo.'],
-};
-function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
-function narratePhase(phase,winner){
-  if(phase==='ended') speak(rand(winner==='good'?PHRASES.goodWin:PHRASES.evilWin));
-  else if(PHRASES[phase]) speak(rand(PHRASES[phase]));
-}
-
-function toggleNarrator(){
-  narratorOn=!narratorOn;
-  const b=document.getElementById('btn-narrator');
-  b.classList.toggle('on',narratorOn);
-  if(narratorOn){ speak('Narrador activado.'); }
-  else{ speechSynthesis?.cancel(); document.getElementById('ntoa').classList.remove('show'); }
-}
+// ═══════════════════════════════════════════════════
+// NARRATOR (Web Speech)
+// ═══════════════════════════════════════════════════
+let narratorOn=false,_prefVoice=null;
+function loadVoices(){if(!window.speechSynthesis)return;const vs=speechSynthesis.getVoices();_prefVoice=vs.find(v=>v.lang.startsWith('es')&&v.name.includes('Google'))||vs.find(v=>v.lang==='es-ES')||vs.find(v=>v.lang.startsWith('es'))||null;}
+if(window.speechSynthesis){loadVoices();speechSynthesis.addEventListener('voiceschanged',loadVoices);}
+function speak(text){if(!narratorOn||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='es-ES';u.rate=0.9;u.pitch=0.88;u.volume=0.95;if(_prefVoice)u.voice=_prefVoice;speechSynthesis.speak(u);showToast(text);}
+function showToast(text){const t=document.getElementById('ntoa');t.textContent='🎙️ '+text;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),4500);}
+const PHRASES={firstNight:['El pueblo se duerme. Todos cierran los ojos.','La oscuridad cae. Cerrad los ojos.'],night:['El pueblo duerme. La oscuridad reina.','Se hace de noche. Cerrad los ojos.'],day:['El sol sale sobre el pueblo. Abrid los ojos.','Amanece. El pueblo despierta.'],goodWin:['La luz triunfa. El Demonio ha caído.','El bien gana. El pueblo está a salvo.'],evilWin:['La oscuridad gana. El Demonio ríe.','El mal triunfa sobre el pueblo.']};
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function narratePhase(phase,winner){if(phase==='ended')speak(rand(winner==='good'?PHRASES.goodWin:PHRASES.evilWin));else if(PHRASES[phase])speak(rand(PHRASES[phase]));}
+function toggleNarrator(){narratorOn=!narratorOn;const b=document.getElementById('btn-narrator');b.classList.toggle('on',narratorOn);if(narratorOn)speak('Narrador activado.');else{speechSynthesis?.cancel();document.getElementById('ntoa').classList.remove('show');}}
 window.toggleNarrator=toggleNarrator;
 
-// ════════════════════════════════════════════════════════
-// MUSIC (Web Audio — procedural, no files)
-// ════════════════════════════════════════════════════════
-let musicOn=false;
-let actx=null;
-let masterGain=null;
-let _musicNodes=[];
-let _musicTimeout=null;
-let _currentMusicPhase=null;
+// ═══════════════════════════════════════════════════
+// MUSIC — 4 randomised ambiences, Web Audio
+// ═══════════════════════════════════════════════════
+let musicOn=false,actx=null,masterGain=null,_mNodes=[],_mTimer=null,_curMusicPhase=null;
 
-function getACtx(){
-  if(!actx){ actx=new(window.AudioContext||window.webkitAudioContext)(); }
-  if(actx.state==='suspended') actx.resume();
-  return actx;
-}
+function getCtx(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx;}
 
-function stopMusic(){
-  clearTimeout(_musicTimeout);
-  if(masterGain){ masterGain.gain.linearRampToValueAtTime(0,actx.currentTime+1.5); }
-  setTimeout(()=>{
-    _musicNodes.forEach(n=>{ try{ n.stop?.(); n.disconnect?.(); }catch(e){} });
-    _musicNodes=[];
-    if(masterGain){ try{ masterGain.disconnect(); }catch(e){} masterGain=null; }
-  },1600);
+function stopAllMusic(cb){
+  clearTimeout(_mTimer);
+  if(masterGain){
+    const ctx=getCtx();masterGain.gain.cancelScheduledValues(ctx.currentTime);masterGain.gain.setValueAtTime(masterGain.gain.value,ctx.currentTime);masterGain.gain.linearRampToValueAtTime(0,ctx.currentTime+1.2);
+    setTimeout(()=>{_mNodes.forEach(n=>{try{n.stop?.();n.disconnect?.();}catch(e){}});_mNodes=[];try{masterGain.disconnect();}catch(e){}masterGain=null;if(cb)cb();},1300);
+  } else {
+    _mNodes.forEach(n=>{try{n.stop?.();n.disconnect?.();}catch(e){}});_mNodes=[];if(cb)cb();
+  }
 }
 
-function createMaster(){
-  const ctx=getACtx();
-  const g=ctx.createGain(); g.gain.setValueAtTime(0,ctx.currentTime);
-  g.connect(ctx.destination);
-  masterGain=g;
-  return g;
+function makeMaster(vol=0.18,fadeIn=3){const ctx=getCtx();const g=ctx.createGain();g.gain.setValueAtTime(0,ctx.currentTime);g.gain.linearRampToValueAtTime(vol,ctx.currentTime+fadeIn);g.connect(ctx.destination);masterGain=g;return g;}
+
+function drone(dest,freq,vol,type='sine',vibRate=0,vibDepth=0){const ctx=getCtx();const o=ctx.createOscillator();const g=ctx.createGain();o.type=type;o.frequency.value=freq;g.gain.value=vol;if(vibRate>0){const lfo=ctx.createOscillator();const lg=ctx.createGain();lfo.frequency.value=vibRate;lg.gain.value=vibDepth;lfo.connect(lg);lg.connect(o.frequency);lfo.start();_mNodes.push(lfo,lg);}o.connect(g);g.connect(dest);o.start();_mNodes.push(o,g);}
+
+function noise(dest,freq=400,vol=0.03,type='lowpass'){const ctx=getCtx();const sz=ctx.sampleRate*3;const buf=ctx.createBuffer(1,sz,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<sz;i++)d[i]=Math.random()*2-1;const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;const flt=ctx.createBiquadFilter();flt.type=type;flt.frequency.value=freq;const g=ctx.createGain();g.gain.value=vol;src.connect(flt);flt.connect(g);g.connect(dest);src.start();_mNodes.push(src,flt,g);}
+
+function bell(dest,freq=110,vol=0.2,dur=5){const ctx=getCtx();const t=ctx.currentTime;const o=ctx.createOscillator();const g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(freq*0.7,t+dur);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+dur);o.connect(g);g.connect(dest);o.start(t);o.stop(t+dur);_mNodes.push(o,g);}
+
+function schedBell(dest,minMs,maxMs,freq=98){if(!musicOn)return;_mTimer=setTimeout(()=>{if(!musicOn||!masterGain)return;bell(dest,freq,0.18,5);schedBell(dest,minMs,maxMs,freq);},minMs+Math.random()*(maxMs-minMs));}
+
+function pluck(dest){if(!musicOn||!masterGain)return;const ctx=getCtx();const SCALE=[220,246.9,261.6,293.7,329.6,349.2,392,440,523.3,587.3];const f=SCALE[Math.floor(Math.random()*SCALE.length)];const o=ctx.createOscillator();const g=ctx.createGain();o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(0.07,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+1.8);o.connect(g);g.connect(dest);o.start();o.stop(ctx.currentTime+2);_mNodes.push(o,g);_mTimer=setTimeout(()=>pluck(dest),1500+Math.random()*3000);}
+
+function crackle(dest){if(!musicOn)return;const ctx=getCtx();const buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.06),ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/1200);const src=ctx.createBufferSource();const g=ctx.createGain();src.buffer=buf;g.gain.value=0.04;src.connect(g);g.connect(dest);src.start();_mNodes.push(src);_mTimer=setTimeout(()=>crackle(dest),400+Math.random()*600);}
+
+// ── 4 Ambiences ──────────────────────────────────────────────
+const AMBIENCES=['medieval','dark','tavern','cinematic'];
+let _curAmbience=null;
+
+function pickAmbience(phase){
+  // Pick randomly but weighted by phase feel
+  const nightOnes=['dark','medieval','cinematic'];
+  const dayOnes=['tavern','medieval','cinematic'];
+  const pool=(phase==='firstNight'||phase==='night')?nightOnes:dayOnes;
+  return pool[Math.floor(Math.random()*pool.length)];
 }
 
-function playDrone(dest,freqs,vol=0.12,type='sine'){
-  const ctx=getACtx();
-  freqs.forEach((freq,i)=>{
-    const osc=ctx.createOscillator(); const g=ctx.createGain();
-    osc.type=type; osc.frequency.value=freq;
-    g.gain.value=vol/(i+1);
-    osc.connect(g); g.connect(dest); osc.start();
-    _musicNodes.push(osc,g);
-  });
-}
-
-function playNoise(dest,cutoff=400,vol=0.035){
-  const ctx=getACtx();
-  const sz=ctx.sampleRate*3;
-  const buf=ctx.createBuffer(1,sz,ctx.sampleRate);
-  const d=buf.getChannelData(0); for(let i=0;i<sz;i++) d[i]=Math.random()*2-1;
-  const src=ctx.createBufferSource(); src.buffer=buf; src.loop=true;
-  const flt=ctx.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=cutoff;
-  const g=ctx.createGain(); g.gain.value=vol;
-  src.connect(flt); flt.connect(g); g.connect(dest); src.start();
-  _musicNodes.push(src,flt,g);
-}
-
-function scheduleBell(dest,minMs=8000,maxMs=18000){
-  _musicTimeout=setTimeout(()=>{
-    if(!musicOn||!masterGain) return;
-    const ctx=getACtx(); const t=ctx.currentTime;
-    const osc=ctx.createOscillator(); const g=ctx.createGain();
-    osc.type='sine'; osc.frequency.setValueAtTime(98,t); osc.frequency.exponentialRampToValueAtTime(60,t+4);
-    g.gain.setValueAtTime(0.22,t); g.gain.exponentialRampToValueAtTime(0.001,t+5);
-    osc.connect(g); g.connect(dest); osc.start(t); osc.stop(t+5);
-    _musicNodes.push(osc,g);
-    scheduleBell(dest,minMs,maxMs);
-  }, minMs+Math.random()*(maxMs-minMs));
-}
-
-function scheduleNote(dest){
-  if(!musicOn||!masterGain) return;
-  const ctx=getACtx(); const t=ctx.currentTime;
-  const SCALE=[220,246.9,261.6,293.7,329.6,349.2,392,440,523.3];
-  const freq=SCALE[Math.floor(Math.random()*SCALE.length)];
-  const osc=ctx.createOscillator(); const g=ctx.createGain();
-  osc.type='triangle'; osc.frequency.value=freq;
-  g.gain.setValueAtTime(0.07,t); g.gain.exponentialRampToValueAtTime(0.001,t+1.5);
-  osc.connect(g); g.connect(dest); osc.start(t); osc.stop(t+2);
-  _musicNodes.push(osc,g);
-  _musicTimeout=setTimeout(()=>scheduleNote(dest), 1800+Math.random()*2800);
-}
-
-function startNightMusic(){
-  const m=createMaster(); m.gain.linearRampToValueAtTime(0.2,actx.currentTime+4);
-  playDrone(m,[36.7,55,73.4],0.1,'sawtooth');
-  playNoise(m,500,0.04);
-  scheduleBell(m);
-}
-function startDayMusic(){
-  const m=createMaster(); m.gain.linearRampToValueAtTime(0.15,actx.currentTime+3);
-  playDrone(m,[220,329.6,440],0.05,'sine');
-  scheduleNote(m);
-}
-function startSetupMusic(){
-  const m=createMaster(); m.gain.linearRampToValueAtTime(0.12,actx.currentTime+3);
-  playDrone(m,[55,82.4,110],0.08,'sine');
-  playNoise(m,300,0.025);
-  // Occasional soft tick
-  function tick(){ if(!musicOn) return; const ctx=getACtx(); const t=ctx.currentTime; const buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.04),ctx.sampleRate); const data=buf.getChannelData(0); for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*Math.exp(-i/600); const src=ctx.createBufferSource(); const g=ctx.createGain(); src.buffer=buf; g.gain.value=0.05; src.connect(g); g.connect(m); src.start(t); _musicNodes.push(src); _musicTimeout=setTimeout(tick,800+Math.random()*400); }
-  tick();
+function startAmbience(name,phase){
+  const ctx=getCtx();
+  _curAmbience=name;
+  if(name==='medieval'){
+    // Rain + wind + distant fire crackle
+    const m=makeMaster(0.22,4);
+    noise(m,300,0.06,'lowpass');   // rain
+    noise(m,80,0.04,'lowpass');    // deep wind rumble
+    noise(m,1200,0.015,'bandpass');// high rain detail
+    if(phase==='night'||phase==='firstNight'){
+      drone(m,55,0.08,'sine',0.12,0.3);
+      schedBell(m,10000,22000,73);
+    } else {
+      drone(m,110,0.05,'sine',0.2,0.5);
+      pluck(m);
+    }
+    crackle(m);
+  } else if(name==='dark'){
+    // Ominous drones + wind + bell
+    const m=makeMaster(0.2,5);
+    drone(m,36.7,0.1,'sawtooth',0.1,0.5);
+    drone(m,55,0.07,'sine',0.15,0.3);
+    drone(m,73.4,0.05,'sine',0.08,0.2);
+    noise(m,500,0.04,'lowpass');
+    schedBell(m,8000,18000,98);
+    schedBell(m,14000,28000,55);
+  } else if(name==='tavern'){
+    // Warmer, higher, busier in day; quieter at night
+    const isDayPhase=phase==='day';
+    const m=makeMaster(isDayPhase?0.16:0.12,3);
+    drone(m,220,0.04,'sine',0.25,0.8);
+    drone(m,329.6,0.03,'sine',0.18,0.5);
+    drone(m,440,0.02,'triangle');
+    noise(m,800,0.025,'bandpass');  // chatter-like
+    pluck(m);
+    if(!isDayPhase){noise(m,200,0.03,'lowpass');}
+  } else if(name==='cinematic'){
+    // Strings-like drones + percussion hits
+    const m=makeMaster(0.18,4);
+    drone(m,55,0.08,'sawtooth',0.05,0.2);
+    drone(m,82.4,0.06,'sawtooth',0.07,0.15);
+    drone(m,110,0.05,'sawtooth',0.1,0.1);
+    noise(m,200,0.025,'lowpass');
+    if(phase==='night'||phase==='firstNight'){
+      schedBell(m,6000,14000,65);
+    } else {
+      pluck(m);
+      drone(m,220,0.03,'sine',0.2,0.4);
+    }
+  }
 }
 
 function updateMusicPhase(phase){
-  if(!musicOn) return;
+  if(!musicOn)return;
   const mapped=(phase==='firstNight'||phase==='night')?'night':phase==='day'?'day':'setup';
-  if(mapped===_currentMusicPhase) return;
-  _currentMusicPhase=mapped;
-  stopMusic();
-  setTimeout(()=>{ if(musicOn){ if(mapped==='night') startNightMusic(); else if(mapped==='day') startDayMusic(); else startSetupMusic(); } },1700);
+  if(mapped===_curMusicPhase)return;
+  _curMusicPhase=mapped;
+  const nextAmbience=pickAmbience(phase);
+  stopAllMusic(()=>{if(musicOn)startAmbience(nextAmbience,phase);});
 }
 
 function toggleMusic(){
   musicOn=!musicOn;
-  const b=document.getElementById('btn-music');
-  b.classList.toggle('on',musicOn);
-  if(musicOn){
-    getACtx();
-    const phase=STATE.phase;
-    _currentMusicPhase=null;
-    updateMusicPhase(phase);
-  } else {
-    stopMusic(); _currentMusicPhase=null;
-  }
+  document.getElementById('btn-music').classList.toggle('on',musicOn);
+  if(musicOn){getCtx();_curMusicPhase=null;updateMusicPhase(STATE.phase);}
+  else{stopAllMusic();_curMusicPhase=null;}
 }
 window.toggleMusic=toggleMusic;
 
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // INIT
-// ════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
   hydrate();
   renderEditions();
   renderRoleSel();
-  document.getElementById('nav-gm').style.display=STATE.gmMode==='auto'?'':'none';
+  // Add 5 default player inputs
+  for(let i=0;i<5;i++) addPInput();
   emit();
 });
 </script>
